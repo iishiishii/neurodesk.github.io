@@ -12,7 +12,9 @@ description: >
   A flexible, scalable and easy to use data analysis environment for reproducible neuroimaging.
 ---
 
+<div style="max-width: 560px; margin: 2rem auto; padding: 10px; border: 3px solid #4f7b38; border-radius: 8px;">
 {{< youtube Hx2shbKDz9o >}}
+</div>
 
 ## What is Neurodesk?
 Neurodesk provides a containerised data analysis environment to facilitate reproducible analysis of neuroimaging data. At Neurodesk, we believe that reproducibility should be a fundamental principle underlying neuroscientific data analysis (1). Analysis pipelines for neuroimaging data typically rely on specific versions of packages and software, and are dependent on their native operating system. These dependencies mean that a working analysis pipeline may fail or produce different results on a new computer, or even on the same computer after a software update. Neurodesk provides a platform in which anyone, anywhere, using any computer can reproduce your original research findings given the original data and analysis code. 
