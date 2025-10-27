@@ -12,7 +12,7 @@ description: >
   A flexible, scalable and easy to use data analysis environment for reproducible neuroimaging.
 ---
 
-<div style="max-width: 560px; margin: 2rem auto; padding: 10px; border: 3px solid #4f7b38; border-radius: 8px;">
+<div style="max-width: 66%; margin: 2rem auto; padding: 10px; border: 3px solid #4f7b38; border-radius: 8px;">
 {{< youtube Hx2shbKDz9o >}}
 </div>
 
