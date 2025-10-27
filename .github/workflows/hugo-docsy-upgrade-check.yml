@@ -188,7 +188,27 @@ jobs:
           STATUS_INT=${STATUS:-1}
           WARN_INT=${WARN_COUNT:-0}
           ERR_INT=${ERR_COUNT:-0}
-          printf '%s' "{\n  \"scenario\": \"${SCENARIO}\",\n  \"status\": ${STATUS_INT},\n  \"hugo\": \"${HUGO_LINE}\",\n  \"docsy\": \"${DOCSY_LINE}\",\n  \"docsy_deps\": \"${DEPS_LINE}\",\n  \"warn_count\": ${WARN_INT},\n  \"err_count\": ${ERR_INT},\n  \"log_dir\": \"${SCENARIO}\"\n}\n" > "$REPORT_DIR/meta/${SCENARIO}.json"
+
+          # Use jq to emit safe, well-formed JSON and validate immediately
+          jq -n \
+            --arg scenario "$SCENARIO" \
+            --arg hugo "$HUGO_LINE" \
+            --arg docsy "$DOCSY_LINE" \
+            --arg docsy_deps "$DEPS_LINE" \
+            --arg log_dir "$SCENARIO" \
+            --argjson status "$STATUS_INT" \
+            --argjson warn_count "$WARN_INT" \
+            --argjson err_count "$ERR_INT" \
+            '{scenario: $scenario, status: $status, hugo: $hugo, docsy: $docsy, docsy_deps: $docsy_deps, warn_count: $warn_count, err_count: $err_count, log_dir: $log_dir}' \
+            > "$REPORT_DIR/meta/${SCENARIO}.json"
+
+          # Validate produced JSON; fail clearly if something went wrong
+          if ! jq -e . "$REPORT_DIR/meta/${SCENARIO}.json" >/dev/null 2>&1; then
+            echo "ERROR: produced invalid JSON for ${SCENARIO}" >&2
+            echo "---- CONTENTS ----" >&2
+            sed -n '1,200p' "$REPORT_DIR/meta/${SCENARIO}.json" >&2 || true
+            exit 1
+          fi
 
       - name: Truncate large logs (keep last 2000 lines)
         if: always()
