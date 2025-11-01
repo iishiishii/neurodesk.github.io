@@ -45,6 +45,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
+      - name: Write applist.json
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+        run: |
+          if [ -n "$ZENODO_TOKEN" ]; then
+            python .github/workflows/write-app-json.py --zenodo_token "$ZENODO_TOKEN"
+          else
+            echo "ZENODO_TOKEN not set — skipping write-app-json.py"
+          fi
+          
       - name: Build with Hugo (prod baseURL)
         env:
           HUGO_ENVIRONMENT: production
