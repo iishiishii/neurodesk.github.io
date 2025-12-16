@@ -107,6 +107,27 @@ jobs:
             echo "⚠ Warning: intro.html not found — notebooks may not have copied correctly"
           fi
 
+      - name: Include neurodel (clone gh-pages branch)
+        run: |
+          set -e
+          NEURODEL_DIR="${GITHUB_WORKSPACE}/public/neurodel"
+          mkdir -p "$NEURODEL_DIR"
+          
+          echo "Cloning neurodel repo gh-pages branch..."
+          git clone --depth=1 --branch gh-pages https://github.com/neurodesk/neurodel.git /tmp/neurodel
+          
+          echo "Copying neurodel HTML into public/neurodel/..."
+          # Copy all files from gh-pages root into public/neurodel/
+          # Skip git/repo metadata
+          cp -r /tmp/neurodel/* "$NEURODEL_DIR/" || true
+          
+          # Verify some key files exist
+          if [ -f "$NEURODEL_DIR/intro.html" ]; then
+            echo "✓ intro.html found in public/neurodel/"
+          else
+            echo "⚠ Warning: intro.html not found — neurodel may not have copied correctly"
+          fi
+
       - name: Checkout neurocontainers-ui (source)
         run: |
           set -e
