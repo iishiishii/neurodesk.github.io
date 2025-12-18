@@ -110,22 +110,22 @@ jobs:
       - name: Include neurodel (clone gh-pages branch)
         run: |
           set -e
-          NEURODEL_DIR="${GITHUB_WORKSPACE}/public/neurodel"
-          mkdir -p "$NEURODEL_DIR"
-          
-          echo "Cloning neurodel repo gh-pages branch..."
-          git clone --depth=1 --branch gh-pages https://github.com/neurodesk/neurodel.git /tmp/neurodel
-          
-          echo "Copying neurodel HTML into public/neurodel/..."
-          # Copy all files from gh-pages root into public/neurodel/
+          EDU_DIR="${GITHUB_WORKSPACE}/public/edu"
+          mkdir -p "$EDU_DIR"
+
+          echo "Cloning neurodeskedu repo gh-pages branch..."
+          git clone --depth=1 --branch gh-pages https://github.com/neurodesk/neurodeskedu.git /tmp/neurodeskedu
+
+          echo "Copying neurodeskedu HTML into public/edu/..."
+          # Copy all files from gh-pages root into public/edu/
           # Skip git/repo metadata
-          cp -r /tmp/neurodel/* "$NEURODEL_DIR/" || true
-          
+          cp -r /tmp/neurodeskedu/* "$EDU_DIR/" || true
+
           # Verify some key files exist
-          if [ -f "$NEURODEL_DIR/intro.html" ]; then
-            echo "✓ intro.html found in public/neurodel/"
+          if [ -f "$EDU_DIR/intro.html" ] || [ -f "$EDU_DIR/index.html" ]; then
+            echo "✓ neurodeskedu static files found in public/edu/"
           else
-            echo "⚠ Warning: intro.html not found — neurodel may not have copied correctly"
+            echo "⚠ Warning: intro.html not found — neurodeskedu may not have copied correctly"
           fi
 
       - name: Checkout neurocontainers-ui (source)
