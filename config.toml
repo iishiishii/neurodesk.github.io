@@ -234,6 +234,10 @@ enable = false
     name = "GitHub"
     weight = 40
     url = "https://github.com/neurodesk"
+[[menu.main]]
+    name = "Learning Resources"
+    weight = 30
+    url = "https://neurodesk.org/edu"
 	
 [module]
 proxy = "direct"
