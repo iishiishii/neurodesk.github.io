@@ -113,7 +113,7 @@ jobs:
           fi
 
       - name: Include neurodeskedu (clone gh-pages branch)
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.include_edu == 'true' }}
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.include_edu }}
         run: |
           set -e
           EDU_DIR="${GITHUB_WORKSPACE}/public/edu"
