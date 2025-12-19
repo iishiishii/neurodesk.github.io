@@ -18,7 +18,7 @@ type: landing
                             </a>
                         </div>
                         <div class="col-10 col-sm-6">
-                            <a class="btn btn-lg btn-light w-100 p-3" href="https://neurodesk.org/example-notebooks/intro.html">
+                            <a class="btn btn-lg btn-light w-100 p-3" href="https://neurodesk.org/edu">
                                 <i class="fa fa-book"></i> See Examples
                             </a>
                         </div>

@@ -24,15 +24,15 @@ Help us build better neuroimaging infrastructure by writing code, improving our 
 
 Good documentation makes tools accessible. Contribute tutorials, usage guides, or improve existing documentation.
 
-- [Submit a tutorial](/tutorials-examples/contribute/contribute-tutorials/)
+- [Submit a tutorial](https://neurodesk.org/edu/contribute/tutorials.html)
 - [Browse our Documentation Guide](/developers/documentation/)
 
 ### Create or Share Workflows
 
 Make it easier for others to use Neurodesk by sharing reproducible analysis pipelines or creating new workflows.
 
-- [Submit an example notebook](/tutorials-examples/contribute/contribute-examples/) 
-    (feel free to have a look at the [workflow examples](https://github.com/neurodesk/example-notebooks/tree/main) already available)
+- [Submit an example notebook](https://neurodesk.org/edu/contribute/examples.html) 
+    (feel free to have a look at the [workflow examples](https://github.com/neurodesk/neurodeskedu) already available)
 
 ### Donate
 
