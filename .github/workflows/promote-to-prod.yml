@@ -10,6 +10,11 @@ on:
         description: "Git ref to promote (default: main)"
         required: false
         default: "main"
+      include_edu:
+        description: "Include neurodeskedu in this promotion"
+        required: false
+        default: "true"
+        type: boolean
 
 permissions:
   contents: read
@@ -107,7 +112,8 @@ jobs:
             echo "⚠ Warning: intro.html not found — notebooks may not have copied correctly"
           fi
 
-      - name: Include neurodel (clone gh-pages branch)
+      - name: Include neurodeskedu (clone gh-pages branch)
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.include_edu == 'true' }}
         run: |
           set -e
           EDU_DIR="${GITHUB_WORKSPACE}/public/edu"
