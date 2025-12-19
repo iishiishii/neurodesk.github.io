@@ -306,7 +306,7 @@ Please consult [this page](https://github.com/neurodesk/neurodesk.github.io/blob
 
 ## 20211018
 - added Rstudio, R and multiple R packages (plotly, car, tidyverse, ...)
-- added ClearSWI and ROMEO for MRI phase processing (including new Tutorials: https://neurodesk.org/tutorials-examples/tutorials/phase_processing/)
+- added ClearSWI and ROMEO for MRI phase processing
 - added more categories in applications menu (Body, Electrophysiology, Hippocampus, Phase Processing, Rodent Imaging, Shape Analysis, Spine, Statistics)
 - bugfix: improved startup time of the desktop container (miniconda in homedirectory was causing chmod slowdown)
 - bugfix: ssh, vnc and rdp servers are now restarted in case the container was stopped and started again (e.g. on Standby)

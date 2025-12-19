@@ -170,7 +170,7 @@ The browser can be closed anytime, and Neurodesktop will continue running in the
 {{< /alert >}}
 
 {{< alert color="info">}}
-If you are using conda environments and you are installing packages or even new kernels, make sure to read this: https://neurodesk.org/tutorials-examples/tutorials/programming/conda/
+If you are using conda environments and you are installing packages or even new kernels, make sure to read this: https://neurodesk.org/edu/tutorials/programming/conda.html
 {{< /alert >}}
 
 {{< alert color="info">}}
