@@ -16,6 +16,19 @@ Latest Version
 
 Please consult [this page](https://github.com/neurodesk/neurodesk.github.io/blob/main/.github/content-templates/release-history-template.md) for the template for new releases.
 
+## 2025-12-20
+### New Features
+- added pydra
+- add jupyter-sshd-proxy to allow ssh and vscode connections
+- add nbdev
+- add nipoppy
+### Improvements
+- update examples
+- update ipyniivue
+### Bug Fixes
+- pin ipywidgets version to 7.8.5 in Dockerfile to get niivue to work in rise slideshow
+
+
 ## 2025-06-10
 ### New Features
 - upgrade to jupyterhub 5.3.0
