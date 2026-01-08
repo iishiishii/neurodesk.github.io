@@ -248,6 +248,11 @@ We try to update this page based on the git commit history:
 
 - application container development (mricron)
 
+## **Arjen Lentz** - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="25" alt="GitHub logo"> <a href="https://github.com/arjenlentz" target="_blank" rel="noopener noreferrer">arjenlentz</a>
+### Software Freelancer
+
+- discussion on software licensing
+
 ## **Kexin Lou** - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="25" alt="GitHub logo"> <a href="https://github.com/Kaxnn" target="_blank" rel="noopener noreferrer">Kaxnn</a>
 ### The University of Queensland, Australia
 
