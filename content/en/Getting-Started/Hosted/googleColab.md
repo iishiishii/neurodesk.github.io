@@ -47,3 +47,57 @@ This is a google colab notebook that shows how to integrate with google drive an
 https://colab.research.google.com/drive/11wVBkjNvrzo2TkUAILtWnPumAeFAfqkl?usp=sharing
 
 and more examples can be found [in our example library](https://neurodesk.org/edu)
+
+
+This also works in a google cloud shell, e.g. for an interactive tutorial in google cloud cloudshell launch-tutorial:
+```bash
+mkdir -p ~/.cloudshell
+touch ~/.cloudshell/no-apt-get-warning
+export LD_PRELOAD=""
+export LMOD_CMD="/usr/share/lmod/lmod/libexec/lmod"
+
+sudo mkdir -p /etc/cvmfs/keys/ardc.edu.au/
+curl -J -O https://raw.githubusercontent.com/neurodesk/neurocommand/main/googlecolab_setup.sh
+chmod +x googlecolab_setup.sh
+./googlecolab_setup.sh
+
+sudo bash -c "cat > /usr/share/module.sh" << 'EOF'
+# system-wide profile.modules                                          #
+# Initialize modules for all sh-derivative shells                      #
+#----------------------------------------------------------------------#
+trap "" 1 2 3
+
+case "$0" in
+    -bash|bash|*/bash) . /usr/share/lmod/8.6.19/init/bash ;;
+       -ksh|ksh|*/ksh) . /usr/share/lmod/8.6.19/init/ksh ;;
+       -zsh|zsh|*/zsh) . /usr/share/lmod/8.6.19/init/zsh ;;
+          -sh|sh|*/sh) . /usr/share/lmod/8.6.19/init/sh ;;
+                    *) . /usr/share/lmod/8.6.19/init/sh ;;  # default for scripts
+esac
+
+trap - 1 2 3
+EOF
+
+source /usr/share/module.sh
+
+module use /cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/*
+
+```
+
+and then used in a tutorial.md:
+```markdown
+# My First fsl Tutorial in cloudshell
+
+## Step 1: Say Hello
+Run the following command to print a message:
+
+```bash
+module use /cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/*
+ml fsl
+bet
+```
+
+The tutorial can then be started:
+```bash
+cloudshell launch-tutorial tutorial.md
+```
