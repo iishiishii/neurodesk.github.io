@@ -4,8 +4,9 @@ linkTitle: "Bunya"
 weight: 2
 aliases: 
 - /docs/getting-started/hosted/bunya
+- /getting-started/hosted/bunya
 description: >
-  Use Neurodesk on Bunya (only for researchers with access to Bunya!)
+  Use Neurodesk on Bunya - the HPC at the University of Queensland
 ---
 
 

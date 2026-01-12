@@ -1,7 +1,7 @@
 ---
 title: "Neurocommand"
 linkTitle: "Neurocommand"
-weight: 5
+weight: 4
 aliases:
 - /docs/neurocommand
 - /docs/getting-started/neurocommand
