@@ -1,9 +1,7 @@
 ---
 title: "Play"
 linkTitle: "Play"
-weight: 13
-# type: redirect
-# redirect_url: https://play.neurodesk.org/
+weight: 1
 aliases:
 - /docs/neurodesktop/getting-started/play
 - /docs/getting-started/neurodesktop/play

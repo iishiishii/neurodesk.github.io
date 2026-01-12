@@ -68,3 +68,7 @@ await module.load('niimath')
 
 ## Installing Neurodesk for a lab
 
+
+## Updating Neurodesk for a lab
+
+

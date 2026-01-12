@@ -1,6 +1,7 @@
 ---
 title: "Google Colab and Cloud Shell"
-linkTitle: "Google Colab"
+weight: 2
+linkTitle: "Google"
 aliases:
 - /docs/getting-started/neurocontainers/googleColab
 - /docs/getting-started/neurocontainers/googlecolab
