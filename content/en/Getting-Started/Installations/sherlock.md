@@ -16,7 +16,7 @@ Neurodesk runs on Stanfords supercomputer "Sherlock". To access neurodesk tools 
 
 You can module use the neurodesk modules (if they have been installed before - see instructions for installing and updating below):
 ```bash
-module use ...
+module use /home/groups/polimeni/modules
 export APPTAINER_BINDPATH=/scratch,/tmp
 ```
 
@@ -27,20 +27,20 @@ ml av
 
 Or you can module load any tool you need:
 ```bash
-ml qsmxt/6.4.1
+ml fsl/6.0.7.18
 ```
 
-If you want to use GUI applications (fsleyes, afni, suma, matlab, ...) you need to overwrite the temporary directory to be /tmp (otherwise you get an error that it cannot connect to the DISPLAY):
-```bash
-export TMPDIR=/tmp 
-```
+## Using GUI applications
 
-For matlab you also need to create a network license file in your ~/Downloads/network.lic:
-```bash
-cat <<EOF > ~/Downloads/network.lic
-SERVER uq-matlab.research.dc.uq.edu.au ANY 27000
-USE_SERVER
-EOF
+First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk)
+```
+ssh -X YOUR_USER_NAME@login.sherlock.stanford.edu
+```
+and then request an interactive job:
+```
+sh_dev
+ml mrtrix3
+mrview
 ```
 
 NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS errors and a crash. To fix this run AFNI with:
@@ -48,11 +48,19 @@ NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS e
 afni -no_detach
 ```
 
-NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to problems on Bunya. A workaround is to run this before mriqc:
+NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to problems. A workaround is to run this before mriqc:
 ```bash
 export neurodesk_singularity_opts="--home $HOME:/home"
 ```
 
+## GPU support
+request a GPU and then add --nv option:
+```
+sh_dev -g 1
+module load fsl/6.0.5.1
+export neurodesk_singularity_opts='--nv'
+eddy_cuda9.1
+```
 
 ## Using containers inside a jupyter notebook
 You need to install this in addtion:
@@ -67,8 +75,22 @@ await module.load('niimath')
 ```
 
 ## Installing Neurodesk for a lab
+```
+cd /home/groups/polimeni/
+git clone https://github.com/neurodesk/neurocommand.git neurodesk
+cd neurodesk 
+pip3 install -r neurodesk/requirements.txt --user 
+bash build.sh --cli
+bash containers.sh
+export APPTAINER_BINDPATH=`pwd -P`
+```
 
-
-## Updating Neurodesk for a lab
+## Installing additional containers
+```
+cd /home/groups/polimeni/neurodesk
+git pull
+bash build.sh
+bash containers.sh
+```
 
 
