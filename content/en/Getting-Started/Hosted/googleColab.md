@@ -54,6 +54,8 @@ and more examples can be found [in our example library](https://neurodesk.org/ed
 ## Cloud Shell
 
 This also works in a google cloud shell, e.g. for an interactive tutorial in google cloud cloudshell launch-tutorial:
+
+First run this:
 ```bash
 mkdir -p ~/.cloudshell
 touch ~/.cloudshell/no-apt-get-warning
@@ -64,6 +66,10 @@ sudo mkdir -p /etc/cvmfs/keys/ardc.edu.au/
 curl -J -O https://raw.githubusercontent.com/neurodesk/neurocommand/main/googlecolab_setup.sh
 chmod +x googlecolab_setup.sh
 ./googlecolab_setup.sh
+```
+
+Then this:
+```bash
 sudo apt install lmod
 sudo bash -c "cat > /usr/share/module.sh" << 'EOF'
 # system-wide profile.modules                                          #
@@ -85,7 +91,6 @@ EOF
 source /usr/share/module.sh
 
 module use /cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/*
-
 ```
 
 and then used in a tutorial.md:

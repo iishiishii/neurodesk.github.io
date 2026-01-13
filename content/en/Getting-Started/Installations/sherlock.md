@@ -33,11 +33,11 @@ ml fsl/6.0.7.18
 ## Using GUI applications
 
 First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk)
-```
+```bash
 ssh -X YOUR_USER_NAME@login.sherlock.stanford.edu
 ```
 and then request an interactive job:
-```
+```bash
 sh_dev
 ml mrtrix3
 mrview
@@ -55,15 +55,22 @@ export neurodesk_singularity_opts="--home $HOME:/home"
 
 ## GPU support
 request a GPU and then add --nv option:
-```
+```bash
 sh_dev -g 1
 module load fsl/6.0.5.1
 export neurodesk_singularity_opts='--nv'
 eddy_cuda9.1
 ```
 
+## Visualization in the File Browser and notebooks of Jupyter Lab
+Start a jupyter lab session and then install this:
+```bash
+pip install jupyterlab_niivue ipyniivue
+```
+
+
 ## Using containers inside a jupyter notebook
-You need to install this in addtion:
+You need to install this:
 ```bash
 pip install jupyterlmod
 ```
@@ -75,7 +82,7 @@ await module.load('niimath')
 ```
 
 ## Installing Neurodesk for a lab
-```
+```bash
 cd /home/groups/polimeni/
 git clone https://github.com/neurodesk/neurocommand.git neurodesk
 cd neurodesk 
@@ -86,7 +93,7 @@ export APPTAINER_BINDPATH=`pwd -P`
 ```
 
 ## Installing additional containers
-```
+```bash
 cd /home/groups/polimeni/neurodesk
 git pull
 bash build.sh
