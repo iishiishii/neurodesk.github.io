@@ -270,7 +270,7 @@ curl -s https://raw.githubusercontent.com/neurodesk/neurocommand/main/cvmfs/log.
 
 #select a container and download it:
 export container=itksnap_3.8.0_20201208
-curl -X GET https://neurocontainers.neurodesk.org/$container.simg -O
+curl -X GET https://neurocontainers.s3.us-east-2.amazonaws.com/$container.simg -O
 
 singularity shell itksnap_3.8.0_20201208.simg
 itksnap

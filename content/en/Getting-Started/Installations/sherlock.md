@@ -8,6 +8,8 @@ description: >
 
 {{< toc >}}
 
+# Using Neurodesk on Sherlock
+
 ## Using Neurodesk containers interactively
 
 <!-- markdown-link-check-disable -->
@@ -32,11 +34,11 @@ ml fsl/6.0.7.18
 
 ## Using GUI applications
 
-First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk)
+First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk or from a mac with https://www.xquartz.org/ installed)
 ```bash
 ssh -X YOUR_USER_NAME@login.sherlock.stanford.edu
 ```
-and then request an interactive job:
+and then request an interactive job and start the software:
 ```bash
 sh_dev
 ml mrtrix3
@@ -48,10 +50,6 @@ NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS e
 afni -no_detach
 ```
 
-NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to problems. A workaround is to run this before mriqc:
-```bash
-export neurodesk_singularity_opts="--home $HOME:/home"
-```
 
 ## GPU support
 request a GPU and then add --nv option:
@@ -81,6 +79,24 @@ import module
 await module.load('niimath')
 ```
 
+## connecting with VScode
+- create a new SSH remote session and connect via `ssh -X YOUR_USERNAME@login.sherlock.stanford.edu`
+- or add this to your ssh config:
+```
+Host login.sherlock.stanford.edu
+  HostName login.sherlock.stanford.edu
+  ForwardX11 yes
+  User YOUR_USERNAME
+```
+
+## Misc
+### note on MRIQC
+NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to problems. A workaround is to run this before mriqc:
+```bash
+export neurodesk_singularity_opts="--home $HOME:/home"
+```
+
+# Managing Neurodesk on Sherlock
 ## Installing Neurodesk for a lab
 ```bash
 cd /home/groups/polimeni/
