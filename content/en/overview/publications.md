@@ -24,7 +24,7 @@ For instructions on how to cite Neurodesk and specific tools, visit our [Citatio
 
 - Dao, T. T., Masson-Trottier, M., Ribeiro, F. L., Scarsbrook, J., Stewart, A., Ye, X., Hamilton, E., Bollmann, S., & Narayanan, A. (2025). Democratizing open neuroimaging: Neurodesk’s approach to open data accessibility and utilization. Aperture Neuro, 5(SI 2). https://doi.org/10.52294/001c.144107
 
-- Monika Dörig, Michèle Masson-Trottier, Thuy Dao, Kyle Mapue, Andrew Jahn, Fernanda L. Ribeiro, Ashley Stewart, Thomas Shaw, Michal Toth, Marla Pinkert, Paul Taylor, Angela Renton, Daniel A. Handwerker, Giulia Baracchini, Christopher Rorden, Aswin Narayanan, & Bollmann, S. (2026). <Developing_an_Interactive_Neuroimaging_Education_Resource_with_Neurodesk.pdf>. EdArXiv. https://doi.org/10.35542/osf.io/7q83c_v1 
+- Monika Dörig, Michèle Masson-Trottier, Thuy Dao, Kyle Mapue, Andrew Jahn, Fernanda L. Ribeiro, Ashley Stewart, Thomas Shaw, Michal Toth, Marla Pinkert, Paul Taylor, Angela Renton, Daniel A. Handwerker, Giulia Baracchini, Christopher Rorden, Aswin Narayanan, & Bollmann, S. (2026). Developing an Interactive Neuroimaging Education Resource with Neurodesk. EdArXiv. https://doi.org/10.35542/osf.io/7q83c_v1 
 
 
 ## Neurodesk in action
