@@ -123,7 +123,7 @@ description: >
 <script src="{{< relurl "/static/js/command.js" >}}"></script>
 
 ## Installation Examples
-We show a couple of specific examples on how Neurodesk can be installed von various systems [here](/getting-started/installations/).
+We show a couple of specific examples on how Neurodesk can be installed on various systems [here](/getting-started/installations/).
 
 ## Release
 Ensure you note the release date of the Neurodesktop container image during installation, as it is indicated in the _docker run_ command, e.g. 
