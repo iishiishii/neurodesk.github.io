@@ -60,6 +60,19 @@ export neurodesk_singularity_opts='--nv'
 eddy_cuda9.1
 ```
 
+## GPU support for GUIs (needs testing)
+
+on macos:
+```
+brew install --cask xquartz
+brew install --cask virtualgl
+```
+
+```
+vglconnect user@server
+vglrun [application_name]
+```
+
 ## Visualization in the File Browser and notebooks of Jupyter Lab
 Start a jupyter lab session and then install this:
 ```bash
