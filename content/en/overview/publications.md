@@ -22,10 +22,22 @@ For instructions on how to cite Neurodesk and specific tools, visit our [Citatio
 
 - Masson-Trottier, M., Dao, T. T., Narayanan, A., & Bollmann, S. (2025). Toward the Future of Scientific Publishing through Reproducible Research Artefacts Enabled by Neurodesk. Aperture Neuro, 12. https://doi.org/10.52294/001c.143700
 
-- Dao, T. T., Masson-Trottier, M., Ribeiro, F. L., Scarsbrook, J., Stewart, A., Ye, X., Hamilton, E., Bollmann, S., & Narayanan, A. (2025). Democratizing open neuroimaging: Neurodesk’s approach to open data accessibility and utilization. Aperture Neuro, 5(SI 2). https://doi.org/10.52294/001c.144107 
+- Dao, T. T., Masson-Trottier, M., Ribeiro, F. L., Scarsbrook, J., Stewart, A., Ye, X., Hamilton, E., Bollmann, S., & Narayanan, A. (2025). Democratizing open neuroimaging: Neurodesk’s approach to open data accessibility and utilization. Aperture Neuro, 5(SI 2). https://doi.org/10.52294/001c.144107
+
+- Monika Dörig, Michèle Masson-Trottier, Thuy Dao, Kyle Mapue, Andrew Jahn, Fernanda L. Ribeiro, Ashley Stewart, Thomas Shaw, Michal Toth, Marla Pinkert, Paul Taylor, Angela Renton, Daniel A. Handwerker, Giulia Baracchini, Christopher Rorden, Aswin Narayanan, & Bollmann, S. (2026). <Developing_an_Interactive_Neuroimaging_Education_Resource_with_Neurodesk.pdf>. EdArXiv. https://doi.org/10.35542/osf.io/7q83c_v1 
 
 
 ## Neurodesk in action
+
+- Wright, B. R., Schira, M. M., Paxinos, G., & Kassem, M. S. (2025). Paediatric MRI: High-Resolution in vivo 3T Methods. bioRxiv. https://doi.org/10.1101/2025.10.30.685686 
+
+- Dörig, M., Cole, D. M., Guekos, A., Stämpfli, P., Schuetz, P., Schibli, L., Schweinhardt, P., & Meier, M. L. (2025). Stable Somatotopy in Chronic Low Back Pain: Is Cortical Map Reorganization a Myth? bioRxiv. https://doi.org/10.1101/2025.11.05.686896 
+
+- Arnoldy, L., Gauci, S., Young, L. M., Macpherson, H., Civier, O., Scholey, A., Pipingas, A., & White, D. J. (2025). Assessing the association between the Mediterranean, Dietary Approaches to Stop Hypertension and Mediterranean-DASH Intervention for Neurodegenerative Delay dietary patterns, structural connectivity and cognitive function. Br J Nutr, 133(7), 1-17. https://doi.org/10.1017/S0007114525000406 
+
+- Pruckner, P., Mito, R., Vaughan, D., Jackson, G., Fischmeister, F., Nenning, K. H., Berger, M., Pataraia, E., Baumgartner, C., Dorfer, C., Rossler, K., Czech, T., Kasprian, G., Bonelli, S., & Smith, R. (2025). Surgical white matter disruption leads to downstream atrophy in the non-resected human brain. Brain. https://doi.org/10.1093/brain/awaf344 
+
+- Khalife, S., Bollmann, S., Zalesky, A., & Oestreich, L. K. L. (2025). Magnetic Resonance Imaging-Derived Markers of Acute and Chronic Inflammatory Processes in the Ventral Tegmental Area Associated With Depression. Biol Psychiatry Cogn Neurosci Neuroimaging. https://doi.org/10.1016/j.bpsc.2025.09.003 
 
 - Ribeiro, F. L., Satzger, R., Hoffstaedter, F., Bürger, C., Herholz, P., Linhardt, D., Benson, N. C., Schwarzkopf, D. S., Puckett, A. M., Bollmann, S., & Hebart, M. N. (2025). Predicting functional topography of the human visual cortex from cortical anatomy at scale. bioRxiv. https://doi.org/10.1101/2025.11.27.690210
 
