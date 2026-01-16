@@ -22,6 +22,12 @@ module use /home/groups/polimeni/modules
 export APPTAINER_BINDPATH=/scratch,/tmp
 ```
 
+You can also add these to your ~/.bashrc:
+```
+echo "module use /home/groups/polimeni/modules/" >> ~/.bashrc
+echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
+```
+
 Now you can list all modules (Neurodesk modules are the first ones in the list):
 ```bash
 ml av
@@ -32,12 +38,15 @@ Or you can module load any tool you need:
 ml fsl/6.0.7.18
 ```
 
+
+
 ## Using GUI applications
 
-First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk or from a mac with https://www.xquartz.org/ installed)
+First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk or from a mac with https://www.xquartz.org/ installed, or from windows using Mobaxterm)
 ```bash
 ssh -X YOUR_USER_NAME@login.sherlock.stanford.edu
 ```
+
 and then request an interactive job and start the software:
 ```bash
 sh_dev
@@ -45,10 +54,6 @@ ml mrtrix3
 mrview
 ```
 
-NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS errors and a crash. To fix this run AFNI with:
-```bash
-afni -no_detach
-```
 
 
 ## GPU support
@@ -73,11 +78,18 @@ vglconnect user@server
 vglrun [application_name]
 ```
 
-## Visualization in the File Browser and notebooks of Jupyter Lab
-Start a jupyter lab session and then install this:
+## Neuroimaging Visualization in the File Browser and notebooks of Jupyter Lab
+Start a jupyter lab session in Ondemand:
+![Ondemand Jupyterlab](/static/docs/installations/ondemand-jupyterlab.png)
+
+and then install this in a new terminal:
 ```bash
 pip install jupyterlab_niivue ipyniivue
 ```
+After the installation finished restart the jupyterlab session in Ondemand.
+
+This adds an extension to jupyterlab that visualizes neuroimaging data directly via a double-click in the filebrowser of jupyterlab:
+![alt text](/static/docs/installations/jupyter-lab-niivue.png)
 
 
 ## Using containers inside a jupyter notebook
@@ -109,6 +121,12 @@ NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to pr
 export neurodesk_singularity_opts="--home $HOME:/home"
 ```
 
+### note on AFNI
+NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS errors and a crash. To fix this run AFNI with:
+```bash
+afni -no_detach
+```
+
 # Managing Neurodesk on Sherlock
 ## Installing Neurodesk for a lab
 ```bash
@@ -127,6 +145,9 @@ cd /home/groups/polimeni/neurodesk
 git pull
 bash build.sh
 bash containers.sh
+# to search for a container:
+bash containers.sh freesurfer
+# then install the choosen version by copy and pasting the specific command install command displayed
 ```
 
 
