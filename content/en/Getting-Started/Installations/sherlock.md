@@ -158,24 +158,41 @@ ssh sherlock
 then create a new SSH remote session in vscode and connect via `ssh sherlock`
 
 ## connecting with Cursor
-prepare for cursor through a normal shell:
+
+THIS NEEDS MORE TESTING: 
+
+prepare for cursor through a normal shell on sherlock:
 ```
-cd ~
-mkdir -p tools
-cd tools
-# Download Node v20 for older Linux (glibc 2.17+)
-wget https://unofficial-builds.nodejs.org/download/release/v20.10.0/node-v20.10.0-linux-x64-glibc-217.tar.gz
-tar -xzf node-v20.10.0-linux-x64-glibc-217.tar.gz
-rm node-v20.10.0-linux-x64-glibc-217.tar.gz
-pkill -u $USER -f cursor-server
-rm /tmp/cursor*
-rm -rf ~/.cursor-server
-ls /tmp
-echo "export PATH=\$PATH:~/tools/node-v20.10.0-linux-x64-glibc-217/bin" >> ~/.bashrc
+ssh sherlock
+sh_dev
+mkdir -p ~/tools
+cd ~/tools
+
+apptainer pull node20.sif docker://node:20-bullseye
+
+cat > node << 'EOF'
+#!/bin/bash
+export UV_USE_IO_URING=0
+apptainer exec --bind $HOME:$HOME $HOME/tools/node20.sif node "$@"
+EOF
+
+chmod +x node
+
+./node --version
+
+echo "export PATH=$PWD:\$PATH" >> ~/.bashrc
 cat ~/.bashrc
 
+pkill -u $USER -f cursor-server
+
+rm /tmp/cursor*
+rm -rf ~/.cursor-server
+
+ls /tmp
+
 node --version
-wget https://nodejs.org/dist/v18.19.0/node-v18.19.0-linux-x64.tar.xz
+
+which node
 
 ```
 then connect via ssh inside cursor.
