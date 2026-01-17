@@ -54,7 +54,6 @@ ml fsl/6.0.7.18
 ```
 
 ## Submitting a job:
-https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
 put this in a file, e.g. `submit.sbatch`:
 ```
@@ -80,6 +79,7 @@ check:
 ```
 squeue -u $USER
 ```
+more details https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
 
 ## Using GUI applications
@@ -101,7 +101,7 @@ export neurodesk_singularity_opts='--nv'
 eddy_cuda9.1
 ```
 
-## GPU support for GUIs (needs testing)
+## GPU support for GUIs (needs more testing)
 on macos:
 ```
 brew install --cask xquartz
@@ -193,6 +193,11 @@ rm -rf ~/.cursor-server
 ls /tmp
 
 node --version
+
+NODE_BIN="/home/users/sciget/tools/node"
+SERVER_SCRIPT="/home/users/sciget/.cursor-server/bin/multiplex-server/3ce73d09cffc8f33c6d911e972bd0f6dabbe3e26e810844be8060e6b10987db8.js"
+TOKEN="8642232f-e645-42f9-a5cc-a6001cbe89cb"
+strace -f -s 200 -o debug_crash.txt "$NODE_BIN" "$SERVER_SCRIPT" "$TOKEN" 0
 ```
 then connect via ssh inside cursor.
 
