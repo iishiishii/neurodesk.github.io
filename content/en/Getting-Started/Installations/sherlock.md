@@ -54,7 +54,9 @@ ml fsl/6.0.7.18
 ```
 
 ## Submitting a job:
-submit.slurm:
+https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
+
+put this in a file, e.g. `submit.sbatch`:
 ```
 #!/bin/bash
 #
@@ -71,7 +73,7 @@ srun sleep 60
 
 then submit:
 ```
-sbatch submit.slurm
+sbatch submit.sbatch
 ```
 
 check:
@@ -138,7 +140,7 @@ await module.load('niimath')
 ```
 
 ## connecting with VScode
-make sure you have VS Code 1.85 -> newer versions will not work on sherlock, because its operating system is too old! Alternatively use the vs-code provided through ondemand.
+make sure you have VS Code 1.85 (https://code.visualstudio.com/updates/v1_85) -> newer versions will not work on sherlock, because its operating system is too old! Alternatively use the vs-code provided through ondemand.
 
 make sure you have this in your ~/.ssh/config 
 ```
@@ -191,9 +193,6 @@ rm -rf ~/.cursor-server
 ls /tmp
 
 node --version
-
-which node
-
 ```
 then connect via ssh inside cursor.
 
