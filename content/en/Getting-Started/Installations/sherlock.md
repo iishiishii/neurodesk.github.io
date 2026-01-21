@@ -140,66 +140,11 @@ await module.load('niimath')
 ```
 
 ## connecting with VScode
-make sure you have VS Code 1.85 (https://code.visualstudio.com/updates/v1_85) -> newer versions will not work on sherlock, because its operating system is too old! Alternatively use the vs-code provided through ondemand.
-
-make sure you have this in your ~/.ssh/config 
-```
-Host sherlock
-    ControlMaster auto
-    ForwardX11 yes
-    ControlPath ~/.ssh/%l%r@%h:%p
-    HostName login.sherlock.stanford.edu
-    User <sunetid> 
-    ControlPersist yes
-```
-
-and connect to sherlock in a normal terminal
-```
-ssh sherlock
-```
-then create a new SSH remote session in vscode and connect via `ssh sherlock`
+VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job. 
 
 ## connecting with Cursor
+Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job.
 
-THIS NEEDS MORE TESTING: 
-
-prepare for cursor through a normal shell on sherlock:
-```
-ssh sherlock
-sh_dev
-mkdir -p ~/tools
-cd ~/tools
-
-apptainer pull node20.sif docker://node:20-bullseye
-
-cat > node << 'EOF'
-#!/bin/bash
-export UV_USE_IO_URING=0
-apptainer exec --bind $HOME:$HOME $HOME/tools/node20.sif node "$@"
-EOF
-
-chmod +x node
-
-./node --version
-
-echo "export PATH=$PWD:\$PATH" >> ~/.bashrc
-cat ~/.bashrc
-
-pkill -u $USER -f cursor-server
-
-rm /tmp/cursor*
-rm -rf ~/.cursor-server
-
-ls /tmp
-
-node --version
-
-NODE_BIN="/home/users/sciget/tools/node"
-SERVER_SCRIPT="/home/users/sciget/.cursor-server/bin/multiplex-server/3ce73d09cffc8f33c6d911e972bd0f6dabbe3e26e810844be8060e6b10987db8.js"
-TOKEN="8642232f-e645-42f9-a5cc-a6001cbe89cb"
-strace -f -s 200 -o debug_crash.txt "$NODE_BIN" "$SERVER_SCRIPT" "$TOKEN" 0
-```
-then connect via ssh inside cursor.
 
 ## Misc
 
