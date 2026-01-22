@@ -146,6 +146,37 @@ VScode does not work on he login nodes due to resource restrictions. It might be
 Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job.
 
 
+## using coding agents on sherlock
+Copilot CLI — an extension of GitHub Copilot that answers natural-language prompts and generates shell commands and code snippets interactively in the CLI. Integrates with developer workflow and git metadata, good at scaffolding repo-level changes. Use this for drafting Slurm scripts, shell-based data-movement commands, Makefiles, container entrypoints, and succinct code edits from the terminal. Caution: always validate generated shell commands before running on Oak.
+```
+ml copilot-cli
+copilot
+```
+
+Gemini CLI — a CLI assistant that can generate code from Google’s Gemini family of models (via Google Cloud/Vertex AI or client tooling). Provides strong multilingual reasoning and contextual code completion. Use this for translating research intent into cloud and hybrid workflows, generating code for TPU/GPU workloads, and producing infrastructure-as-code snippets that tie to GCP resources. Caution: always confirm data residency and compliance requirements for sensitive data.
+```
+ml gemini-cli
+gemini
+```
+
+Claude Code (Claude family) — a coding-specialized variant in the Anthropic Claude model family aimed at code generation, refactoring, and reasoning tasks. Provides conversational reasoning about code, multi-step planning for algorithmic tasks, and safer-response tuning relative to generic models. Caution: check private endpoints/dedicated instances before sending sensitive datasets.
+```
+ml claude-code
+claude
+```
+
+Codex — an OpenAI model family good at producing short code snippets, language translations, and API glue, historically the basis for many coding assistants. Use this for scaffold code, translating pseudocode to working scripts, and generating wrappers for system calls and schedulers. Caution: watch out for API hallucinations and insecure shell usage suggestions; verification in GPT-4 (which often supersedes Codex in capability and safety) advised.
+```
+ml codex
+codex
+```
+
+Crush CLI — an all-around CLI assistant from the Charmbracelet Go-based “ecosystem” intended to improve interactive developer workflows and scripting. Use it for interactive shells or task runners, pipeline composition for local data preprocessing, productivity (nicer prompts, piping primitives, nicer output formatting), or small automation tasks such as repo tooling and glue scripts.
+```
+ml crush
+crush
+```
+
 ## Misc
 
 ### note on miniconda
