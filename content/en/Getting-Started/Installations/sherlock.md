@@ -6,16 +6,14 @@ description: >
   Use Neurodesk on Sherlock - the HPC at Stanford University
 ---
 
+Neurodesk runs on Stanfords supercomputer "Sherlock" and below are different ways of accessing it.
+
 {{< toc >}}
 
-# Using Neurodesk on Sherlock
 
-## Using Neurodesk containers interactively
+# Using Neurodesk on Sherlock via ssh
 
-<!-- markdown-link-check-disable -->
-Neurodesk runs on Stanfords supercomputer "Sherlock". To access neurodesk tools you need to be in an interactive job (e.g. via Open On-Demand: https://ondemand.sherlock.stanford.edu/)
-<!-- markdown-link-check-enable -->
-
+## Using Neurodesk containers
 Setup your ~/.ssh/config
 ```
 Host sherlock
@@ -60,14 +58,21 @@ put this in a file, e.g. `submit.sbatch`:
 #!/bin/bash
 #
 #SBATCH --job-name=test
-#
-#SBATCH --time=10:00
+#SBATCH --time=47:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=32
 #SBATCH --mem-per-cpu=2G
+#SBATCH --output=test_job.%j.out
+#SBATCH --error=test_job.%j.err
+#SBATCH -p normal
 
-srun hostname
-srun sleep 60
+module use /home/groups/polimeni/modules/
+module load ants
+```
+
+use sh_part to see which partitions and limits are available:
+```
+sh_part
 ```
 
 then submit:
@@ -78,6 +83,11 @@ sbatch submit.sbatch
 check:
 ```
 squeue -u $USER
+```
+
+cancel jobs:
+```
+scancel <jobid>
 ```
 more details https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
@@ -101,7 +111,7 @@ export neurodesk_singularity_opts='--nv'
 eddy_cuda9.1
 ```
 
-## GPU support for GUIs (needs more testing)
+## GPU support for GUIs (not yet working!)
 on macos:
 ```
 brew install --cask xquartz
@@ -113,30 +123,60 @@ vglconnect user@server
 vglrun [application_name]
 ```
 
-## Neuroimaging Visualization in the File Browser and notebooks of Jupyter Lab
-Start a jupyter lab session in Ondemand:
+
+
+
+# Using Neurodesk on Sherlock via Ondemand
+<!-- markdown-link-check-disable -->
+Open a jupyterlab session via Open On-Demand: https://ondemand.sherlock.stanford.edu/
+<!-- markdown-link-check-enable -->
 ![Ondemand Jupyterlab](/static/docs/installations/ondemand-jupyterlab.png)
 
-and then install this in a new terminal:
+## Installing jupyterlab plugins:
+open a terminal in jupyterlab and install:
 ```bash
-pip install jupyterlab_niivue ipyniivue
+pip install jupyterlab_niivue ipyniivue jupyterlmod
 ```
 After the installation finished restart the jupyterlab session in Ondemand.
 
-This adds an extension to jupyterlab that visualizes neuroimaging data directly via a double-click in the filebrowser in jupyterlab:
+## Neuroimaging Visualization in the File Browser and notebooks of Jupyter Lab
+The `pip install jupyterlab_niivue` added an extension to jupyterlab that visualizes neuroimaging data directly via a double-click in the filebrowser in jupyterlab:
 ![alt text](/static/docs/installations/jupyter-lab-niivue.png)
 
-
 ## Using containers inside a jupyter notebook
-You need to install this:
-```bash
-pip install jupyterlmod
-```
-
-Then start a notebook and run these commands:
+The install of `pip install jupyterlmod` made the following possible inside a jupyter notebook:
 ```python
 import module
 await module.load('niimath')
+```
+
+## Using niivue inside a jupyter notebook:
+The install of `pip install ipyniivue` allows interactive visualizations inside jupyter notebooks: See examples here https://niivue.github.io/ipyniivue/gallery/index.html
+
+
+
+
+
+# Using Neurodesk via a full neurodesk desktop session
+```
+#!/bin/bash
+function getnode() {
+    local MIDDLE_PORT=$(shuf -i 10000-65000 -n 1)
+    
+    echo " establishing tunnel via Login Node port: $MIDDLE_PORT"
+    
+    #    - Tunnel A: Laptop:8888 -> Login:MIDDLE_PORT
+    #    - Command: Requests node -> Tunnels Login:MIDDLE_PORT -> Compute:8888
+    ssh -t -L 8888:localhost:${MIDDLE_PORT} sherlock \
+        "salloc -p dev --nodes=1 --time=02:00:00 --ntasks=1 --cpus-per-task=1 --mem=8G \
+        bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
+                 ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST}'"
+}
+```
+
+if you get an error:
+```
+ssh -O exit sherlock
 ```
 
 ## connecting with VScode
@@ -202,7 +242,33 @@ afni -no_detach
 ## Transfer files to and from Onedrive
 First install rclone on your computer and set it up for onedrive. Then copy the config file ~/.config/rclone/rclone.conf to sherlock. Then run rclone on sherlock:
 ```
+ml system
 ml rclone
+rclone ls 
+rclone copy
+```
+
+### setting up rclone for onedrive (needs to be done on a computer with a browser, so not sherlock):
+```bash 
+rclone config
+# select n for new remote
+# enter a name, e.g. onedrive
+# select one drive from the list, depending on the rclone version this could be 38
+# hit enter for default client_id
+# hit enter for default client_secret
+# select region 1 Microsoft Global
+# hit enter for default tenant
+# enter n to skip advanced config
+# enter y to open a webbrowser and authenticate with onedrive
+# enter 1 for config type OneDrive Personal or Business
+# hit enter for default config_driveid
+# enter y to accept
+# enter y again to confirm
+# then quit config q
+# now test:
+rclone ls onedrive:
+# if it's not showing the files from your onedrive, change the config_driveid in ~/.config/rclone/rclone.conf
+vi ~/.config/rclone/rclone.conf
 ```
 
 ## Transfer files using datalad
