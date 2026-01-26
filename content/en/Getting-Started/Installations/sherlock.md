@@ -157,36 +157,60 @@ The install of `pip install ipyniivue` allows interactive visualizations inside 
 
 
 
-# Using Neurodesk via a full neurodesk desktop session
-```
-#!/bin/bash
-function getnode() {
-    local MIDDLE_PORT=$(shuf -i 10000-65000 -n 1)
-    
-    echo " establishing tunnel via Login Node port: $MIDDLE_PORT"
-    
-    #    - Tunnel A: Laptop:8888 -> Login:MIDDLE_PORT
-    #    - Command: Requests node -> Tunnels Login:MIDDLE_PORT -> Compute:8888
-    ssh -t -L 8888:localhost:${MIDDLE_PORT} sherlock \
-        "salloc -p dev --nodes=1 --time=02:00:00 --ntasks=1 --cpus-per-task=1 --mem=8G \
-        bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
-                 ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST}'"
-}
+# Using Neurodesk via a full neurodesktop session
+```bash
+bash connectSherlock.sh
 ```
 
-if you get an error:
+connect:
+```bash
+connectSherlock
 ```
-ssh -O exit sherlock
+
+```bash
+# 1. Create a blank 2GB file (Change count=2048 for different size in MB)
+dd if=/dev/zero of=neurodesktop-overlay.img bs=1M count=2048
+
+# 2. Format it as ext3 (The -F flag forces it to run on a file)
+mkfs.ext3 -F neurodesktop-overlay.img
+
+# 3. Create the required directory structure inside the image
+# We use debugfs to write to the file system without mounting it (which requires root)
+debugfs -w -R "mkdir upper" neurodesktop-overlay.img
+debugfs -w -R "mkdir work" neurodesktop-overlay.img
+
+# rm -rf ~/neurodesktop-home
+mkdir -p ~/neurodesktop-home
 ```
 
-## connecting with VScode
-VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job. 
+```bash
+apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop-dev:2026-01-26-1950
+```
 
-## connecting with Cursor
-Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job.
+```bash
+apptainer run \
+   --fakeroot \
+   --nv \
+   --overlay ~/neurodesktop-overlay.img \
+   --bind /home/groups/polimeni/neurodesk/local/containers/:/neurodesktop-storage/containers \
+   --no-home \
+   --home ~/neurodesktop-home:/home/jovyan \
+   --env CVMFS_DISABLE=true \
+   --env NB_UID=$(id -u) \
+   --env NB_GID=$(id -g) \
+   --env NEURODESKTOP_VERSION=2025-12-20 \
+   /home/groups/polimeni/neurodesk/neurodesktop-dev_2026-01-26-1950.sif \
+   start-notebook.py --allow-root
+```
 
 
-## using coding agents on sherlock
+# connecting with VScode
+VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
+
+# connecting with Cursor
+Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
+
+# using coding agents on sherlock
 Copilot CLI — an extension of GitHub Copilot that answers natural-language prompts and generates shell commands and code snippets interactively in the CLI. Integrates with developer workflow and git metadata, good at scaffolding repo-level changes. Use this for drafting Slurm scripts, shell-based data-movement commands, Makefiles, container entrypoints, and succinct code edits from the terminal. Caution: always validate generated shell commands before running on Oak.
 ```
 ml copilot-cli
@@ -217,22 +241,22 @@ ml crush
 crush
 ```
 
-## Misc
+# Misc
 
-### note on miniconda
-# we need an older version of Miniconda on Sherlock due to the outdated glibC:
+## note on miniconda
+we need an older version of Miniconda on Sherlock due to the outdated glibc:
 ```
 wget https://repo.anaconda.com/miniconda/Miniconda3-py310_23.3.1-0-Linux-x86_64.sh
 bash Miniconda3-py310_23.3.1-0-Linux-x86_64.sh
 ```
 
-### note on MRIQC
+## note on MRIQC
 NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to problems. A workaround is to run this before mriqc:
 ```bash
 export neurodesk_singularity_opts="--home $HOME:/home"
 ```
 
-### note on AFNI
+## note on AFNI
 NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS errors and a crash. To fix this run AFNI with:
 ```bash
 afni -no_detach
@@ -309,5 +333,10 @@ bash containers.sh
 bash containers.sh freesurfer
 # then install the choosen version by copy and pasting the specific command install command displayed
 ```
+
+## Updating Neurodesktop image
+```
+```
+
 
 
