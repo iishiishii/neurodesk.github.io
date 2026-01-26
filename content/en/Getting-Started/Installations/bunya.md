@@ -61,7 +61,7 @@ If you are missing an application, please contact mail.neurodesk@gmail.com and a
 ### Using this inside a jupyter notebook
 You need to install this in addtion:
 ```bash
-pip install jupyterlab_niivue ipyniivue jupyterlmod
+pip install jupyterlab_niivue ipyniivue jupyterlmod jupyterlab_slurm
 ```
 
 Then start a notebook and run these commands:
