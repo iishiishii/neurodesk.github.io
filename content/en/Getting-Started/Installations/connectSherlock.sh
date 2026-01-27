@@ -12,7 +12,7 @@ function connectSherlock() {
         return 1
     fi
     # Close master connection on return
-    trap "ssh -S \"$CTRL_SOCKET\" -O exit \"$LOGIN_NODE\" 2>/dev/null" RETURN
+    # trap "ssh -S \"$CTRL_SOCKET\" -O exit \"$LOGIN_NODE\" 2>/dev/null" RETURN
     
     # --- 1. CHECK FOR EXISTING "NEURODESKTOP" JOBS ---
     # We add --name="neurodesktop" to squeue so we don't accidentally 
@@ -76,6 +76,7 @@ function connectSherlock() {
     echo "Preparing setup script..."
     ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh << 'EOF'
 #!/bin/bash
+export PATH=\$PATH:/sbin:/usr/sbin
 if [ ! -f neurodesktop-overlay.img ]; then
     echo \"Creating neurodesktop-overlay.img (2GB)...\"
     dd if=/dev/zero of=neurodesktop-overlay.img bs=1M count=2048
