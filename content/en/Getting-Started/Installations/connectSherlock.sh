@@ -2,11 +2,22 @@
 function connectSherlock() {
     local LOGIN_NODE="sherlock"
     local JOB_NAME="neurodesktop"
+    local CTRL_SOCKET="${HOME}/.ssh/sherlock_ctrl_$(date +%s)_${RANDOM}"
+
+    # Start master connection
+    # -M: master mode, -f: background, -N: no command, -S: socket path
+    ssh -M -f -N -S "$CTRL_SOCKET" "$LOGIN_NODE"
+    if [ $? -ne 0 ]; then
+        echo "Authentication failed."
+        return 1
+    fi
+    # Close master connection on return
+    trap "ssh -S \"$CTRL_SOCKET\" -O exit \"$LOGIN_NODE\" 2>/dev/null" RETURN
     
     # --- 1. CHECK FOR EXISTING "NEURODESKTOP" JOBS ---
     # We add --name="neurodesktop" to squeue so we don't accidentally 
     # grab background compute jobs.
-    local EXISTING_JOB=$(ssh -q "$LOGIN_NODE" "squeue -u \$USER --name=$JOB_NAME -h -t R -o '%i %N' | head -n 1")
+    local EXISTING_JOB=$(ssh -S "$CTRL_SOCKET" -q "$LOGIN_NODE" "squeue -u \$USER --name=$JOB_NAME -h -t R -o '%i %N' | head -n 1")
     
     if [ ! -z "$EXISTING_JOB" ]; then
         read -r JOB_ID NODE_NAME <<< "$EXISTING_JOB"
@@ -18,7 +29,7 @@ function connectSherlock() {
         if [[ ! "$reuse" =~ ^([nN][oO]|[nN])$ ]]; then
             echo "Reconnecting to $NODE_NAME..."
             echo "ℹ️  Using existing tunnel on port 8888 (maintained by your original terminal)."
-            ssh -t "$LOGIN_NODE" "ssh $NODE_NAME"
+            ssh -S "$CTRL_SOCKET" -t "$LOGIN_NODE" "ssh $NODE_NAME"
             return
         fi
     fi
@@ -56,16 +67,53 @@ function connectSherlock() {
     # --- 3. CHECK LOCAL PORT 8888 ---
     # Check if port 8888 is occupied and kill the process if so
     if lsof -Pi :8888 -sTCP:LISTEN -t >/dev/null ; then
-        echo "⚠️  Port 8888 is already in use."
+        echo "Port 8888 is already in use."
         local PID=$(lsof -Pi :8888 -sTCP:LISTEN -t)
         echo "Killing process $PID to free up port 8888..."
         kill -9 "$PID"
     fi
 
+    echo "Preparing setup script..."
+    ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh << 'EOF'
+#!/bin/bash
+if [ ! -f neurodesktop-overlay.img ]; then
+    echo \"Creating neurodesktop-overlay.img (2GB)...\"
+    dd if=/dev/zero of=neurodesktop-overlay.img bs=1M count=2048
+    mkfs.ext3 -F neurodesktop-overlay.img
+    debugfs -w -R \"mkdir upper\" neurodesktop-overlay.img
+    debugfs -w -R \"mkdir work\" neurodesktop-overlay.img
+else
+    echo \"neurodesktop-overlay.img found.\"
+fi
+
+if [ ! -d ~/neurodesktop-home ]; then
+    echo \"Creating ~/neurodesktop-home...\"
+    mkdir -p ~/neurodesktop-home
+else
+    echo \"~/neurodesktop-home found.\"
+fi
+
+echo \"Starting Neurodesktop container...\"
+# Using backslashes for line continuation in the remote file requires double backslash here
+apptainer run \\
+   --fakeroot \\
+   --nv \\
+   --overlay ~/neurodesktop-overlay.img \\
+   --bind /home/groups/polimeni/neurodesk/local/containers/:/neurodesktop-storage/containers \\
+   --no-home \\
+   --home ~/neurodesktop-home:/home/jovyan \\
+   --env CVMFS_DISABLE=true \\
+   --env NB_UID=\$(id -u) \\
+   --env NB_GID=\$(id -g) \\
+   --env NEURODESKTOP_VERSION=latest \\
+   /home/groups/polimeni/neurodesk/neurodesktop_latest.sif \\
+   start-notebook.py --allow-root
+EOF
+chmod +x ~/.neurodesk_setup.sh"
+
     # --- 4. LAUNCH ALLOCATION ---
-    # Added --job-name (or -J) to tag this specific session
-    ssh -S none -t -L 8888:localhost:${MIDDLE_PORT} "$LOGIN_NODE" \
+    ssh -S "$CTRL_SOCKET" -t -L 8888:localhost:${MIDDLE_PORT} "$LOGIN_NODE" \
         "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM \
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
-                 ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST}'"
+                 ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST} \"~/.neurodesk_setup.sh\"'"
 }

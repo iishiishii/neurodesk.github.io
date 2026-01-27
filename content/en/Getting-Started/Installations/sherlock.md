@@ -158,6 +158,7 @@ The install of `pip install ipyniivue` allows interactive visualizations inside 
 
 
 # Using Neurodesk via a full neurodesktop session
+## starting
 ```bash
 bash connectSherlock.sh
 ```
@@ -167,26 +168,14 @@ connect:
 connectSherlock
 ```
 
+## updating the desktop image
 ```bash
-# 1. Create a blank 2GB file (Change count=2048 for different size in MB)
-dd if=/dev/zero of=neurodesktop-overlay.img bs=1M count=2048
-
-# 2. Format it as ext3 (The -F flag forces it to run on a file)
-mkfs.ext3 -F neurodesktop-overlay.img
-
-# 3. Create the required directory structure inside the image
-# We use debugfs to write to the file system without mounting it (which requires root)
-debugfs -w -R "mkdir upper" neurodesktop-overlay.img
-debugfs -w -R "mkdir work" neurodesktop-overlay.img
-
-# rm -rf ~/neurodesktop-home
-mkdir -p ~/neurodesktop-home
+cd /home/groups/polimeni/neurodesk
+apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
+ln -s /home/groups/polimeni/neurodesk/neurodesktop_2026-01-26.sif /home/groups/polimeni/neurodesk/neurodesktop_latest.sif 
 ```
 
-```bash
-apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop-dev:2026-01-26-1950
-```
-
+## manual start in a job
 ```bash
 apptainer run \
    --fakeroot \
@@ -198,11 +187,10 @@ apptainer run \
    --env CVMFS_DISABLE=true \
    --env NB_UID=$(id -u) \
    --env NB_GID=$(id -g) \
-   --env NEURODESKTOP_VERSION=2025-12-20 \
-   /home/groups/polimeni/neurodesk/neurodesktop-dev_2026-01-26-1950.sif \
+   --env NEURODESKTOP_VERSION=test_2026-01-26 \
+   /home/groups/polimeni/neurodesk/neurodesktop-test_2026-01-26.sif \
    start-notebook.py --allow-root
 ```
-
 
 # connecting with VScode
 VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
