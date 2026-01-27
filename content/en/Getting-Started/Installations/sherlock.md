@@ -29,7 +29,7 @@ and then connect to sherlock
 ssh sherlock
 ```
 
-You can module use the neurodesk modules (if they have been installed before - see instructions for installing and updating below):
+You can module use the neurodesk modules (if they have been installed before - see instructions for installing and updating at the end of this page below):
 ```bash
 module use /home/groups/polimeni/modules
 export APPTAINER_BINDPATH=/scratch,/tmp
@@ -102,6 +102,8 @@ ml mrtrix3
 mrview
 ```
 
+This runs via x-forwarding and doesn't work well, for a better experience see below how to start a full neurodesktop on Sherlock.
+
 ## GPU support
 request a GPU and then add --nv option:
 ```bash
@@ -109,18 +111,6 @@ sh_dev -g 1
 module load fsl/6.0.5.1
 export neurodesk_singularity_opts='--nv'
 eddy_cuda9.1
-```
-
-## GPU support for GUIs (not yet working!)
-on macos:
-```
-brew install --cask xquartz
-brew install --cask virtualgl
-```
-
-```
-vglconnect user@server
-vglrun [application_name]
 ```
 
 
@@ -156,27 +146,21 @@ The install of `pip install ipyniivue` allows interactive visualizations inside 
 
 
 
-
 # Using Neurodesk via a full neurodesktop session
+This is an ideal setup for visualizing results on Sherlock.
+
 ## downloading startup script
 ```bash
 curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/content/en/Getting-Started/Installations/connectSherlock.sh
 chmod +x connectSherlock.sh
 ```
 
-## starting script
+## starting session
 ```
 ./connectSherlock.sh
 ```
 
-## updating the desktop image
-```bash
-cd /home/groups/polimeni/neurodesk
-apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
-ln -s /home/groups/polimeni/neurodesk/neurodesktop_2026-01-26.sif /home/groups/polimeni/neurodesk/neurodesktop_latest.sif 
-```
-
-## manual start in a job
+## start desktop manually when inside a job
 ```bash
 apptainer run \
    --fakeroot \
@@ -196,8 +180,12 @@ apptainer run \
 # connecting with VScode
 VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
 
+
+
 # connecting with Cursor
 Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
+
+
 
 # using coding agents on sherlock
 Copilot CLI — an extension of GitHub Copilot that answers natural-language prompts and generates shell commands and code snippets interactively in the CLI. Integrates with developer workflow and git metadata, good at scaffolding repo-level changes. Use this for drafting Slurm scripts, shell-based data-movement commands, Makefiles, container entrypoints, and succinct code edits from the terminal. Caution: always validate generated shell commands before running on Oak.
@@ -324,8 +312,10 @@ bash containers.sh freesurfer
 ```
 
 ## Updating Neurodesktop image
+```bash
+cd /home/groups/polimeni/neurodesk
+apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
+ln -s /home/groups/polimeni/neurodesk/neurodesktop_2026-01-26.sif /home/groups/polimeni/neurodesk/neurodesktop_latest.sif 
 ```
-```
-
 
 
