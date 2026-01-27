@@ -160,12 +160,9 @@ The install of `pip install ipyniivue` allows interactive visualizations inside 
 # Using Neurodesk via a full neurodesktop session
 ## starting
 ```bash
-bash connectSherlock.sh
-```
-
-connect:
-```bash
-connectSherlock
+!curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/heads/installation-examples/content/en/Getting-Started/Installations/connectSherlock.sh
+!chmod +x connectSherlock.sh
+!./connectSherlock.sh
 ```
 
 ## updating the desktop image

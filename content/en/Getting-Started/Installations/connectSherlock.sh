@@ -117,3 +117,8 @@ chmod +x ~/.neurodesk_setup.sh"
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
                  ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST} \"~/.neurodesk_setup.sh\"'"
 }
+
+# Check if the script is being executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    connectSherlock "$@"
+fi
