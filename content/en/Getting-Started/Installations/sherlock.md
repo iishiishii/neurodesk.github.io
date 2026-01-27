@@ -11,9 +11,9 @@ Neurodesk runs on Stanfords supercomputer "Sherlock" and below are different way
 {{< toc >}}
 
 
-# Using Neurodesk on Sherlock via ssh
+## Using Neurodesk on Sherlock via ssh
 
-## Using Neurodesk containers
+### Using Neurodesk containers
 Setup your ~/.ssh/config
 ```
 Host sherlock
@@ -51,7 +51,7 @@ Or you can module load any tool you need:
 ml fsl/6.0.7.18
 ```
 
-## Submitting a job:
+### Submitting a job:
 
 put this in a file, e.g. `submit.sbatch`:
 ```
@@ -92,7 +92,7 @@ scancel <jobid>
 more details https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
 
-## Using GUI applications
+### Using GUI applications
 First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk or from a mac with https://www.xquartz.org/ installed, or from windows using Mobaxterm)
 
 and then request an interactive job and start the software:
@@ -104,7 +104,7 @@ mrview
 
 This runs via x-forwarding and doesn't work well, for a better experience see below how to start a full neurodesktop on Sherlock.
 
-## GPU support
+### GPU support
 request a GPU and then add --nv option:
 ```bash
 sh_dev -g 1
@@ -116,51 +116,51 @@ eddy_cuda9.1
 
 
 
-# Using Neurodesk on Sherlock via Ondemand
+## Using Neurodesk on Sherlock via Ondemand
 <!-- markdown-link-check-disable -->
 Open a jupyterlab session via Open On-Demand: https://ondemand.sherlock.stanford.edu/
 <!-- markdown-link-check-enable -->
 ![Ondemand Jupyterlab](/static/docs/installations/ondemand-jupyterlab.png)
 
-## Installing jupyterlab plugins:
+### Installing jupyterlab plugins:
 open a terminal in jupyterlab and install:
 ```bash
 pip install jupyterlab_niivue ipyniivue jupyterlmod
 ```
 After the installation finished restart the jupyterlab session in Ondemand.
 
-## Neuroimaging Visualization in the File Browser and notebooks of Jupyter Lab
+### Neuroimaging Visualization in the File Browser and notebooks of Jupyter Lab
 The `pip install jupyterlab_niivue` added an extension to jupyterlab that visualizes neuroimaging data directly via a double-click in the filebrowser in jupyterlab:
 ![alt text](/static/docs/installations/jupyter-lab-niivue.png)
 
-## Using containers inside a jupyter notebook
+### Using containers inside a jupyter notebook
 The install of `pip install jupyterlmod` made the following possible inside a jupyter notebook:
 ```python
 import module
 await module.load('niimath')
 ```
 
-## Using niivue inside a jupyter notebook:
+### Using niivue inside a jupyter notebook:
 The install of `pip install ipyniivue` allows interactive visualizations inside jupyter notebooks: See examples here https://niivue.github.io/ipyniivue/gallery/index.html
 
 
 
 
-# Using Neurodesk via a full neurodesktop session
+## Using Neurodesk via a full neurodesktop session
 This is an ideal setup for visualizing results on Sherlock.
 
-## downloading startup script
+### downloading startup script
 ```bash
 curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/content/en/Getting-Started/Installations/connectSherlock.sh
 chmod +x connectSherlock.sh
 ```
 
-## starting session
+### starting session
 ```
 ./connectSherlock.sh
 ```
 
-## start desktop manually when inside a job
+### start desktop manually when inside a job
 ```bash
 apptainer run \
    --fakeroot \
@@ -177,17 +177,17 @@ apptainer run \
    start-notebook.py --allow-root
 ```
 
-# connecting with VScode
+## connecting with VScode
 VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
 
 
 
-# connecting with Cursor
+## connecting with Cursor
 Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
 
 
 
-# using coding agents on sherlock
+## using coding agents on sherlock
 Copilot CLI — an extension of GitHub Copilot that answers natural-language prompts and generates shell commands and code snippets interactively in the CLI. Integrates with developer workflow and git metadata, good at scaffolding repo-level changes. Use this for drafting Slurm scripts, shell-based data-movement commands, Makefiles, container entrypoints, and succinct code edits from the terminal. Caution: always validate generated shell commands before running on Oak.
 ```
 ml copilot-cli
@@ -218,29 +218,29 @@ ml crush
 crush
 ```
 
-# Misc
+## Misc
 
-## note on miniconda
+### note on miniconda
 we need an older version of Miniconda on Sherlock due to the outdated glibc:
 ```
 wget https://repo.anaconda.com/miniconda/Miniconda3-py310_23.3.1-0-Linux-x86_64.sh
 bash Miniconda3-py310_23.3.1-0-Linux-x86_64.sh
 ```
 
-## note on MRIQC
+### note on MRIQC
 NOTE: MRIQC has its $HOME variable hardcoded to be /home/mriqc. This leads to problems. A workaround is to run this before mriqc:
 ```bash
 export neurodesk_singularity_opts="--home $HOME:/home"
 ```
 
-## note on AFNI
+### note on AFNI
 NOTE: If you are using AFNI then the default detach behavior will cause SIGBUS errors and a crash. To fix this run AFNI with:
 ```bash
 afni -no_detach
 ```
 
-# Data transfer
-## Transfer files to and from Onedrive
+## Data transfer
+### Transfer files to and from Onedrive
 First install rclone on your computer and set it up for onedrive. Then copy the config file ~/.config/rclone/rclone.conf to sherlock. Then run rclone on sherlock:
 ```
 ml system
@@ -249,7 +249,7 @@ rclone ls
 rclone copy
 ```
 
-### setting up rclone for onedrive (needs to be done on a computer with a browser, so not sherlock):
+setting up rclone for onedrive (needs to be done on a computer with a browser, so not sherlock):
 ```bash 
 rclone config
 # select n for new remote
@@ -272,7 +272,7 @@ rclone ls onedrive:
 vi ~/.config/rclone/rclone.conf
 ```
 
-## Transfer files using datalad
+### Transfer files using datalad
 ```
 ml contribs
 ml poldrack
@@ -280,14 +280,14 @@ ml datalad-uv
 datalad
 ```
 
-## Transfer files via scp
+### Transfer files via scp
 ``` 
 scp foo <sunetid>@dtn.sherlock.stanford.edu:
 # this file will end up in your scratch space
 ```
 
-# Managing Neurodesk on Sherlock
-## Installing Neurodesk for a lab
+## Managing Neurodesk on Sherlock
+### Installing Neurodesk for a lab
 This is already done and doesn't need to be run again!
 ```bash
 cd /home/groups/polimeni/
@@ -299,7 +299,7 @@ bash containers.sh
 export APPTAINER_BINDPATH=`pwd -P`
 ```
 
-## Installing additional containers
+### Installing additional containers
 Everyone has write permissions and can download and install new containers.
 ```bash
 cd /home/groups/polimeni/neurodesk
@@ -311,7 +311,7 @@ bash containers.sh freesurfer
 # then install the choosen version by copy and pasting the specific command install command displayed
 ```
 
-## Updating Neurodesktop image
+### Updating Neurodesktop image
 ```bash
 cd /home/groups/polimeni/neurodesk
 apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
