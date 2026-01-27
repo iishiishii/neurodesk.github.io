@@ -11,8 +11,12 @@ function connectSherlock() {
         echo "Authentication failed."
         return 1
     fi
-    # Close master connection on return
-    # trap "ssh -S \"$CTRL_SOCKET\" -O exit \"$LOGIN_NODE\" 2>/dev/null" RETURN
+    # Close master connection and free up port 8888 on return
+    trap 'ssh -S "'"$CTRL_SOCKET"'" -O exit "'"$LOGIN_NODE"'" 2>/dev/null; \
+          if lsof -Pi :8888 -sTCP:LISTEN -t >/dev/null 2>&1; then \
+              echo "Cleaning up port 8888..."; \
+              lsof -Pi :8888 -sTCP:LISTEN -t | xargs kill -9 2>/dev/null; \
+          fi' RETURN
     
     # --- 1. CHECK FOR EXISTING "NEURODESKTOP" JOBS ---
     # We add --name="neurodesktop" to squeue so we don't accidentally 
@@ -65,12 +69,13 @@ function connectSherlock() {
     echo "Establishing tunnel via Login Node port: $MIDDLE_PORT"
 
     # --- 3. CHECK LOCAL PORT 8888 ---
-    # Check if port 8888 is occupied and kill the process if so
+    # Check if port 8888 is occupied and kill the process(es) if so
     if lsof -Pi :8888 -sTCP:LISTEN -t >/dev/null ; then
         echo "Port 8888 is already in use."
-        local PID=$(lsof -Pi :8888 -sTCP:LISTEN -t)
-        echo "Killing process $PID to free up port 8888..."
-        kill -9 "$PID"
+        local PIDS
+        PIDS=$(lsof -Pi :8888 -sTCP:LISTEN -t)
+        echo "Killing process(es) $PIDS to free up port 8888..."
+        echo "$PIDS" | xargs kill -9 2>/dev/null
     fi
 
     echo "Preparing setup script..."
