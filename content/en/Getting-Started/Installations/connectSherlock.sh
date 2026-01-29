@@ -40,18 +40,18 @@ function connectSherlock() {
 
     # --- 2. CONFIGURATION FOR NEW CONNECTION ---
     echo "================================================================================"
-    echo " partition   || job runtime | mem/core | per-node cores"
-    echo " name        ||     maximum |  maximum | (range)"
+    echo " partition   || job runtime       | mem/core | per-node cores"
+    echo " name        ||     maximum       |  maximum | (range)"
     echo "--------------------------------------------------------------------------------"
-    echo " normal     ||          7d |      8GB | 20-64"
-    echo " bigmem      ||          1d |     64GB | 24-256"
-    echo " dev         ||          2h |      8GB | 20-32"
+    echo " normal      || 2d or 7d (owner) |      8GB  | 20-64"
+    echo " bigmem      ||               1d |     64GB  | 24-256"
+    echo " dev         ||               2h |      8GB  | 20-32"
     echo "--------------------------------------------------------------------------------"
     echo "================================================================================"
     
-    echo -n "Which partition do you want to submit to? [dev] "
+    echo -n "Which partition do you want to submit to? [normal] "
     read -r PARTITION
-    PARTITION=${PARTITION:-dev}
+    PARTITION=${PARTITION:-normal}
 
     echo -n "How much Memory needed? [8G] "
     read -r MEM
@@ -61,9 +61,9 @@ function connectSherlock() {
     read -r CPUS
     CPUS=${CPUS:-1}
 
-    echo -n "How much Time needed? [01:00:00] "
+    echo -n "How much Time needed? [02:00:00] "
     read -r WALLTIME
-    WALLTIME=${WALLTIME:-01:00:00}
+    WALLTIME=${WALLTIME:-02:00:00}
 
     local MIDDLE_PORT=$(shuf -i 10000-65000 -n 1)
     echo "Establishing tunnel via Login Node port: $MIDDLE_PORT"
@@ -106,6 +106,7 @@ apptainer run \\
    --nv \\
    --overlay ~/neurodesktop-overlay.img \\
    --bind /home/groups/polimeni/neurodesk/local/containers/:/neurodesktop-storage/containers \\
+   --bind /home/groups/polimeni/neurodesk/local/containers/:/neurocommand/local/containers \\
    --no-home \\
    --home ~/neurodesktop-home:/home/jovyan \\
    --env CVMFS_DISABLE=true \\

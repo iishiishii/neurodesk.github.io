@@ -25,7 +25,7 @@ Host sherlock
     ControlPersist yes
 ```
 and then connect to sherlock
-```
+```bash
 ssh sherlock
 ```
 
@@ -36,7 +36,7 @@ export APPTAINER_BINDPATH=/scratch,/tmp
 ```
 
 You can also add these to your ~/.bashrc:
-```
+```bash
 echo "module use /home/groups/polimeni/modules/" >> ~/.bashrc
 echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
 ```
@@ -54,30 +54,58 @@ ml fsl/6.0.7.18
 ### Submitting a job:
 
 put this in a file, e.g. `submit.sbatch`:
-```
+```bash
 #!/bin/bash
 #
 #SBATCH --job-name=test
-#SBATCH --time=47:00:00
+#SBATCH --time=01:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=2G
-#SBATCH --output=test_job.%j.out
-#SBATCH --error=test_job.%j.err
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
 #SBATCH -p normal
 
+module purge
 module use /home/groups/polimeni/modules/
 module load ants
+ants.... $1
 ```
 
 use sh_part to see which partitions and limits are available:
-```
+```bash
 sh_part
 ```
 
 then submit:
-```
+```bash
 sbatch submit.sbatch
+```
+
+or parallize across subjects:
+```bash
+for file in `ls sub*.nii`; 
+    do echo "submitting job for $file"; 
+    sbatch submit.sbatch $file; 
+done
+```
+
+starting a matlab job:
+```bash
+#!/bin/bash
+#SBATCH --job-name=invert
+#SBATCH --time=00:03:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=3
+#SBATCH --mem-per-cpu=4G
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
+#SBATCH --partition=normal
+#SBATCH --mail-type=ALL
+
+module purge
+module load matlab
+matlab -batch matlab_file_without_the_dot_m_ending
 ```
 
 check:
@@ -88,6 +116,7 @@ squeue -u $USER
 cancel jobs:
 ```
 scancel <jobid>
+scancel --name=my_job_name
 ```
 more details https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
@@ -131,7 +160,7 @@ After the installation finished restart the jupyterlab session in Ondemand.
 
 ### Neuroimaging Visualization in the File Browser and notebooks of Jupyter Lab
 The `pip install jupyterlab_niivue` added an extension to jupyterlab that visualizes neuroimaging data directly via a double-click in the filebrowser in jupyterlab:
-![alt text](/static/docs/installations/jupyter-lab-niivue.png)
+![jupyter lab screenshot](/static/docs/installations/jupyter-lab-niivue.png)
 
 ### Using containers inside a jupyter notebook
 The install of `pip install jupyterlmod` made the following possible inside a jupyter notebook:
@@ -147,17 +176,16 @@ The install of `pip install ipyniivue` allows interactive visualizations inside 
 
 
 ## Using Neurodesk via a full neurodesktop session
-This is an ideal setup for visualizing results on Sherlock.
+This is an ideal setup for visualizing results on Sherlock and for running GUI applications.
 
 ### downloading startup script
 ```bash
 curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/content/en/Getting-Started/Installations/connectSherlock.sh
-chmod +x connectSherlock.sh
 ```
 
 ### starting session
 ```
-./connectSherlock.sh
+bash connectSherlock.sh
 ```
 
 ### start desktop manually when inside a job
@@ -178,13 +206,26 @@ apptainer run \
 ```
 
 ## connecting with VScode
-VScode does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
+VScode server does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container. However, it is possible to run vscode server through ondemand:
+![code server](/static/docs/installations/code-server.png)
 
+A great extension to install is niivue for vscode which allows visualizing neuroimaging data in vscode:
+![niivue vscode screensho](/static/docs/installations/niivuevscode.png)
 
+and for AI coding: 
+- claude code
+- gemini CLI companion
+- gemini code assist
+
+and for checking on slurm jobs in vscode:
+- slurm--
+
+and for matlab scripts:
+- MATLAB Extension for Windsurf
+-- path is: /share/software/user/restricted/matlab/R2022b/
 
 ## connecting with Cursor
 Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
-
 
 
 ## using coding agents on sherlock
