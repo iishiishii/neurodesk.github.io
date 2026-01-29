@@ -51,7 +51,7 @@ Or you can module load any tool you need:
 ml fsl/6.0.7.18
 ```
 
-### Submitting a job:
+### Submitting a job
 
 put this in a file, e.g. `submit.sbatch`:
 ```bash
@@ -82,6 +82,12 @@ then submit:
 sbatch submit.sbatch
 ```
 
+to size jobs you can use ruse https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#sizing-a-job
+```bash
+module load system ruse
+ruse ./myapp
+```
+
 or parallize across subjects:
 ```bash
 for file in `ls sub*.nii`; 
@@ -89,6 +95,8 @@ for file in `ls sub*.nii`;
     sbatch submit.sbatch $file; 
 done
 ```
+
+if you need lots of jobs, consider using array jobs: https://www.sherlock.stanford.edu/docs/advanced-topics/job-management/?h=array+jobs
 
 starting a matlab job:
 ```bash
@@ -155,7 +163,7 @@ Open a jupyterlab session via Open On-Demand: https://ondemand.sherlock.stanford
 Make sure to select python 3.9 - otherwise the HPC slurm plugin for jupyterlab will not work
 ![Ondemand Jupyterlab](/static/docs/installations/ondemand-jupyterlab.png)
 
-### Installing jupyterlab plugins:
+### Installing jupyterlab plugins
 open a terminal in jupyterlab and install:
 ```bash
 pip install jupyterlab_niivue ipyniivue jupyterlmod jupyterlab_slurm
@@ -181,7 +189,7 @@ now you can run command line tools in a notebook
 !bet
 ```
 
-### Using niivue inside a jupyter notebook:
+### Using niivue inside a jupyter notebook
 The install of `pip install ipyniivue` allows interactive visualizations inside jupyter notebooks: See examples here https://niivue.github.io/ipyniivue/gallery/index.html
 
 e.g.:
@@ -193,7 +201,7 @@ nv.load_volumes([{'path': 'sub-01_ses-01_7T_T1w_defaced_brain.nii.gz'}])
 nv
 ```
 
-### Checking on SLURM inside jupyter lab:
+### Checking on SLURM inside jupyter lab
 The install of `pip install jupyterlab_slurm` added a plugin that allows monitoring slurm jobs.
 
 
@@ -337,6 +345,12 @@ rclone config
 rclone ls onedrive:
 # if it's not showing the files from your onedrive, change the config_driveid in ~/.config/rclone/rclone.conf
 vi ~/.config/rclone/rclone.conf
+```
+
+### mounting sherlock on your sytem through sshfs
+```
+mkdir ~/sherlock_home
+$ sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_home
 ```
 
 ### Transfer files using datalad
