@@ -31,13 +31,13 @@ ssh sherlock
 
 You can module use the neurodesk modules (if they have been installed before - see instructions for installing and updating at the end of this page below):
 ```bash
-module use /home/groups/polimeni/modules
+module use $GROUP_HOME/modules
 export APPTAINER_BINDPATH=/scratch,/tmp
 ```
 
 You can also add these to your ~/.bashrc:
 ```bash
-echo "module use /home/groups/polimeni/modules/" >> ~/.bashrc
+echo "module use $GROUP_HOME/modules/" >> ~/.bashrc
 echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
 ```
 
@@ -67,7 +67,7 @@ put this in a file, e.g. `submit.sbatch`:
 #SBATCH -p normal
 
 module purge
-module use /home/groups/polimeni/modules/
+module use $GROUP_HOME/modules/
 module load ants
 ants.... $1
 ```
@@ -137,9 +137,11 @@ This runs via x-forwarding and doesn't work well, for a better experience see be
 request a GPU and then add --nv option:
 ```bash
 sh_dev -g 1
-module load fsl/6.0.5.1
+module load fsl
 export neurodesk_singularity_opts='--nv'
-eddy_cuda9.1
+git clone https://github.com/neurolabusc/gpu_test.git
+cd gpu_test/etest/
+bash runme_gpu.sh
 ```
 
 
@@ -149,12 +151,14 @@ eddy_cuda9.1
 <!-- markdown-link-check-disable -->
 Open a jupyterlab session via Open On-Demand: https://ondemand.sherlock.stanford.edu/
 <!-- markdown-link-check-enable -->
+
+Make sure to select python 3.9 - otherwise the HPC slurm plugin for jupyterlab will not work
 ![Ondemand Jupyterlab](/static/docs/installations/ondemand-jupyterlab.png)
 
 ### Installing jupyterlab plugins:
 open a terminal in jupyterlab and install:
 ```bash
-pip install jupyterlab_niivue ipyniivue jupyterlmod
+pip install jupyterlab_niivue ipyniivue jupyterlmod jupyterlab_slurm
 ```
 After the installation finished restart the jupyterlab session in Ondemand.
 
@@ -165,12 +169,34 @@ The `pip install jupyterlab_niivue` added an extension to jupyterlab that visual
 ### Using containers inside a jupyter notebook
 The install of `pip install jupyterlmod` made the following possible inside a jupyter notebook:
 ```python
-import module
-await module.load('niimath')
+import os
+import lmod
+group_home = os.environ.get("GROUP_HOME", "")
+os.environ["MODULEPATH"] = os.path.abspath(f"{group_home}/neurodesk/local/containers/modules/")
+await lmod.load('fsl')
+```
+
+now you can run command line tools in a notebook
+```
+!bet
 ```
 
 ### Using niivue inside a jupyter notebook:
 The install of `pip install ipyniivue` allows interactive visualizations inside jupyter notebooks: See examples here https://niivue.github.io/ipyniivue/gallery/index.html
+
+e.g.:
+```python
+from ipyniivue import NiiVue
+
+nv = NiiVue()
+nv.load_volumes([{'path': 'sub-01_ses-01_7T_T1w_defaced_brain.nii.gz'}])
+nv
+```
+
+### Checking on SLURM inside jupyter lab:
+The install of `pip install jupyterlab_slurm` added a plugin that allows monitoring slurm jobs.
+
+
 
 
 
@@ -194,14 +220,14 @@ apptainer run \
    --fakeroot \
    --nv \
    --overlay ~/neurodesktop-overlay.img \
-   --bind /home/groups/polimeni/neurodesk/local/containers/:/neurodesktop-storage/containers \
+   --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
    --no-home \
    --home ~/neurodesktop-home:/home/jovyan \
    --env CVMFS_DISABLE=true \
    --env NB_UID=$(id -u) \
    --env NB_GID=$(id -g) \
    --env NEURODESKTOP_VERSION=test_2026-01-26 \
-   /home/groups/polimeni/neurodesk/neurodesktop-test_2026-01-26.sif \
+   $GROUP_HOME/neurodesk/neurodesktop-test_2026-01-26.sif \
    start-notebook.py --allow-root
 ```
 
@@ -331,7 +357,7 @@ scp foo <sunetid>@dtn.sherlock.stanford.edu:
 ### Installing Neurodesk for a lab
 This is already done and doesn't need to be run again!
 ```bash
-cd /home/groups/polimeni/
+cd $GROUP_HOME/
 git clone https://github.com/neurodesk/neurocommand.git neurodesk
 cd neurodesk 
 pip3 install -r neurodesk/requirements.txt --user 
@@ -343,7 +369,7 @@ export APPTAINER_BINDPATH=`pwd -P`
 ### Installing additional containers
 Everyone has write permissions and can download and install new containers.
 ```bash
-cd /home/groups/polimeni/neurodesk
+cd $GROUP_HOME/neurodesk
 git pull
 bash build.sh
 bash containers.sh
@@ -354,9 +380,9 @@ bash containers.sh freesurfer
 
 ### Updating Neurodesktop image
 ```bash
-cd /home/groups/polimeni/neurodesk
+cd $GROUP_HOME/neurodesk
 apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
-ln -s /home/groups/polimeni/neurodesk/neurodesktop_2026-01-26.sif /home/groups/polimeni/neurodesk/neurodesktop_latest.sif 
+ln -s $GROUP_HOME/neurodesk/neurodesktop_2026-01-26.sif $GROUP_HOME/neurodesk/neurodesktop_latest.sif 
 ```
 
 
