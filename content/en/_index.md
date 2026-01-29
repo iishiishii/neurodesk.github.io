@@ -4,6 +4,9 @@ linktitle: Neurodesk
 type: landing
 ---
 
+<link rel="stylesheet" href="/css/landing-custom.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <section class="row td-box -bg-secondary justify-content-left h-auto col-big-desktop">
 <div class="container">
     <div class="row align-items-center">
