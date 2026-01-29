@@ -67,7 +67,7 @@ type: landing
 </section>
 
 <section class="row -bg-white justify-content-left h-auto col-big-desktop">
-<div class="container">
+<div class="container py-3" style="padding-top: 1.5rem !important; padding-bottom: 1.5rem !important;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="row g-3">
@@ -83,7 +83,7 @@ type: landing
                     </a>
                 </div>
                 <div class="col-12">
-                    <div class="text-center mt-3">
+                    <div class="text-center mt-2 mb-0">
                         <a href="{{< relurl "/overview/faq/#what-is-neurodesk" >}}" class="text-dark" style="text-decoration: none; font-weight: 500;">Learn more about Neurodesk</a>
                         <span class="mx-2" style="color: #666;">·</span>
                         <a href="https://neurodesk.org/edu" class="text-dark" style="text-decoration: none; font-weight: 500;">See examples</a>
@@ -94,8 +94,9 @@ type: landing
     </div>
 </div>
 </section>
+
 <section class="container-fluid">
-<div class="container-fluid py-3" style="background-color: #f8f9fa;">
+<div class="container-fluid py-2" style="padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; background-color: #f8f9fa;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10 text-center">
             <h2 class="mb-3" style="color: #1a1a1a;">See Neurodesk in Action</h2>
@@ -120,6 +121,7 @@ type: landing
     </div>
 </div>
 </section>
+
 <section
   id="startup"
   class="row -bg-light justify-content-left h-auto col-big-desktop"
