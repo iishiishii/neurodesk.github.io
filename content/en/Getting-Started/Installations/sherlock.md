@@ -206,15 +206,12 @@ The install of `pip install jupyterlab_slurm` added a plugin that allows monitor
 
 
 
-
-
-
 ## Using Neurodesk via a full neurodesktop session
 This is an ideal setup for visualizing results on Sherlock and for running GUI applications.
 
 ### downloading startup script
 ```bash
-curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/content/en/Getting-Started/Installations/connectSherlock.sh
+curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/heads/main/content/en/Getting-Started/Installations/connectSherlock.sh
 ```
 
 ### starting session
@@ -347,10 +344,10 @@ rclone ls onedrive:
 vi ~/.config/rclone/rclone.conf
 ```
 
-### mounting sherlock on your sytem through sshfs
-```
+### mounting sherlock on your computer through sshfs
+```bash
 mkdir ~/sherlock_home
-$ sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_home
+sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_home
 ```
 
 ### Transfer files using datalad
