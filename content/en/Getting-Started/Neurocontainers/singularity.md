@@ -1,14 +1,14 @@
 ---
-title: "Singularity"
-linkTitle: "Singularity"
+title: "Singularity/Apptainer"
+linkTitle: "Singularity/Apptainer"
 aliases:
 - /docs/getting-started/neurocontainers/singularity
 
 description: >
-  Neurodesk Singularity Containers
+  Neurodesk Singularity/Apptainer Containers
 ---
 
-Our docker containers are converted to singularity containers and stored on Object storage.
+Our docker containers are converted to singularity/apptainer containers and stored on Object storage.
 
 ## Download Singularity Containers
 First get an overview of which containers are available as Singularity containers:
@@ -24,14 +24,14 @@ export container=itksnap_3.8.0_20201208
 
 Then download the containers. One way is to use CURL:
 ```shell
-curl -X GET https://neurocontainers.neurodesk.org/$container.simg -O
+curl -X GET https://neurocontainers.s3.us-east-2.amazonaws.com/$container.simg -O
 ```
 
 ## Singularity Containers and GPUs
 Some of our containers contain GPU-accelerated applications. Here is an example that tests the GPU accelerated program eddy in FSL:
 
 ```shell
-curl -X GET https://neurocontainers.neurodesk.org/fsl_6.0.5.1_20221016.simg -O
+curl -X GET https://neurocontainers.s3.us-east-2.amazonaws.com/fsl_6.0.5.1_20221016.simg -O
 git clone https://github.com/neurolabusc/gpu_test.git
 singularity shell --nv fsl_6.0.5.1_20221016.simg
 cd gpu_test/etest/

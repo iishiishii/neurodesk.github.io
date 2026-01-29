@@ -1,7 +1,7 @@
 ---
 title: "Github Codespaces"
 linkTitle: "Github"
-weight: 1
+weight: 3
 aliases: 
 - /docs/getting-started/hosted/github
 description: >

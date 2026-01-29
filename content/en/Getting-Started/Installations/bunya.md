@@ -4,8 +4,9 @@ linkTitle: "Bunya"
 weight: 2
 aliases: 
 - /docs/getting-started/hosted/bunya
+- /getting-started/hosted/bunya
 description: >
-  Use Neurodesk on Bunya (only for researchers with access to Bunya!)
+  Use Neurodesk on Bunya - the HPC at the University of Queensland
 ---
 
 
@@ -60,7 +61,7 @@ If you are missing an application, please contact mail.neurodesk@gmail.com and a
 ### Using this inside a jupyter notebook
 You need to install this in addtion:
 ```bash
-pip install jupyterlmod
+pip install jupyterlab_niivue ipyniivue jupyterlmod jupyterlab_slurm
 ```
 
 Then start a notebook and run these commands:

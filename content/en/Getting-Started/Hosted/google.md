@@ -1,6 +1,7 @@
 ---
 title: "Google Colab and Cloud Shell"
-linkTitle: "Google Colab"
+weight: 2
+linkTitle: "Google"
 aliases:
 - /docs/getting-started/neurocontainers/googleColab
 - /docs/getting-started/neurocontainers/googlecolab
@@ -9,6 +10,8 @@ aliases:
 description: >
   Neurodesk Singularity Containers for Google Colab
 ---
+
+{{< toc >}}
 
 ## Colab
 
@@ -53,38 +56,12 @@ and more examples can be found [in our example library](https://neurodesk.org/ed
 ## Cloud Shell
 
 This also works in a google cloud shell, e.g. for an interactive tutorial in google cloud cloudshell launch-tutorial:
+
+First run this:
 ```bash
-mkdir -p ~/.cloudshell
-touch ~/.cloudshell/no-apt-get-warning
-export LD_PRELOAD=""
-export LMOD_CMD="/usr/share/lmod/lmod/libexec/lmod"
-
-sudo mkdir -p /etc/cvmfs/keys/ardc.edu.au/
-curl -J -O https://raw.githubusercontent.com/neurodesk/neurocommand/main/googlecolab_setup.sh
-chmod +x googlecolab_setup.sh
-./googlecolab_setup.sh
-sudo apt install lmod
-sudo bash -c "cat > /usr/share/module.sh" << 'EOF'
-# system-wide profile.modules                                          #
-# Initialize modules for all sh-derivative shells                      #
-#----------------------------------------------------------------------#
-trap "" 1 2 3
-
-case "$0" in
-    -bash|bash|*/bash) . /usr/share/lmod/8.6.19/init/bash ;;
-       -ksh|ksh|*/ksh) . /usr/share/lmod/8.6.19/init/ksh ;;
-       -zsh|zsh|*/zsh) . /usr/share/lmod/8.6.19/init/zsh ;;
-          -sh|sh|*/sh) . /usr/share/lmod/8.6.19/init/sh ;;
-                    *) . /usr/share/lmod/8.6.19/init/sh ;;  # default for scripts
-esac
-
-trap - 1 2 3
-EOF
-
-source /usr/share/module.sh
-
-module use /cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/*
-
+curl -J -O https://raw.githubusercontent.com/neurodesk/neurocommand/main/googlecloudshell_setup.sh
+chmod +x googlecloudshell_setup.sh
+./googlecloudshell_setup.sh
 ```
 
 and then used in a tutorial.md:

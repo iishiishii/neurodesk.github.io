@@ -58,23 +58,20 @@ sudo cvmfs_config setup
 
 You can use the list above, but you can also pick a subset of servers that are close to you or fit your usecase better. To better understand what to choose, we use the following CVMFS server setup:
 
-These CVMFS Stratum 1 servers are hosted by the Open Science Grid and every server has a Cloudflare CDN alias that is correctly located through the Maxmind GEOAPI service in the CVMFS client: 
+These CVMFS Stratum 1 servers are hosted by the Open Science Grid and every server has a Cloudflare CDN alias that is correctly geo-located through the Maxmind GEOAPI service in the CVMFS client: 
 - Illinois, USA:             s1fnal-cvmfs.openhtc.io:8080     -> cvmfs-s1fnal.opensciencegrid.org:8000
-- Sao Paulo, Brazil:         s1sampa-cvmfs.openhtc.io:8080    -> sampacs01.if.usp.br:8000
 - Nebraska, USA:             s1osggoc-cvmfs.openhtc.io:8080   -> cvmfs-s1goc.opensciencegrid.org:8000
 - New York, US:              s1bnl-cvmfs.openhtc.io:8080      -> cvmfs-s1bnl.opensciencegrid.org:8000
 - Oxford, UK:                s1ral-cvmfs.openhtc.io:8080      -> cvmfs-egi.gridpp.rl.ac.uk:8000
-
-This server is currently down:
 - Netherlands, Europe:       s1nikhef-cvmfs.openhtc.io:8080   -> cvmfs01.nikhef.nl:8000
 
-This CVMFS Stratum 1 server is hosted by ARDC Nectar Cloud and also has a Cloudflare CDN alias.
+This server is currently down:
+- Sao Paulo, Brazil:         s1sampa-cvmfs.openhtc.io:8080    -> sampacs01.if.usp.br:8000
+
+These CVMFS Stratum 1 servers are hosted by ARDC Nectar Cloud and also has a Cloudflare CDN alias.
 - Brisbane, Queensland, Australia: s1brisbane-cvmfs.openhtc.io -> cvmfs-brisbane.neurodesk.org
 - Sydney, New South Wales, Australia: s1sydney-cvmfs.openhtc.io -> cvmfs-sydney.neurodesk.org
 - Melbourne, Victoria, Australia: s1melbourne-cvmfs.openhtc.io -> cvmfs-melbourne.neurodesk.org
-
-
-This CVMFS Stratum 1 server is hosted by Pawseys Nimbus Cloud and also has a Cloudflare CDN alias.
 - Perth, Western Australia, Australia: s1perth-cvmfs.openhtc.io -> cvmfs-perth.neurodesk.org
 
 This CVMFS Stratum 1 server is hosted by AWS:

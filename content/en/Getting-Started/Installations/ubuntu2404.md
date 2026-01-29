@@ -1,11 +1,12 @@
 ---
-title: "Examples"
-linkTitle: "Examples"
+title: "Ubuntu 24.04"
+linkTitle: "Ubuntu 24.04"
 weight: 1
 aliases: 
 - /docs/getting-started/local/examples
+- /getting-started/local/examples
 description: >
-  Installation Examples
+  Local Installation Example for Ubuntu 24.04
 ---
 
 On this page we show specific examples of the different ways of how Neurodesk can be installed on a local computer. We start from the highest level using the Neurodesk app, then go lower level via docker, neurocommand and down to the lowest level using neurocontainers. We also show on each level how containers can be streamed via CVMFS or downloaded locally.
@@ -269,7 +270,7 @@ curl -s https://raw.githubusercontent.com/neurodesk/neurocommand/main/cvmfs/log.
 
 #select a container and download it:
 export container=itksnap_3.8.0_20201208
-curl -X GET https://neurocontainers.neurodesk.org/$container.simg -O
+curl -X GET https://neurocontainers.s3.us-east-2.amazonaws.com/$container.simg -O
 
 singularity shell itksnap_3.8.0_20201208.simg
 itksnap
