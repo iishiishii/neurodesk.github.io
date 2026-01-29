@@ -69,7 +69,7 @@ type: landing
         <div class="col-12 col-lg-8">
             <div class="row g-3">
                 <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-success w-100 p-3 shadow-lg" href="{{< relurl "/getting-started/hosted" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #1a1a1a;">
+                    <a class="btn btn-lg btn-success w-100 p-3 shadow-lg" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #1a1a1a;">
                         <i class="fas fa-rocket"></i> Try Neurodesk Now
                         <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
                     </a>
