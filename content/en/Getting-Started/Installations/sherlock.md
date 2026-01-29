@@ -68,7 +68,7 @@ put this in a file, e.g. `submit.sbatch`:
 
 module purge
 module use $GROUP_HOME/modules/
-module load ants
+module load ants/2.6.0
 ants.... $1
 ```
 
