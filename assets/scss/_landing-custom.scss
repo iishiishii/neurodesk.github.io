@@ -2,15 +2,18 @@
    Neurodesk Landing Page - Complete CSS
    ======================================== */
 
-body {
-  outline: 6px solid red !important;
+/* Hero Section - Logo */
+.neurodesk-hero-logo {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    opacity: 0.9;
 }
 
-/* Hero Section Improvements */
-.neurodesk-hero-logo {
-    height: 300px;
-    max-width: 100%;
-    opacity: 0.85;
+@media (min-width: 1200px) {
+    .neurodesk-hero-logo {
+        max-width: 460px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -20,18 +23,39 @@ body {
     }
 }
 
-/* Reduce spacing at top of page */
+/* Hero Section - Container & Spacing */
 .td-box.-bg-secondary {
-    padding-top: 1rem !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
     .td-box.-bg-secondary {
-        padding-top: 2rem !important;
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
     }
 }
 
-/* Keep heading on one line on larger screens */
+.td-box.-bg-secondary .container {
+    max-width: 2000px;
+}
+
+/* Better column balance on large screens */
+@media (min-width: 992px) {
+    .td-box.-bg-secondary .col-md-8 {
+        flex: 0 0 58%;
+        max-width: 58%;
+    }
+    .td-box.-bg-secondary .col-md-4 {
+        flex: 0 0 32%;
+        max-width: 32%;
+    }
+    .td-box.-bg-secondary .row.align-items-center {
+        align-items: center !important;
+    }
+}
+
+/* Hero Heading */
 .hero-heading {
     font-size: 2.5rem;
     line-height: 1.2;
@@ -62,14 +86,17 @@ body {
     }
 }
 
-/* Horizontal Value Cards Container */
+/* Horizontal Value Cards */
+.td-box.-bg-secondary .hero-values-grid {
+    max-width: 60ch;
+}
+
 .hero-values-horizontal {
     display: block;
     margin: 1.5rem 0;
     padding: 0;
 }
 
-/* Individual Value Item */
 .hero-value-horizontal {
     display: flex;
     align-items: flex-start;
@@ -78,7 +105,10 @@ body {
     margin-bottom: 0.5rem;
 }
 
-/* Value Icon */
+.td-box.-bg-secondary .hero-value-card {
+    padding: 0.85rem 1rem;
+}
+
 .hero-value-horizontal .hero-value-icon,
 .hero-value-horizontal i {
     font-size: 2rem;
@@ -88,14 +118,12 @@ body {
     margin-top: 0.1rem;
 }
 
-/* Value Text Container */
 .hero-value-horizontal .hero-value-text,
 .hero-value-horizontal > div {
     display: block;
     flex: 1;
 }
 
-/* Value Title */
 .hero-value-horizontal strong {
     display: block;
     font-size: 1.05rem;
@@ -105,7 +133,6 @@ body {
     line-height: 1.3;
 }
 
-/* Value Description */
 .hero-value-horizontal span {
     display: block;
     font-size: 0.875rem;
@@ -113,7 +140,39 @@ body {
     line-height: 1.4;
 }
 
-/* Social Proof Stats Container */
+/* Social Proof Stats */
+.td-box.-bg-secondary .social-proof-stats {
+    display: grid;
+    gap: 0.6rem;
+    max-width: 58ch;
+    padding-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .td-box.-bg-secondary .social-proof-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem 1.2rem;
+    }
+}
+
+.td-box.-bg-secondary .social-proof-stats .stat-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.td-box.-bg-secondary .social-proof-stats .stat-number {
+    font-weight: 700;
+}
+
+.td-box.-bg-secondary .social-proof-stats .stat-label {
+    opacity: 0.9;
+}
+
+/* Social Proof Inline */
 .social-proof-inline {
     display: flex;
     flex-wrap: wrap;
@@ -124,7 +183,6 @@ body {
     line-height: 1.6;
 }
 
-/* Individual Proof Item */
 .social-proof-inline .proof-item {
     display: inline;
     white-space: nowrap;
@@ -135,14 +193,12 @@ body {
     font-weight: 600;
 }
 
-/* Bullet Separator */
 .social-proof-inline .proof-separator {
     color: rgba(255, 255, 255, 0.4);
     font-size: 1.2rem;
     margin: 0 0.25rem;
 }
 
-/* Link in Stats */
 .social-proof-inline .proof-item a {
     color: #9EC672;
     text-decoration: none;
@@ -251,13 +307,8 @@ body {
     overflow: hidden;
 }
 
-/* Terminal Styling for Neurocommand */
-.code-preview {
-    background: #1e1e1e;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
+/* Terminal Styling */
+.code-preview,
 .fake-terminal {
     background: #1e1e1e;
     border-radius: 8px;
@@ -378,7 +429,7 @@ body {
     }
 }
 
-/* Button Improvements */
+/* Buttons */
 .btn-primary {
     background: #4A90E2;
     border-color: #4A90E2;
@@ -437,3 +488,4 @@ h2 {
 .bg-light {
     background-color: #f8f9fa !important;
 }
+
