@@ -65,6 +65,10 @@ function connectSherlock() {
     read -r WALLTIME
     WALLTIME=${WALLTIME:-02:00:00}
 
+    echo -n "How many GPUs needed? [none] "
+    read -r GPU
+    GPU=${GPU:-none}
+
     local MIDDLE_PORT=$(shuf -i 10000-65000 -n 1)
     echo "Establishing tunnel via Login Node port: $MIDDLE_PORT"
 
@@ -99,16 +103,26 @@ else
     echo \"~/neurodesktop-home found.\"
 fi
 
+if [ ! -d ~/neurodesktop-home/workdir ]; then
+    echo \"Creating ~/neurodesktop-home/workdir...\"
+    mkdir -p ~/neurodesktop-home/workdir
+else
+    echo \"~/neurodesktop-home/workdir found.\"
+fi
+
+
+#    --home \$HOME/neurodesktop-home:/home/jovyan \\
+#    --containall \\
+
 echo \"Starting Neurodesktop container...\"
 # Using backslashes for line continuation in the remote file requires double backslash here
 apptainer run \\
-   --fakeroot \\
    --nv \\
-   --overlay ~/neurodesktop-overlay.img \\
+   --fakeroot \\
+   --overlay \$HOME/neurodesktop-overlay.img \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \\
    --no-home \\
-   --home ~/neurodesktop-home:/home/jovyan \\
    --env CVMFS_DISABLE=true \\
    --env NB_UID=\$(id -u) \\
    --env NB_GID=\$(id -g) \\
@@ -119,8 +133,13 @@ EOF
 chmod +x ~/.neurodesk_setup.sh"
 
     # --- 4. LAUNCH ALLOCATION ---
+    local GPU_FLAG=""
+    if [[ "$GPU" != "none" && ! -z "$GPU" ]]; then
+        GPU_FLAG="--gres=gpu:$GPU"
+    fi
+    
     ssh -S "$CTRL_SOCKET" -t -L 8888:localhost:${MIDDLE_PORT} "$LOGIN_NODE" \
-        "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM \
+        "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM $GPU_FLAG \
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
                  ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST} \"~/.neurodesk_setup.sh\"'"
 }

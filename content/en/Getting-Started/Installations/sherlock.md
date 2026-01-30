@@ -391,9 +391,12 @@ bash containers.sh freesurfer
 
 ### Updating Neurodesktop image
 ```bash
-cd $GROUP_HOME/neurodesk
-apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
-ln -s $GROUP_HOME/neurodesk/neurodesktop_2026-01-26.sif $GROUP_HOME/neurodesk/neurodesktop_latest.sif 
+ssh sherlock
+sh_dev
+export VERSION="2026-01-30"
+cd ${GROUP_HOME}/neurodesk
+apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}
+ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif 
 ```
 
 
