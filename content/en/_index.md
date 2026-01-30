@@ -11,7 +11,7 @@ type: landing
     <div class="row align-items-center">
         <div class="col-md-8 order-md-1">
             <h1 class="hero-heading mt-0 pb-2">Reproduce Your Neuroimaging Analysis Anywhere</h1>
-            <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities. Neurodesk gives you consistent, reproducible neuroimaging tools across any system.</p>
+            <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities.<br>Neurodesk gives you consistent, reproducible neuroimaging tools across any system.</p>
             <!-- 4 Hero Value Cards in 2x2 Grid with Links -->
             <div class="social-proof-stats">
                 <a href="{{< relurl "/getting-started/" >}}" class="stat-item-link">
@@ -60,7 +60,7 @@ type: landing
                 </a>
             </div>
             <!-- 3 Validation Badges - Horizontal Line -->
-            <div class="validation-badges">
+            <div class="validation-badges" style="font-size: 1.3rem;">
                 <a href="{{< relurl "/applications/" >}}" class="badge-item">
                     <i class="fas fa-brain"></i>
                     <span><strong>100+</strong> Neuroimaging Tools</span>
