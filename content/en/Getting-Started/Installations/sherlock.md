@@ -117,12 +117,20 @@ matlab -batch matlab_file_without_the_dot_m_ending
 ```
 
 check:
-```
+```bash
 squeue -u $USER
+# or
+squeue --me
+# or to watch it continuesly:
+watch -n 5 "squeue -u $USER"
+# or get more details:
+squeue --me -o "%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m"
+# or create an alias:
+echo 'alias sq="squeue --me -o \"%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m\""' >> ~/.bashrc
 ```
 
 cancel jobs:
-```
+```bash
 scancel <jobid>
 scancel --name=my_job_name
 ```
@@ -219,6 +227,12 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 bash connectSherlock.sh
 ```
 
+### setup file access
+to access files on /scratch you need to run this once in a terminal:
+```
+echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
+```
+
 ### start desktop manually when already inside a job
 ```bash
 apptainer run \
@@ -253,6 +267,9 @@ and for checking on slurm jobs in vscode:
 and for matlab scripts:
 - MATLAB Extension for Windsurf
 -- path is: /share/software/user/restricted/matlab/R2022b/
+
+useful shortcuts:
+- you can execute a line from your scripts on the terminal via setting a keyboard shortcut to "Terminal: Run Selected Text in Active Terminal" - that makes testing scripts and debugging them quite quick
 
 ## connecting with Cursor
 Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
@@ -404,11 +421,19 @@ bash containers.sh freesurfer
 ### Updating Neurodesktop image
 ```bash
 ssh sherlock
-sh_dev
+sh_dev -m 32 -p normal -c 4
 export VERSION="2026-01-30"
 cd ${GROUP_HOME}/neurodesk
+export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp
+mkdir -p $APPTAINER_TMPDIR
 apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}
+rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif
 ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif 
+```
+
+Or submit the update as a single Slurm job:
+```bash
+sbatch -p normal -c 4 --mem=32G --job-name=neurodesktop-update --wrap 'export VERSION="2026-01-30"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
 
 
