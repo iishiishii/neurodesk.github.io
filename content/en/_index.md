@@ -169,8 +169,8 @@ type: landing
 									<p class="card-summary">Complete virtual desktop environment with GUI applications, ready to use in your browser or locally.</p>
 									<ul class="feature-list text-start small">
 										<li>100+ pre-installed neuroimaging tools</li>
-										<li>Full desktop experience (XFCE)</li>
-										<li>No local installation required</li>
+										<li>Familiar desktop interface for graphical applications</li>
+										<li>Install Neurodesk once, all tools are ready to use</li>
                         			</ul>
 								</div>
 								<div class="image-wrapper mt-2">
@@ -208,7 +208,7 @@ type: landing
 									<ul class="feature-list text-start small">
 										<li>Simple module-based interface</li>
 										<li>Integrates with existing workflows</li>
-										<li>Works on any Linux system</li>
+										<li>Accessible through Neurodesk for command-line workflows</li>
 									</ul>
 								</div>
 								<div class="image-wrapper mt-auto">

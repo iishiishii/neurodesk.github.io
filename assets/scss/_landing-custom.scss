@@ -652,3 +652,10 @@ section.row.td-box.-bg-white:last-of-type {
     }
   }
 }
+
+.component-card.command .image-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 250px; // Adjust to control the vertical space
+}
