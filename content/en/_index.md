@@ -90,14 +90,14 @@ type: landing
         <div class="col-12 col-lg-8">
             <div class="row g-3">
                 <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-success w-100 p-3 shadow-lg" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a;">
-                        <i class="fas fa-rocket"></i> Try Neurodesk Now
+                    <a class="btn btn-lg btn-success w-100 p-3 shadow-lg" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a; min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
+                        <span><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
                         <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
                     </a>
                 </div>
                 <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-outline-dark w-100 p-3" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px;">
-                        <i class="fas fa-download"></i> Install Locally
+                    <a class="btn btn-lg btn-outline-dark w-100 p-3" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+                        <span><i class="fas fa-download"></i> Install Locally</span>
                     </a>
                 </div>
                 <div class="col-12">
