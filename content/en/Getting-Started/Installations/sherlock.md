@@ -219,20 +219,19 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 bash connectSherlock.sh
 ```
 
-### start desktop manually when inside a job
+### start desktop manually when already inside a job
 ```bash
 apptainer run \
    --fakeroot \
    --nv \
-   --overlay ~/neurodesktop-overlay.img \
+   --overlay $SCRATCH/neurodesktop-overlay.img \
    --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
    --no-home \
-   --home ~/neurodesktop-home:/home/jovyan \
    --env CVMFS_DISABLE=true \
    --env NB_UID=$(id -u) \
    --env NB_GID=$(id -g) \
-   --env NEURODESKTOP_VERSION=test_2026-01-26 \
-   $GROUP_HOME/neurodesk/neurodesktop-test_2026-01-26.sif \
+   --env NEURODESKTOP_VERSION=latest \
+   $GROUP_HOME/neurodesk/neurodesktop-neurodesktop_latest.sif \
    start-notebook.py --allow-root
 ```
 
