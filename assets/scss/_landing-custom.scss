@@ -659,3 +659,14 @@ section.row.td-box.-bg-white:last-of-type {
   justify-content: center;
   min-height: 250px; // Adjust to control the vertical space
 }
+
+// Add padding at top of hero when banner is hidden
+.td-box.-bg-secondary {
+  padding-top: 4rem !important;
+  padding-bottom: 1.5rem !important;
+  
+  @media (min-width: 992px) {
+    padding-top: 5rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
