@@ -345,9 +345,22 @@ vi ~/.config/rclone/rclone.conf
 ```
 
 ### mounting sherlock on your computer through sshfs
+install sshfs for your operating system, e.g. on MacOS:
+```
+brew tap macos-fuse-t/homebrew-cask
+brew install fuse-t-sshfs
+```
+
+then mount for macos:
 ```bash
-mkdir ~/sherlock_home
-sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_home
+mkdir ~/sherlock_scratch
+sshfs sciget@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
+```
+
+on linux:
+```bash
+mkdir ~/sherlock_scratch
+sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch
 ```
 
 ### Transfer files using datalad

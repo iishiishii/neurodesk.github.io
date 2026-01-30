@@ -85,6 +85,7 @@ function connectSherlock() {
     echo "Preparing setup script..."
     ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh << 'EOF'
 #!/bin/bash
+cd \$SCRATCH
 export PATH=\$PATH:/sbin:/usr/sbin
 if [ ! -f neurodesktop-overlay.img ]; then
     echo \"Creating neurodesktop-overlay.img (2GB)...\"
@@ -112,14 +113,13 @@ fi
 
 
 #    --home \$HOME/neurodesktop-home:/home/jovyan \\
-#    --containall \\
 
 echo \"Starting Neurodesktop container...\"
 # Using backslashes for line continuation in the remote file requires double backslash here
 apptainer run \\
    --nv \\
    --fakeroot \\
-   --overlay \$HOME/neurodesktop-overlay.img \\
+   --overlay \$SCRATCH/neurodesktop-overlay.img \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \\
    --no-home \\
