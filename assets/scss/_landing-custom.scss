@@ -526,3 +526,82 @@ section.row.td-box.-bg-white:last-of-type {
   }
 }
 
+// Hero cards as links
+.stat-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  
+  .stat-item {
+    cursor: pointer;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.22);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// 3 Validation Badges - Horizontal Layout
+.validation-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 62ch;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: #d3e7b6;
+    transform: translateX(3px);
+    
+    i {
+      color: #d3e7b6;
+    }
+  }
+  
+  i {
+    font-size: 1.1rem;
+    color: #d3e7b6;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+  
+  strong {
+    color: #fff;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    
+    span {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+  }
+}
+
+// GitHub logo specific styling
+.badge-item .fa-github {
+  font-size: 1.2rem;
+}
