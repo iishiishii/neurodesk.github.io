@@ -1,9 +1,5 @@
 /* ========================================
-<<<<<<< HEAD
    Neurodesk Landing Page - Updated CSS
-=======
-   Neurodesk Landing Page - Complete CSS
->>>>>>> upstream/updating-homepage
    ======================================== */
 
 /* Hero Section - Logo */
@@ -29,24 +25,14 @@
 
 /* Hero Section - Container & Spacing */
 .td-box.-bg-secondary {
-<<<<<<< HEAD
     padding-top: 1.5rem !important;
     padding-bottom: 1.5rem !important;
-=======
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
->>>>>>> upstream/updating-homepage
 }
 
 @media (min-width: 992px) {
     .td-box.-bg-secondary {
-<<<<<<< HEAD
         padding-top: 2rem !important;
         padding-bottom: 2rem !important;
-=======
-        padding-top: 2.5rem !important;
-        padding-bottom: 2.5rem !important;
->>>>>>> upstream/updating-homepage
     }
 }
 
@@ -56,7 +42,6 @@
 
 /* Better column balance on large screens */
 @media (min-width: 992px) {
-<<<<<<< HEAD
     .td-box.-bg-secondary .row.align-items-center {
         align-items: center !important;
     }
@@ -65,19 +50,6 @@
     .td-box.-bg-secondary .col-md-8 {
         padding-right: 2rem;
     }
-=======
-    .td-box.-bg-secondary .col-md-8 {
-        flex: 0 0 58%;
-        max-width: 58%;
-    }
-    .td-box.-bg-secondary .col-md-4 {
-        flex: 0 0 32%;
-        max-width: 32%;
-    }
-    .td-box.-bg-secondary .row.align-items-center {
-        align-items: center !important;
-    }
->>>>>>> upstream/updating-homepage
 }
 
 /* Hero Heading */
@@ -111,7 +83,6 @@
     }
 }
 
-<<<<<<< HEAD
 /* 2x2 Grid for 4 Hero Value Cards */
 .td-box.-bg-secondary .social-proof-stats {
     display: grid;
@@ -121,84 +92,17 @@
     padding-top: 0;
     margin-top: 1rem;
     margin-bottom: 0.75rem;
-=======
-/* Horizontal Value Cards */
-.td-box.-bg-secondary .hero-values-grid {
-    max-width: 60ch;
-}
-
-.hero-values-horizontal {
-    display: block;
-    margin: 1.5rem 0;
-    padding: 0;
-}
-
-.hero-value-horizontal {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 0.75rem 0;
-    margin-bottom: 0.5rem;
-}
-
-.td-box.-bg-secondary .hero-value-card {
-    padding: 0.85rem 1rem;
-}
-
-.hero-value-horizontal .hero-value-icon,
-.hero-value-horizontal i {
-    font-size: 2rem;
-    color: #50C878;
-    flex-shrink: 0;
-    width: 2rem;
-    margin-top: 0.1rem;
-}
-
-.hero-value-horizontal .hero-value-text,
-.hero-value-horizontal > div {
-    display: block;
-    flex: 1;
-}
-
-.hero-value-horizontal strong {
-    display: block;
-    font-size: 1.05rem;
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    line-height: 1.3;
-}
-
-.hero-value-horizontal span {
-    display: block;
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.4;
-}
-
-/* Social Proof Stats */
-.td-box.-bg-secondary .social-proof-stats {
-    display: grid;
-    gap: 0.6rem;
-    max-width: 58ch;
-    padding-top: 0.5rem;
->>>>>>> upstream/updating-homepage
 }
 
 @media (min-width: 768px) {
     .td-box.-bg-secondary .social-proof-stats {
         grid-template-columns: 1fr 1fr;
-<<<<<<< HEAD
         gap: 0.9rem 1rem;
-=======
-        gap: 0.8rem 1.2rem;
->>>>>>> upstream/updating-homepage
     }
 }
 
 .td-box.-bg-secondary .social-proof-stats .stat-item {
     display: flex;
-<<<<<<< HEAD
     align-items: flex-start;
     gap: 0.9rem;
     padding: 0.85rem 1rem;
@@ -263,58 +167,12 @@
 }
 
 .validation-badge a {
-=======
-    flex-direction: column;
-    padding: 0.75rem 0.9rem;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-}
-
-.td-box.-bg-secondary .social-proof-stats .stat-number {
-    font-weight: 700;
-}
-
-.td-box.-bg-secondary .social-proof-stats .stat-label {
-    opacity: 0.9;
-}
-
-/* Social Proof Inline */
-.social-proof-inline {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-}
-
-.social-proof-inline .proof-item {
-    display: inline;
-    white-space: nowrap;
-}
-
-.social-proof-inline .proof-item strong {
-    color: #50C878;
-    font-weight: 600;
-}
-
-.social-proof-inline .proof-separator {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 1.2rem;
-    margin: 0 0.25rem;
-}
-
-.social-proof-inline .proof-item a {
->>>>>>> upstream/updating-homepage
     color: #9EC672;
     text-decoration: none;
     border-bottom: 1px dotted rgba(158, 198, 114, 0.6);
     transition: all 0.3s ease;
 }
 
-<<<<<<< HEAD
 .validation-badge a:hover {
     color: #d3e7b6;
     border-bottom-color: #d3e7b6;
@@ -353,27 +211,6 @@ section.row.-bg-white .container {
 .container-fluid.py-5 {
     padding-top: 2rem !important;
     padding-bottom: 3rem !important;
-=======
-.social-proof-inline .proof-item a:hover {
-    color: #50C878;
-    border-bottom-color: #50C878;
-}
-
-@media (max-width: 768px) {
-    .social-proof-inline {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .social-proof-inline .proof-separator {
-        display: none;
-    }
-    
-    .social-proof-inline .proof-item {
-        display: block;
-    }
->>>>>>> upstream/updating-homepage
 }
 
 /* Video Container */
@@ -383,10 +220,7 @@ section.row.-bg-white .container {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     background: #ffffff;
     border: 1px solid #e0e0e0;
-<<<<<<< HEAD
     padding: 1rem;
-=======
->>>>>>> upstream/updating-homepage
 }
 
 .video-container img,
@@ -450,11 +284,7 @@ section.row.-bg-white .container {
     content: "✓";
     position: absolute;
     left: 0;
-<<<<<<< HEAD
     color: #d3e7b6;
-=======
-    color: #50C878;
->>>>>>> upstream/updating-homepage
     font-weight: bold;
 }
 
@@ -507,11 +337,7 @@ section.row.-bg-white .container {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.875rem;
     line-height: 1.8;
-<<<<<<< HEAD
     color: #d3e7b6;
-=======
-    color: #50C878;
->>>>>>> upstream/updating-homepage
     min-height: 120px;
 }
 
@@ -555,11 +381,7 @@ section.row.-bg-white .container {
 
 .community-card i {
     font-size: 3rem;
-<<<<<<< HEAD
     color: #d3e7b6;
-=======
-    color: #50C878;
->>>>>>> upstream/updating-homepage
     display: block;
     margin-bottom: 1rem;
 }
@@ -579,22 +401,14 @@ section.row.-bg-white .container {
 /* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     .component-card,
-<<<<<<< HEAD
     .community-card,
     .stat-item {
-=======
-    .community-card {
->>>>>>> upstream/updating-homepage
         transition: none;
     }
     
     .component-card:hover,
-<<<<<<< HEAD
     .community-card:hover,
     .stat-item:hover {
-=======
-    .community-card:hover {
->>>>>>> upstream/updating-homepage
         transform: none;
     }
     
@@ -606,7 +420,6 @@ section.row.-bg-white .container {
 
 /* Buttons */
 .btn-primary {
-<<<<<<< HEAD
     background: #4f7b38;
     border-color: #1e2a16;
 }
@@ -614,15 +427,6 @@ section.row.-bg-white .container {
 .btn-primary:hover {
     background: #4f7b38;
     border-color: #1e2a16;
-=======
-    background: #4A90E2;
-    border-color: #4A90E2;
-}
-
-.btn-primary:hover {
-    background: #357ABD;
-    border-color: #357ABD;
->>>>>>> upstream/updating-homepage
 }
 
 .btn-outline-light:hover {
@@ -674,7 +478,6 @@ h2 {
     background-color: #f8f9fa !important;
 }
 
-<<<<<<< HEAD
 // Override the white CTA section spacing
 section.row.-bg-white {
   padding-top: 1.5rem !important;
@@ -723,91 +526,3 @@ section.row.td-box.-bg-white:last-of-type {
   }
 }
 
-.component-card.command .image-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 250px; // Adjust to control the vertical space
-}
-
-// Hero cards as links
-.stat-item-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  
-  .stat-item {
-    cursor: pointer;
-    
-    &:hover {
-      background: rgba(0, 0, 0, 0.22);
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-  }
-}
-
-// 3 Validation Badges - Horizontal Layout
-.validation-badges {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  max-width: 62ch;
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-}
-
-.badge-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.9);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    color: #d3e7b6;
-    transform: translateX(3px);
-    
-    i {
-      color: #d3e7b6;
-    }
-  }
-  
-  i {
-    font-size: 1.1rem;
-    color: #d3e7b6;
-    flex-shrink: 0;
-    transition: color 0.2s ease;
-  }
-  
-  strong {
-    color: #fff;
-  }
-  
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    
-    span {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-  }
-}
-
-// GitHub logo specific styling
-.badge-item .fa-github {
-  font-size: 1.2rem;
-}
-=======
->>>>>>> upstream/updating-homepage
