@@ -1,5 +1,5 @@
 /* ========================================
-   Neurodesk Landing Page - Complete CSS
+   Neurodesk Landing Page - Updated CSS
    ======================================== */
 
 /* Hero Section - Logo */
@@ -25,14 +25,14 @@
 
 /* Hero Section - Container & Spacing */
 .td-box.-bg-secondary {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
 }
 
 @media (min-width: 992px) {
     .td-box.-bg-secondary {
-        padding-top: 2.5rem !important;
-        padding-bottom: 2.5rem !important;
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
     }
 }
 
@@ -42,16 +42,13 @@
 
 /* Better column balance on large screens */
 @media (min-width: 992px) {
-    .td-box.-bg-secondary .col-md-8 {
-        flex: 0 0 58%;
-        max-width: 58%;
-    }
-    .td-box.-bg-secondary .col-md-4 {
-        flex: 0 0 32%;
-        max-width: 32%;
-    }
     .td-box.-bg-secondary .row.align-items-center {
         align-items: center !important;
+    }
+    
+    /* Add gap between columns */
+    .td-box.-bg-secondary .col-md-8 {
+        padding-right: 2rem;
     }
 }
 
@@ -86,145 +83,134 @@
     }
 }
 
-/* Horizontal Value Cards */
-.td-box.-bg-secondary .hero-values-grid {
-    max-width: 60ch;
-}
-
-.hero-values-horizontal {
-    display: block;
-    margin: 1.5rem 0;
-    padding: 0;
-}
-
-.hero-value-horizontal {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 0.75rem 0;
-    margin-bottom: 0.5rem;
-}
-
-.td-box.-bg-secondary .hero-value-card {
-    padding: 0.85rem 1rem;
-}
-
-.hero-value-horizontal .hero-value-icon,
-.hero-value-horizontal i {
-    font-size: 2rem;
-    color: #50C878;
-    flex-shrink: 0;
-    width: 2rem;
-    margin-top: 0.1rem;
-}
-
-.hero-value-horizontal .hero-value-text,
-.hero-value-horizontal > div {
-    display: block;
-    flex: 1;
-}
-
-.hero-value-horizontal strong {
-    display: block;
-    font-size: 1.05rem;
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    line-height: 1.3;
-}
-
-.hero-value-horizontal span {
-    display: block;
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.4;
-}
-
-/* Social Proof Stats */
+/* 2x2 Grid for 4 Hero Value Cards */
 .td-box.-bg-secondary .social-proof-stats {
     display: grid;
-    gap: 0.6rem;
-    max-width: 58ch;
-    padding-top: 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+    max-width: 62ch;
+    padding-top: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 @media (min-width: 768px) {
     .td-box.-bg-secondary .social-proof-stats {
         grid-template-columns: 1fr 1fr;
-        gap: 0.8rem 1.2rem;
+        gap: 0.9rem 1rem;
     }
 }
 
 .td-box.-bg-secondary .social-proof-stats .stat-item {
     display: flex;
-    flex-direction: column;
-    padding: 0.75rem 0.9rem;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 0.85rem 1rem;
     border-radius: 12px;
     background: rgba(0, 0, 0, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: all 0.3s ease;
+}
+
+.td-box.-bg-secondary .social-proof-stats .stat-item:hover {
+    background: rgba(0, 0, 0, 0.18);
+    transform: translateY(-2px);
+}
+
+.td-box.-bg-secondary .social-proof-stats .stat-icon {
+    flex-shrink: 0;
+    font-size: 1.75rem;
+    color: #d3e7b6;
+    margin-top: 0.1rem;
+}
+
+.td-box.-bg-secondary .social-proof-stats .stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .td-box.-bg-secondary .social-proof-stats .stat-number {
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #fff;
+    line-height: 1.3;
 }
 
 .td-box.-bg-secondary .social-proof-stats .stat-label {
-    opacity: 0.9;
+    opacity: 0.85;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
 }
 
-/* Social Proof Inline */
-.social-proof-inline {
+/* Validation Badge */
+.validation-badge {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     gap: 0.5rem;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
+    max-width: 62ch;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
 }
 
-.social-proof-inline .proof-item {
-    display: inline;
-    white-space: nowrap;
+.validation-badge i {
+    color: #d3e7b6;
+    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
-.social-proof-inline .proof-item strong {
-    color: #50C878;
-    font-weight: 600;
+.validation-badge strong {
+    color: #fff;
 }
 
-.social-proof-inline .proof-separator {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 1.2rem;
-    margin: 0 0.25rem;
-}
-
-.social-proof-inline .proof-item a {
+.validation-badge a {
     color: #9EC672;
     text-decoration: none;
     border-bottom: 1px dotted rgba(158, 198, 114, 0.6);
     transition: all 0.3s ease;
 }
 
-.social-proof-inline .proof-item a:hover {
-    color: #50C878;
-    border-bottom-color: #50C878;
+.validation-badge a:hover {
+    color: #d3e7b6;
+    border-bottom-color: #d3e7b6;
 }
 
-@media (max-width: 768px) {
-    .social-proof-inline {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .social-proof-inline .proof-separator {
-        display: none;
-    }
-    
-    .social-proof-inline .proof-item {
-        display: block;
-    }
+/* Secondary Links with Icons */
+.secondary-links {
+    font-size: 0.95rem;
+}
+
+.secondary-links a {
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.secondary-links a:hover {
+    color: #d3e7b6 !important;
+}
+
+.secondary-links a i {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Reduce CTA Section Spacing */
+section.row.-bg-white .container {
+    padding-top: 1.25rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+/* Video Section Spacing */
+.container-fluid.py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 3rem !important;
 }
 
 /* Video Container */
@@ -234,6 +220,7 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     background: #ffffff;
     border: 1px solid #e0e0e0;
+    padding: 1rem;
 }
 
 .video-container img,
@@ -297,7 +284,7 @@
     content: "✓";
     position: absolute;
     left: 0;
-    color: #50C878;
+    color: #d3e7b6;
     font-weight: bold;
 }
 
@@ -350,7 +337,7 @@
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.875rem;
     line-height: 1.8;
-    color: #50C878;
+    color: #d3e7b6;
     min-height: 120px;
 }
 
@@ -394,7 +381,7 @@
 
 .community-card i {
     font-size: 3rem;
-    color: #50C878;
+    color: #d3e7b6;
     display: block;
     margin-bottom: 1rem;
 }
@@ -414,12 +401,14 @@
 /* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     .component-card,
-    .community-card {
+    .community-card,
+    .stat-item {
         transition: none;
     }
     
     .component-card:hover,
-    .community-card:hover {
+    .community-card:hover,
+    .stat-item:hover {
         transform: none;
     }
     
@@ -431,13 +420,13 @@
 
 /* Buttons */
 .btn-primary {
-    background: #4A90E2;
-    border-color: #4A90E2;
+    background: #4f7b38;
+    border-color: #1e2a16;
 }
 
 .btn-primary:hover {
-    background: #357ABD;
-    border-color: #357ABD;
+    background: #4f7b38;
+    border-color: #1e2a16;
 }
 
 .btn-outline-light:hover {
@@ -489,3 +478,137 @@ h2 {
     background-color: #f8f9fa !important;
 }
 
+// Override the white CTA section spacing
+section.row.-bg-white {
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+
+// Make sure container doesn't add extra space
+section.row.-bg-white .container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+// Reduce row gap between button and links
+section.row.-bg-white .row.g-3 {
+  row-gap: 0.75rem !important;
+}
+
+// Final CTA buttons with brand colors
+section.row.td-box.-bg-white:last-of-type {
+  .btn {
+    transition: all 0.3s ease;
+    
+    &:first-of-type {
+      background-color: #6aa329 !important;
+      border-color: #6aa329 !important;
+      
+      &:hover {
+        background-color: #4f7b38 !important;
+        border-color: #4f7b38 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(106, 163, 41, 0.3);
+      }
+    }
+    
+    &:last-of-type {
+      background-color: transparent !important;
+      border: 2px solid #6aa329 !important;
+      color: #6aa329 !important;
+      
+      &:hover {
+        background-color: #6aa329 !important;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+.component-card.command .image-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 250px; // Adjust to control the vertical space
+}
+
+// Hero cards as links
+.stat-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  
+  .stat-item {
+    cursor: pointer;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.22);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// 3 Validation Badges - Horizontal Layout
+.validation-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 62ch;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: #d3e7b6;
+    transform: translateX(3px);
+    
+    i {
+      color: #d3e7b6;
+    }
+  }
+  
+  i {
+    font-size: 1.1rem;
+    color: #d3e7b6;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+  
+  strong {
+    color: #fff;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    
+    span {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+  }
+}
+
+// GitHub logo specific styling
+.badge-item .fa-github {
+  font-size: 1.2rem;
+}
