@@ -227,12 +227,6 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 bash connectSherlock.sh
 ```
 
-### setup file access
-to access files on /scratch you need to run this once in a terminal:
-```
-echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
-```
-
 ### start desktop manually when already inside a job
 ```bash
 apptainer run \
@@ -360,7 +354,7 @@ rclone ls onedrive:
 vi ~/.config/rclone/rclone.conf
 ```
 
-### mounting sherlock on your computer through sshfs
+### mounting sherlock files on your computer through sshfs
 install sshfs for your operating system, e.g. on MacOS:
 ```
 brew tap macos-fuse-t/homebrew-cask
@@ -389,8 +383,11 @@ datalad
 
 ### Transfer files via scp
 ``` 
+# this will transfer a file from your computer to your scratch space
 scp foo <sunetid>@dtn.sherlock.stanford.edu:
-# this file will end up in your scratch space
+
+# this will transfer a directory from sherlock to your computer:
+scp -r <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
 ```
 
 ## Managing Neurodesk on Sherlock
@@ -416,6 +413,22 @@ bash containers.sh
 # to search for a container:
 bash containers.sh freesurfer
 # then install the choosen version by copy and pasting the specific command install command displayed
+```
+
+If a new container was installed from Neurodesktop, the paths will need to be adjusted to work outside of Neurodesktop for the rest of sherlock:
+```bash
+sh_dev
+#First, test if that happened:
+cd $GROUP_HOME/neurodesk/local/containers/modules
+find . -maxdepth 4 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
+
+#Then fix for modules:
+cd $GROUP_HOME/neurodesk/local/containers/modules
+find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
+
+#Then fix for containers:
+cd $GROUP_HOME/neurodesk/local/containers
+find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
 ```
 
 ### Updating Neurodesktop image
