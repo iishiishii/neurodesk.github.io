@@ -419,7 +419,7 @@ If a new container was installed from Neurodesktop, the paths will need to be ad
 ```bash
 sh_dev
 #First, test if that happened:
-cd $GROUP_HOME/neurodesk/local/containers/modules
+cd $GROUP_HOME/neurodesk/local/containers/
 find . -maxdepth 4 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
 
 #Then fix for modules:
