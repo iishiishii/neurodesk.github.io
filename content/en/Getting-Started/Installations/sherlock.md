@@ -117,12 +117,20 @@ matlab -batch matlab_file_without_the_dot_m_ending
 ```
 
 check:
-```
+```bash
 squeue -u $USER
+# or
+squeue --me
+# or to watch it continuesly:
+watch -n 5 "squeue -u $USER"
+# or get more details:
+squeue --me -o "%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m"
+# or create an alias:
+echo 'alias sq="squeue --me -o \"%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m\""' >> ~/.bashrc
 ```
 
 cancel jobs:
-```
+```bash
 scancel <jobid>
 scancel --name=my_job_name
 ```
@@ -219,20 +227,19 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 bash connectSherlock.sh
 ```
 
-### start desktop manually when inside a job
+### start desktop manually when already inside a job
 ```bash
 apptainer run \
    --fakeroot \
    --nv \
-   --overlay ~/neurodesktop-overlay.img \
+   --overlay $SCRATCH/neurodesktop-overlay.img \
    --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
    --no-home \
-   --home ~/neurodesktop-home:/home/jovyan \
    --env CVMFS_DISABLE=true \
    --env NB_UID=$(id -u) \
    --env NB_GID=$(id -g) \
-   --env NEURODESKTOP_VERSION=test_2026-01-26 \
-   $GROUP_HOME/neurodesk/neurodesktop-test_2026-01-26.sif \
+   --env NEURODESKTOP_VERSION=latest \
+   $GROUP_HOME/neurodesk/neurodesktop-neurodesktop_latest.sif \
    start-notebook.py --allow-root
 ```
 
@@ -254,6 +261,9 @@ and for checking on slurm jobs in vscode:
 and for matlab scripts:
 - MATLAB Extension for Windsurf
 -- path is: /share/software/user/restricted/matlab/R2022b/
+
+useful shortcuts:
+- you can execute a line from your scripts on the terminal via setting a keyboard shortcut to "Terminal: Run Selected Text in Active Terminal" - that makes testing scripts and debugging them quite quick
 
 ## connecting with Cursor
 Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
@@ -344,10 +354,23 @@ rclone ls onedrive:
 vi ~/.config/rclone/rclone.conf
 ```
 
-### mounting sherlock on your computer through sshfs
+### mounting sherlock files on your computer through sshfs
+install sshfs for your operating system, e.g. on MacOS:
+```
+brew tap macos-fuse-t/homebrew-cask
+brew install fuse-t-sshfs
+```
+
+then mount for macos:
 ```bash
-mkdir ~/sherlock_home
-sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_home
+mkdir ~/sherlock_scratch
+sshfs sciget@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
+```
+
+on linux:
+```bash
+mkdir ~/sherlock_scratch
+sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch
 ```
 
 ### Transfer files using datalad
@@ -360,8 +383,11 @@ datalad
 
 ### Transfer files via scp
 ``` 
+# this will transfer a file from your computer to your scratch space
 scp foo <sunetid>@dtn.sherlock.stanford.edu:
-# this file will end up in your scratch space
+
+# this will transfer a directory from sherlock to your computer:
+scp -r <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
 ```
 
 ## Managing Neurodesk on Sherlock
@@ -389,11 +415,42 @@ bash containers.sh freesurfer
 # then install the choosen version by copy and pasting the specific command install command displayed
 ```
 
+If a new container was installed from Neurodesktop, the paths will need to be adjusted to work outside of Neurodesktop for the rest of sherlock:
+```bash
+sh_dev
+#First, test if that happened:
+cd $GROUP_HOME/neurodesk/local/containers/
+find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
+cd $GROUP_HOME/neurodesk/local/containers/modules
+find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
+
+
+
+#Then fix for modules:
+cd $GROUP_HOME/neurodesk/local/containers/modules
+find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
+
+#Then fix for containers:
+cd $GROUP_HOME/neurodesk/local/containers
+find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
+```
+
 ### Updating Neurodesktop image
 ```bash
-cd $GROUP_HOME/neurodesk
-apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:2026-01-26
-ln -s $GROUP_HOME/neurodesk/neurodesktop_2026-01-26.sif $GROUP_HOME/neurodesk/neurodesktop_latest.sif 
+ssh sherlock
+sh_dev -m 32 -p normal -c 4
+export VERSION="2026-01-30"
+cd ${GROUP_HOME}/neurodesk
+export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp
+mkdir -p $APPTAINER_TMPDIR
+apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}
+rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif
+ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif 
+```
+
+Or submit the update as a single Slurm job:
+```bash
+sbatch -p normal -c 4 --mem=32G --job-name=neurodesktop-update --wrap 'export VERSION="2026-01-30"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
 
 
