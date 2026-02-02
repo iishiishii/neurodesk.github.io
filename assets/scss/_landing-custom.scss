@@ -58,12 +58,56 @@
     line-height: 1.2;
 }
 
-@media (min-width: 992px) {
-    .hero-heading {
-        font-size: 2.75rem;
-        white-space: nowrap;
-    }
+.hero-heading {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  white-space: normal;        // allow wrapping by default
+  overflow-wrap: anywhere;     // safety for long phrases
 }
+
+@media (min-width: 992px) {
+  .hero-heading {
+    font-size: 2.75rem;
+  }
+}
+
+/* Only force one-line when you truly have the space */
+@media (min-width: 1400px) {
+  .hero-heading {
+    white-space: nowrap;
+  }
+}
+
+/* Keep logo contained and give the text column breathing room */
+@media (min-width: 992px) {
+  .td-box.-bg-secondary .col-md-8 {
+    padding-right: 2.5rem;
+  }
+
+  .td-box.-bg-secondary .col-md-4 {
+    overflow: hidden;
+  }
+}
+
+.neurodesk-hero-logo {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  max-height: 360px;
+}
+
+@media (max-width: 1200px) {
+  .neurodesk-hero-logo { max-height: 320px; }
+}
+
+@media (max-width: 992px) {
+  .neurodesk-hero-logo {
+    max-height: 240px;
+    margin: 2rem auto 0;
+  }
+}
+
 
 @media (min-width: 1200px) {
     .hero-heading {
@@ -135,13 +179,6 @@
     font-size: 1rem;
     color: #fff;
     line-height: 1.3;
-}
-
-.td-box.-bg-secondary .social-proof-stats .stat-label {
-    opacity: 0.85;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.85);
 }
 
 /* Validation Badge */
