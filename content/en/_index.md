@@ -69,10 +69,6 @@ type: landing
                     <i class="fab fa-github"></i>
                     <span><strong>Open Source</strong> Fully Transparent</span>
                 </a>
-                <a href="https://direct.mit.edu/imag/article/doi/10.1162/IMAG.a.79/131499" target="_blank" class="badge-item">
-                    <i class="fas fa-check-circle"></i>
-                    <span><strong>Independently Evaluated</strong> Accessibility & Usability Study published in MIT</span>
-                </a>
             </div>
         </div>
         <div class="col-md-4 order-md-2 text-center">
@@ -84,8 +80,30 @@ type: landing
 </div>
 </section>
 
+<section class="landing-eval">
+  <div class="container">
+    <div class="landing-eval-inner">
+      <div class="landing-eval-title">
+        <i class="fas fa-check-circle" aria-hidden="true"></i>
+        <span>Independently evaluated</span>
+      </div>
+      <p class="landing-eval-quote">
+        “Neurodesk offers an extensive container repository, with the versatility of a command-line interface for technical users and a GUI that lowers barriers for non-technical users.”
+      </p>
+      <div class="landing-eval-meta">
+        <span> - Imaging Neuroscience (MIT Press), accessibility and usability study</span>
+        <a href="https://direct.mit.edu/imag/article/doi/10.1162/IMAG.a.79/131499" target="_blank" rel="noopener">
+          Read the paper
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 <section class="row -bg-white justify-content-left h-auto col-big-desktop">
-<div class="container" style="padding-top: 1.5rem !important; padding-bottom: 0rem !important;">
+<div class="container" style="padding-top: -1.25rem !important; padding-bottom: 0rem !important;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="row g-3">

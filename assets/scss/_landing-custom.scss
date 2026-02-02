@@ -203,8 +203,8 @@
 
 /* Reduce CTA Section Spacing */
 section.row.-bg-white .container {
-    padding-top: 1.25rem !important;
-    padding-bottom: 0.75rem !important;
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
 }
 
 /* Video Section Spacing */
@@ -480,8 +480,8 @@ h2 {
 
 // Override the white CTA section spacing
 section.row.-bg-white {
-  padding-top: 1.5rem !important;
-  padding-bottom: 1.5rem !important;
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
 }
 
 // Make sure container doesn't add extra space
@@ -492,7 +492,7 @@ section.row.-bg-white .container {
 
 // Reduce row gap between button and links
 section.row.-bg-white .row.g-3 {
-  row-gap: 0.75rem !important;
+  row-gap: 0rem !important;
 }
 
 // Final CTA buttons with brand colors
@@ -669,4 +669,62 @@ section.row.td-box.-bg-white:last-of-type {
     padding-top: 5rem !important;
     padding-bottom: 2rem !important;
   }
+}
+
+/* Evaluation strip: looks like Docsy content, not a separate component */
+.landing-eval {
+  background: #fff;
+  padding: 0rem 0 0rem;
+}
+
+.landing-eval-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+.landing-eval-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #1e2a16;
+  margin-bottom: 0.5rem;
+}
+
+.landing-eval-quote {
+  margin: 0 0 0.75rem 0;
+  color: #1e2a16;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #1e2a16;
+  margin-bottom: 0.5rem;
+}
+
+.landing-eval-quote {
+  margin: 0 0 0.75rem 0;
+  color: #1e2a16;
+  font-size: 1.1rem;     /* smaller than your screenshot */
+  line-height: 1.45;
+  max-width: 80ch;       /* keeps it readable */
+}
+
+.landing-eval-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: baseline;
+  color: #111827;
+}
+
+.landing-eval-meta a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.landing-eval-meta a:hover {
+  text-decoration: underline;
 }
