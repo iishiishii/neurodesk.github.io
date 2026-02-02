@@ -16,7 +16,7 @@ For instructions on how to cite Neurodesk and specific tools, visit our [Citatio
 
 ---
 
-## Featured Publications
+## Featured Publications describing Neurodesk
 
 - Renton, A.I., Dao, T.T., Johnstone, T., Civier, O., Sullivan, R. P., White, D. J., ... Narayanan, A. & Bollmann, S. Neurodesk: an accessible, flexible and portable data analysis environment for reproducible neuroimaging. Nat Methods (2024). https://doi.org/10.1038/s41592-023-02145-x
 
@@ -28,6 +28,7 @@ For instructions on how to cite Neurodesk and specific tools, visit our [Citatio
 
 
 ## Neurodesk in action
+- Pruckner, Philip, Remika Mito, David N Vaughan, et al. “Surgical White Matter Disruption Leads to Downstream Atrophy in the Non-Resected Human Brain.” Brain, September 16, 2025, awaf344. https://doi.org/10.1093/brain/awaf344.
 
 - Wright, B. R., Schira, M. M., Paxinos, G., & Kassem, M. S. (2025). Paediatric MRI: High-Resolution in vivo 3T Methods. bioRxiv. https://doi.org/10.1101/2025.10.30.685686 
 
