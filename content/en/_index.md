@@ -10,7 +10,7 @@ type: landing
 <div class="container">
     <div class="row align-items-center">
         <div class="col-md-8 order-md-1">
-            <h1 class="hero-heading mt-0 pb-2">Reproduce Your Neuroimaging Analysis Anywhere</h1>
+            <h1 class="hero-heading mt-0 pb-2">Run Your Neuroimaging Analysis Anywhere</h1>
             <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities.<br>Neurodesk gives you consistent, reproducible neuroimaging tools across any system.</p>
             <!-- 4 Hero Value Cards in 2x2 Grid with Links -->
             <div class="social-proof-stats">
@@ -322,7 +322,7 @@ type: landing
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
-            <h2 class="mb-3">Ready to Make Your Research Reproducible?</h2>
+            <h2 class="mb-3">Ready to Run Neurodesk Anywhere?</h2>
             <p class="lead mb-4">Join researchers worldwide using Neurodesk for transparent, reproducible neuroimaging.</p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                 <a class="btn btn-lg px-5 py-3" href="{{< relurl "/getting-started/hosted" >}}" style="background-color: #6aa329; border-color: #6aa329; color: #ffffff; font-weight: 600;">
