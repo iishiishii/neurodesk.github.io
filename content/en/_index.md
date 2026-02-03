@@ -12,20 +12,22 @@ type: landing
         <div class="col-md-8 order-md-1">
             <h1 class="hero-heading mt-0 pb-2">Run Your Neuroimaging Analysis Anywhere</h1>
             <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities.<br>Neurodesk gives you consistent, reproducible neuroimaging tools across any system.</p>
-            <div class="row g-3 mb-4">
-                <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-success w-100 shadow-lg" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a; height: 85px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <span style="font-size: 1.1rem;"><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
-                        <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-outline-light w-100" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-size: 1.1rem;"><i class="fas fa-download"></i> Install Locally</span>
-                    </a>
+            <div class="hero-cta-wrapper">
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6">
+                        <a class="btn btn-lg btn-success w-100 shadow-lg hero-cta-primary" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a; height: 85px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <span style="font-size: 1.1rem;"><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
+                            <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
+                        </a>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <a class="btn btn-lg btn-outline-light w-100 hero-cta-secondary" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 1.1rem;"><i class="fas fa-download"></i> Install Neurodesk Locally</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="validation-badges" style="font-size: 1.3rem;">
+            <div class="validation-badges">
                 <a href="{{< relurl "/applications/" >}}" class="badge-item">
                     <i class="fas fa-brain"></i>
                     <span><strong>100+</strong> Neuroimaging Tools</span>
