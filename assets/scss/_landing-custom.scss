@@ -259,32 +259,40 @@
   }
 }
 
-/* Reduce white space in eval section */
-.landing-eval {
-  background: #fff;
-  padding: 1.5rem 0 1rem; /* Reduced top/bottom padding */
-}
-
-.landing-eval-inner {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem 0; /* Reduced padding */
-  border-top: 1px solid rgba(0,0,0,0.12);
-  border-bottom: 1px solid rgba(0,0,0,0.12);
-}
-
-/* Evaluation Cards - Constrained Width */
+/* Evaluation Cards - Responsive Grid Layout with Smart Breakpoints */
 .landing-eval-cards {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(280px, 400px); /* Mobile: 1 column with constraints */
   gap: 0.75rem;
-  margin: 1.5rem auto 1rem; /* Added auto for centering */
-  max-width: 900px; /* Constrain max width */
+  margin: 1.5rem auto 1rem;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-content: center; 
   
-  @media (min-width: 800px) {
-    grid-template-columns: 1fr 1fr;
+  /* Tablet: 2x2 grid - cards at natural size */
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(300px, 450px)); /* Cards between 300-450px */
     gap: 1rem;
+    max-width: 900px;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
+  
+  /* Large screens: 1x4 horizontal - cards at natural size */
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(4, minmax(300px, 450px)); /* Cards between 280-350px */
+    gap: 1rem;
+    max-width: 1600px; /* Max width for 1x4 */
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.eval-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
 }
 
 .eval-card {
@@ -304,6 +312,31 @@
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
+}
+
+.eval-card-icon {
+  flex-shrink: 0;
+  font-size: 2rem;
+  color: #d3e7b6;
+}
+
+.eval-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.eval-card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.eval-card-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
 }
 
 /* ==========================================
@@ -358,69 +391,6 @@
   text-decoration: underline;
 }
 
-/* Evaluation Cards - Dark Green on White */
-.landing-eval-cards {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-}
-
-.eval-card-link {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-}
-
-.eval-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  border-radius: 12px;
-  background: rgba(30, 42, 22, 0.95);
-  border: 1px solid rgba(211, 231, 182, 0.2);
-  transition: all 0.3s ease;
-  width: 100%;
-  cursor: pointer;
-  
-  &:hover {
-    background: rgba(22, 32, 16, 1);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-}
-
-.eval-card-icon {
-  flex-shrink: 0;
-  font-size: 1.75rem;
-  color: #d3e7b6;
-}
-
-.eval-card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.eval-card-title {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #fff;
-  line-height: 1.3;
-}
-
-.eval-card-desc {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.4;
-}
 
 /* ==========================================
    CTA SECTION (WHITE)

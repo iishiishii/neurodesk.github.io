@@ -64,7 +64,7 @@ type: landing
 <section class="row -bg-white justify-content-left h-auto col-big-desktop landing-cta">
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
+        <div class="col-12">
             <!-- 4 Hero Value Cards -->
             <div class="landing-eval-cards mb-4">
                 <a href="{{< relurl "/getting-started/" >}}" class="eval-card-link">
@@ -73,7 +73,7 @@ type: landing
                             <i class="fas fa-desktop"></i>
                         </div>
                         <div class="eval-card-content">
-                            <span class="eval-card-title">One environment, any system</span>
+                            <span class="eval-card-title">One environment</span>
                             <span class="eval-card-desc">Run tools consistently across operating systems</span>
                         </div>
                     </div>
@@ -84,8 +84,8 @@ type: landing
                             <i class="fas fa-code"></i>
                         </div>
                         <div class="eval-card-content">
-                            <span class="eval-card-title">GUI or notebooks</span>
-                            <span class="eval-card-desc">Virtual desktop or Jupyter notebooks</span>
+                            <span class="eval-card-title">Choose your Interface</span>
+                            <span class="eval-card-desc">Supports gaphical desktops, command line and computational notebooks</span>
                         </div>
                     </div>
                 </a>
@@ -95,7 +95,7 @@ type: landing
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
                         <div class="eval-card-content">
-                            <span class="eval-card-title">Local to cloud</span>
+                            <span class="eval-card-title">Work in the cloud</span>
                             <span class="eval-card-desc">Deploy anywhere without installation overhead</span>
                         </div>
                     </div>
