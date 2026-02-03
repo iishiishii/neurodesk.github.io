@@ -470,6 +470,12 @@ section.landing-cta {
   overflow: hidden;
   transition: all 0.3s ease;
   border: 1px solid #e0e0e0;
+  
+  /* On mobile, remove height restrictions */
+  @media (max-width: 767px) {
+    height: auto !important;
+    min-height: auto !important;
+  }
 }
 
 .component-card:hover {
@@ -481,6 +487,12 @@ section.landing-cta {
   text-decoration: none;
   color: inherit;
   padding: 1.5rem;
+  height: 100%;
+  
+  /* Ensure full display on mobile */
+  @media (max-width: 767px) {
+    height: auto !important;
+  }
 }
 
 .component-icon-large {
@@ -506,6 +518,12 @@ section.landing-cta {
   list-style: none;
   padding-left: 0;
   margin-top: 1rem;
+  
+  @media (max-width: 767px) {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 
 .feature-list li {
@@ -523,17 +541,79 @@ section.landing-cta {
   font-weight: bold;
 }
 
+/* Image wrapper - general styles */
 .image-wrapper {
   margin-top: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  @media (max-width: 767px) {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin-top: 1rem;
+  }
+  
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
 }
 
+/* Desktop card - Neurodesktop image */
+.component-card.desktop .image-wrapper {
+  min-height: 200px;
+  
+  img {
+    max-width: 100%;
+  }
+  
+  @media (max-width: 767px) {
+    min-height: 180px;
+  }
+}
+
+/* Containers card - Neurocontainers image */
+.component-card.containers .image-wrapper {
+  min-height: 200px;
+  
+  img {
+    max-width: 100%;
+  }
+  
+  @media (max-width: 767px) {
+    min-height: 180px;
+  }
+}
+
+/* Command card - Terminal */
 .component-card.command .image-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 250px;
+  
+  .fake {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    
+    @media (max-width: 767px) {
+      max-width: 100%;
+    }
+  }
+}
+
+/* Adjust column sizing for better mobile layout */
+@media (max-width: 767px) {
+  .component-start .col-10 {
+    flex: 0 0 100%;
+    max-width: 95%;
+  }
 }
 
 /* ==========================================
