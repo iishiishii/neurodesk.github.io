@@ -894,3 +894,33 @@ section.row.td-box.-bg-white:last-of-type {
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.4;
 }
+
+/* Hero CTA button hover effects */
+.td-box.-bg-secondary .btn-success {
+  background-color: #9EC672 !important;
+  border-color: #9EC672 !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #b7d886 !important;
+    border-color: #b7d886 !important;
+    color: #1e2a16 !important; /* Deep green text */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px #b7d886 !important;
+  }
+}
+
+.td-box.-bg-secondary .btn-outline-light {
+  background-color: transparent !important;
+  border-color: #d3e7b6 !important;
+  color: #d3e7b6 !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #b7d886 !important;
+    border-color: #b7d886 !important;
+    color: #1e2a16 !important; /* Deep green text */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px #b7d886 !important;
+  }
+}
