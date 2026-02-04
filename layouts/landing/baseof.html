@@ -2,6 +2,10 @@
 <html itemscope itemtype="http://schema.org/WebPage" lang="{{ .Site.Language.Lang }}" class="no-js">
   <head>
     {{ partial "head.html" . }}
+    <meta name="landing-baseof" content="true">
+    <style>
+      {{ readFile "assets/css/landing-custom.css" | safeCSS }}
+    </style>
   </head>
   <body class="td-{{ .Kind }}{{ with .Page.Params.body_class }} {{ . }}{{ end }}">
     <header>

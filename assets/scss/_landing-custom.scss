@@ -1,0 +1,872 @@
+/* ========================================
+   Neurodesk Landing Page - Clean Final CSS
+   ======================================== */
+/* Define width variable with responsive values */
+:root {
+  --hero-content-width: 600px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --hero-content-width: 700px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --hero-content-width: 800px;
+  }
+}
+
+/* Apply to all hero content */
+.td-box.-bg-secondary .col-md-8 {
+  h1,
+  .lead,
+  .hero-cta-buttons,
+  .validation-badges {
+    max-width: var(--hero-content-width);
+  }
+}
+/* ==========================================
+   HERO SECTION
+   ========================================== */
+
+/* Hero Container & Spacing */
+.td-box.-bg-secondary {
+  padding-top: 4rem !important;
+  padding-bottom: 1.5rem !important;
+  
+  @media (min-width: 992px) {
+    padding-top: 5rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+.td-box.-bg-secondary .container {
+  max-width: 2000px;
+}
+
+/* Column spacing and alignment */
+@media (min-width: 992px) {
+  .td-box.-bg-secondary .row.align-items-center {
+    align-items: center !important;
+  }
+  
+  .td-box.-bg-secondary .col-md-8 {
+    padding-right: 2.5rem;
+  }
+
+  .td-box.-bg-secondary .col-md-4 {
+    overflow: hidden;
+  }
+}
+
+.td-box.-bg-secondary .col-md-8 {
+  h1,
+  .lead,
+  .hero-cta-buttons,
+  .validation-badges {
+    max-width: var(--hero-content-width);
+  }
+}
+
+/* Hero Heading */
+.hero-heading {
+  font-size: 2rem;
+  line-height: 1.2;
+  white-space: normal !important; /* Always allow wrapping */
+  overflow-wrap: normal;
+  max-width: var(--hero-content-width);
+}
+
+@media (min-width: 992px) {
+  .hero-heading {
+    font-size: 2.2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-heading {
+    font-size: 2.3rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .hero-heading {
+    font-size: 2.4rem;
+  }
+}
+
+
+/* Hero Logo */
+.neurodesk-hero-logo {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  max-height: 360px;
+  opacity: 0.9;
+}
+
+@media (max-width: 1200px) {
+  .neurodesk-hero-logo { 
+    max-height: 320px; 
+  }
+}
+
+@media (max-width: 992px) {
+  .neurodesk-hero-logo {
+    max-height: 240px;
+    margin: 2rem auto 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .neurodesk-hero-logo {
+    height: 200px;
+    margin-top: 2rem;
+  }
+}
+
+/* Hero CTA Buttons Wrapper */
+.hero-cta-wrapper {
+  max-width: var(--hero-content-width);
+  margin: 0;
+  padding: 0; /* Remove all padding */
+  
+  .row {
+    margin: 0;
+    margin-left: 0 !important; /* Force remove Bootstrap's negative margin */
+    margin-right: 0 !important;
+  }
+  
+  .col-12,
+  .col-sm-6 {
+    padding-left: 0 !important; /* Remove Bootstrap column padding */
+    padding-right: 0.375rem; /* Keep small gap between buttons */
+  }
+  
+  .col-sm-6:last-child {
+    padding-right: 0 !important;
+    padding-left: 0.375rem ;
+  }
+}
+
+/* Hero CTA Buttons - Side by Side */
+.hero-cta-buttons {
+  display: flex;
+  gap: 0.75rem;
+  max-width: var(--hero-content-width);
+  margin: 1.5rem 0 1rem 0;
+  
+  @media (max-width: 568px) {
+    flex-direction: column;
+  }
+  
+  .btn {
+    flex: 1;
+    min-width: 0;
+    
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+/* Hero CTA Button Styles */
+.td-box.-bg-secondary .btn-success {
+  background-color: #9EC672 !important;
+  border-color: #9EC672 !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #7db354 !important;
+    border-color: #7db354 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px #b7d886 !important;
+  }
+}
+
+.td-box.-bg-secondary .btn-outline-light {
+  background-color: transparent !important;
+  border-color: #d3e7b6 !important;
+  color: #d3e7b6 !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #b7d886 !important;
+    border-color: #b7d886 !important;
+    color: #1e2a16 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px #b7d886 !important;
+  }
+}
+
+/* Validation Badges - Centered Below Buttons */
+.validation-badges {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 1rem !important;
+  margin-bottom: 0 !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 750px; /* Match heading/buttons width */
+  width: 100%;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  
+  &:hover {
+    color: #d3e7b6 !important;
+    
+    i {
+      color: #d3e7b6;
+    }
+  }
+  
+  i {
+    font-size: 1.4rem;
+    color: #d3e7b6;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+  
+  strong {
+    color: #fff !important;
+    font-weight: 700;
+  }
+  
+  span {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+}
+
+/* Evaluation Cards - Responsive Grid Layout with Smart Breakpoints */
+.landing-eval-cards {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px); /* Mobile: 1 column with constraints */
+  gap: 0.75rem;
+  margin: 1.5rem auto 1rem;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-content: center; 
+  
+  /* Tablet: 2x2 grid - cards at natural size */
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(300px, 450px)); /* Cards between 300-450px */
+    gap: 1rem;
+    max-width: 900px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Large screens: 1x4 horizontal - cards at natural size */
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(4, minmax(300px, 450px)); /* Cards between 280-350px */
+    gap: 1rem;
+    max-width: 1600px; /* Max width for 1x4 */
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.eval-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+}
+
+.eval-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  background: rgba(30, 42, 22, 0.95);
+  border: 1px solid rgba(211, 231, 182, 0.2);
+  transition: all 0.3s ease;
+  width: 100%;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(22, 32, 16, 1);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.eval-card-icon {
+  flex-shrink: 0;
+  font-size: 2rem;
+  color: #d3e7b6;
+}
+
+.eval-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.eval-card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.eval-card-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+
+/* ==========================================
+   EVALUATION SECTION
+   ========================================== */
+
+.landing-eval {
+  background: #fff;
+  padding: 2rem 0 1.5rem;
+}
+
+.landing-eval-inner {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+.landing-eval-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #1e2a16;
+  margin-bottom: 0.75rem;
+}
+
+.landing-eval-quote {
+  margin: 0 0 0.75rem 0;
+  color: #1e2a16;
+  font-size: 1.1rem;
+  line-height: 1.45;
+  max-width: 80ch;
+}
+
+.landing-eval-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: baseline;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.landing-eval-meta a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.landing-eval-meta a:hover {
+  text-decoration: underline;
+}
+
+
+/* ==========================================
+   CTA SECTION (WHITE)
+   ========================================== */
+
+section.landing-cta {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
+  .container {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .secondary-links {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .row {
+    margin-bottom: 0 !important;
+  }
+}
+
+.secondary-links {
+  font-size: 0.95rem;
+}
+
+.secondary-links a {
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.secondary-links a:hover {
+  color: #d3e7b6 !important;
+}
+
+.secondary-links a i {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* ==========================================
+   VIDEO SECTION
+   ========================================== */
+
+.container-fluid.py-5 {
+  padding-top: 2rem !important;
+  padding-bottom: 3rem !important;
+}
+
+.video-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 1rem;
+}
+
+.video-container img,
+.video-container video {
+  background: #ffffff;
+}
+
+/* ==========================================
+   COMPONENT CARDS
+   ========================================== */
+
+.component-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+  
+  /* On mobile, remove height restrictions */
+  @media (max-width: 767px) {
+    height: auto !important;
+    min-height: auto !important;
+  }
+}
+
+.component-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.component-click-btn {
+  text-decoration: none;
+  color: inherit;
+  padding: 1.5rem;
+  height: 100%;
+  
+  /* Ensure full display on mobile */
+  @media (max-width: 767px) {
+    height: auto !important;
+  }
+}
+
+.component-icon-large {
+  font-size: 3.5rem;
+  color: #4A90E2;
+  text-align: center;
+}
+
+.component-card h4 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.card-summary {
+  color: #666;
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.feature-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+  
+  @media (max-width: 767px) {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+.feature-list li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #555;
+}
+
+.feature-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #d3e7b6;
+  font-weight: bold;
+}
+
+/* Image wrapper - general styles */
+.image-wrapper {
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  @media (max-width: 767px) {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin-top: 1rem;
+  }
+  
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+/* Desktop card - Neurodesktop image */
+.component-card.desktop .image-wrapper {
+  min-height: 200px;
+  
+  img {
+    max-width: 100%;
+  }
+  
+  @media (max-width: 767px) {
+    min-height: 180px;
+  }
+}
+
+/* Containers card - Neurocontainers image */
+.component-card.containers .image-wrapper {
+  min-height: 200px;
+  
+  img {
+    max-width: 100%;
+  }
+  
+  @media (max-width: 767px) {
+    min-height: 180px;
+  }
+}
+
+/* Command card - Terminal */
+.component-card.command .image-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 250px;
+  
+  .fake {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    
+    @media (max-width: 767px) {
+      max-width: 100%;
+    }
+  }
+}
+
+/* Adjust column sizing for better mobile layout */
+@media (max-width: 767px) {
+  .component-start .col-10 {
+    flex: 0 0 100%;
+    max-width: 95%;
+  }
+}
+
+/* ==========================================
+   TERMINAL STYLING
+   ========================================== */
+
+.code-preview,
+.fake-terminal {
+  background: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fakeMenu {
+  width: 100%;
+  height: 25px;
+  background: #2d2d2d;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.fakeButtons {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.fakeClose {
+  background: #ff5f56;
+}
+
+.fakeMinimize {
+  background: #ffbd2e;
+}
+
+.fakeZoom {
+  background: #27c93f;
+}
+
+.fakeScreen {
+  background: #1e1e1e;
+  padding: 1.5rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: #d3e7b6;
+  min-height: 120px;
+}
+
+.terminal-line {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.terminal-cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ==========================================
+   COMMUNITY CARDS
+   ========================================== */
+
+.community-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px #b7d886 !important;
+
+    h4 {
+      color: #b7d886 !important;
+    }
+    
+    .card-summary {
+      color: #b7d886 !important;
+    }
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-body {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  i {
+    font-size: 2.5rem;
+    color: #d3e7b6;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  
+  h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .card-summary {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+}
+
+/* Community cards - 5 in one row */
+.community-start .row.community {
+  justify-content: center;
+  
+  @media (min-width: 1200px) {
+    .col-xl-3 {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+  }
+  
+  @media (max-width: 1199px) and (min-width: 992px) {
+    .col-lg-6 {
+      flex: 0 0 33.333%;
+      max-width: 33.333%;
+    }
+  }
+}
+
+/* ==========================================
+   FINAL CTA SECTION
+   ========================================== */
+
+section.row.td-box.-bg-white:last-of-type {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+  
+  .btn {
+    transition: all 0.3s ease;
+    
+    &:first-of-type {
+      background-color: #6aa329 !important;
+      border-color: #6aa329 !important;
+      color: #ffffff !important;
+      
+      &:hover {
+        background-color: #4f7b38 !important;
+        border-color: #4f7b38 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(106, 163, 41, 0.3);
+      }
+    }
+    
+    &:last-of-type {
+      background-color: transparent !important;
+      border: 2px solid #6aa329 !important;
+      color: #6aa329 !important;
+      
+      &:hover {
+        background-color: #4f7b38 !important;
+        border-color: #4f7b38 !important;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px #1e2a16;
+      }
+    }
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .component-card,
+  .community-card,
+  .stat-item {
+    transition: none;
+  }
+  
+  .component-card:hover,
+  .community-card:hover,
+  .stat-item:hover {
+    transform: none;
+  }
+  
+  .terminal-cursor {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ==========================================
+   UTILITY STYLES
+   ========================================== */
+
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+.py-5 {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+@media (min-width: 768px) {
+  .py-5 {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+}
+
+.text-light a:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
