@@ -10,57 +10,18 @@ type: landing
 <div class="container">
     <div class="row align-items-center">
         <div class="col-md-8 order-md-1">
-            <h1 class="hero-heading mt-0 pb-2">Reproduce Your Neuroimaging Analysis Anywhere</h1>
+            <h1 class="hero-heading mt-0 pb-2">Run Your Neuroimaging Analysis Anywhere</h1>
             <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities.<br>Neurodesk gives you consistent, reproducible neuroimaging tools across any system.</p>
-            <!-- 4 Hero Value Cards in 2x2 Grid with Links -->
-            <div class="social-proof-stats">
-                <a href="{{< relurl "/getting-started/" >}}" class="stat-item-link">
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-desktop"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number">One environment, any system</span>
-                            <span class="stat-label">Run tools consistently across operating systems</span>
-                        </div>
-                    </div>
+            <div class="hero-cta-buttons mb-4">
+                <a class="btn btn-lg btn-success hero-cta-primary" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a; height: 85px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <span style="font-size: 1.1rem;"><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
+                    <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
                 </a>
-                <a href="{{< relurl "/getting-started/neurodesktop/" >}}" class="stat-item-link">
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number">GUI or notebooks</span>
-                            <span class="stat-label">Virtual desktop or Jupyter notebooks</span>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{< relurl "/getting-started/neurocontainers/" >}}" class="stat-item-link">
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number">Local to cloud</span>
-                            <span class="stat-label">Deploy anywhere without installation overhead</span>
-                        </div>
-                    </div>
-                </a>
-                <a href="https://neurodesk.org/edu/contribute/intro.html" class="stat-item-link">
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-hands-helping"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number">Contribute learning resources</span>
-                            <span class="stat-label">Share your knowledge with the community</span>
-                        </div>
-                    </div>
+                <a class="btn btn-lg btn-outline-light hero-cta-secondary" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 1.1rem;"><i class="fas fa-download"></i> Install Locally</span>
                 </a>
             </div>
-            <!-- 3 Validation Badges - Horizontal Line -->
-            <div class="validation-badges" style="font-size: 1.3rem;">
+            <div class="validation-badges">
                 <a href="{{< relurl "/applications/" >}}" class="badge-item">
                     <i class="fas fa-brain"></i>
                     <span><strong>100+</strong> Neuroimaging Tools</span>
@@ -68,10 +29,6 @@ type: landing
                 <a href="https://github.com/neurodesk" target="_blank" class="badge-item">
                     <i class="fab fa-github"></i>
                     <span><strong>Open Source</strong> Fully Transparent</span>
-                </a>
-                <a href="https://direct.mit.edu/imag/article/doi/10.1162/IMAG.a.79/131499" target="_blank" class="badge-item">
-                    <i class="fas fa-check-circle"></i>
-                    <span><strong>Independently Evaluated</strong> Accessibility & Usability Study published in MIT</span>
                 </a>
             </div>
         </div>
@@ -84,22 +41,77 @@ type: landing
 </div>
 </section>
 
-<section class="row -bg-white justify-content-left h-auto col-big-desktop">
-<div class="container" style="padding-top: 1.5rem !important; padding-bottom: 0rem !important;">
+<section class="landing-eval">
+  <div class="container">
+    <div class="landing-eval-inner">
+      <div class="landing-eval-title">
+        <i class="fas fa-check-circle" aria-hidden="true"></i>
+        <span>Independently evaluated</span>
+      </div>
+      <p class="landing-eval-quote">
+        “Neurodesk offers an extensive container repository, with the versatility of a command-line interface for technical users and a GUI that lowers barriers for non-technical users.”
+      </p>
+      <div class="landing-eval-meta">
+        <span> - Imaging Neuroscience (MIT Press), accessibility and usability study</span>
+        <a href="https://direct.mit.edu/imag/article/doi/10.1162/IMAG.a.79/131499" target="_blank" rel="noopener">
+          Read the paper
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row -bg-white justify-content-left h-auto col-big-desktop landing-cta">
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-8">
-            <div class="row g-3">
-                <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-success w-100 p-3 shadow-lg" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a; min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                        <span><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
-                        <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-6">
-                    <a class="btn btn-lg btn-outline-dark w-100 p-3" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; min-height: 80px; display: flex; align-items: center; justify-content: center;">
-                        <span><i class="fas fa-download"></i> Install Locally</span>
-                    </a>
-                </div>
+        <div class="col-12">
+            <!-- 4 Hero Value Cards -->
+            <div class="landing-eval-cards mb-4">
+                <a href="{{< relurl "/getting-started/" >}}" class="eval-card-link">
+                    <div class="eval-card">
+                        <div class="eval-card-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="eval-card-content">
+                            <span class="eval-card-title">One environment</span>
+                            <span class="eval-card-desc">Run tools consistently across operating systems</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="{{< relurl "/getting-started/neurodesktop/" >}}" class="eval-card-link">
+                    <div class="eval-card">
+                        <div class="eval-card-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="eval-card-content">
+                            <span class="eval-card-title">Choose your Interface</span>
+                            <span class="eval-card-desc">Supports gaphical desktops, command line and computational notebooks</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="{{< relurl "/getting-started/neurocontainers/" >}}" class="eval-card-link">
+                    <div class="eval-card">
+                        <div class="eval-card-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="eval-card-content">
+                            <span class="eval-card-title">Work in the cloud</span>
+                            <span class="eval-card-desc">Deploy anywhere without installation overhead</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://neurodesk.org/edu/contribute/intro.html" class="eval-card-link">
+                    <div class="eval-card">
+                        <div class="eval-card-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="eval-card-content">
+                            <span class="eval-card-title">Contribute learning resources</span>
+                            <span class="eval-card-desc">Share your knowledge with the community</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
                 <div class="col-12">
                     <div class="text-center mt-2 mb-0 secondary-links">
                         <a href="{{< relurl "/overview/faq/#what-is-neurodesk" >}}" class="text-dark">
@@ -116,6 +128,7 @@ type: landing
     </div>
 </div>
 </section>
+
 
 <section class="container-fluid">
 <div class="container-fluid py-2" style="padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; background-color: #f8f9fa;">
@@ -169,8 +182,8 @@ type: landing
 									<p class="card-summary">Complete virtual desktop environment with GUI applications, ready to use in your browser or locally.</p>
 									<ul class="feature-list text-start small">
 										<li>100+ pre-installed neuroimaging tools</li>
-										<li>Full desktop experience (XFCE)</li>
-										<li>No local installation required</li>
+										<li>Familiar desktop interface for graphical applications</li>
+										<li>Install Neurodesk once, all tools are ready to use</li>
                         			</ul>
 								</div>
 								<div class="image-wrapper mt-2">
@@ -208,7 +221,7 @@ type: landing
 									<ul class="feature-list text-start small">
 										<li>Simple module-based interface</li>
 										<li>Integrates with existing workflows</li>
-										<li>Works on any Linux system</li>
+										<li>Accessible through Neurodesk for command-line workflows</li>
 									</ul>
 								</div>
 								<div class="image-wrapper mt-auto">
@@ -249,6 +262,17 @@ type: landing
 			</div>
 			<div class="col-11 col-sm-11 col-md-10 col-lg-7 col-xl-8 community-col">
 				<div class="row community">
+                    <div class="col-6 col-md-5 col-lg-6 col-xl-3">
+                        <div class="card community-card">
+                            <a target="_blank" href="https://donations.uq.edu.au/EAINNEUR">
+                                <div class="card-body">
+                                    <i class="fas fa-heart"></i>
+                                    <h4>Support Us</h4>
+                                    <p class="card-summary">Help sustain Neurodesk with a donation to support development and infrastructure</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 					<div class="col-6 col-md-5 col-lg-6 col-xl-3">
 						<div class="card community-card">
 							<a href="{{< relurl "/overview/faq/#what-is-neurodesk" >}}">
@@ -304,10 +328,10 @@ type: landing
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
-            <h2 class="mb-3">Ready to Make Your Research Reproducible?</h2>
+            <h2 class="mb-3">Ready to Run Neurodesk Anywhere?</h2>
             <p class="lead mb-4">Join researchers worldwide using Neurodesk for transparent, reproducible neuroimaging.</p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                <a class="btn btn-lg px-5 py-3" href="{{< relurl "/getting-started/hosted" >}}" style="background-color: #6aa329; border-color: #6aa329; color: #ffffff; font-weight: 600;">
+                <a class="btn btn-lg px-5 py-3" href="{{< relurl "/getting-started/" >}}" style="background-color: #6aa329; border-color: #6aa329; color: #ffffff; font-weight: 600;">
                     Get Started Now
                 </a>
                 <a class="btn btn-lg px-5 py-3" href="{{< relurl "/overview/faq/#what-is-neurodesk" >}}" style="background-color: transparent; border: 2px solid #6aa329; color: #6aa329; font-weight: 600;">
