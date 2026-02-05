@@ -1,7 +1,7 @@
 ---
 title: "Installation Examples"
 linkTitle: "Installations"
-weight: 6
+weight: 7
 description: >
   Installation Examples for Neurodesk on various systems
 ---
