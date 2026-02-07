@@ -1,6 +1,6 @@
 ---
 title: "Scientific Agents"
-linkTitle: "Scigent"
+linkTitle: "Agents"
 weight: 6
 description: >
   How to use scientific coding agents in Neurodesk
