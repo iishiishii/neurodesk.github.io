@@ -33,7 +33,7 @@ ollama pull devstral
 We need to extend the context window to make it usable for coding:
 ```bash
 echo "FROM devstral:latest
-PARAMETER num_ctx 16000" > Modelfile
+PARAMETER num_ctx 16384" > Modelfile
 
 ollama create devstral-16k -f Modelfile
 
