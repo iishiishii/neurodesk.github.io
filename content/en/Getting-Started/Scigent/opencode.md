@@ -22,4 +22,20 @@ You can also configure your own model provider:
 - ctrl+p 
 - and select switch model 
 - then ctrl+a to connect a different provider
-- openai works well for example
+
+
+You can also self-host a model in Ollama on your computer. For this install Ollama on your system and start the neurodesktop container with these additional docker parameters:
+```
+--add-host=host.docker.internal:host-gateway \
+-e OLLAMA_HOST="http://host.docker.internal:11434" \
+```
+
+These models work well:
+```
+ollama pull qwen3-coder-next
+ollama pull devstral
+```
+
+Then switch the model to Ollama:
+- ctrl+p 
+- and select switch model 
