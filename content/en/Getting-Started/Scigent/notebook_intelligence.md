@@ -25,11 +25,20 @@ You can also self-host a model in Ollama on your computer. For this install Olla
 -e OLLAMA_HOST="http://host.docker.internal:11434" \
 ```
 
-These models work well:
-```
-ollama pull qwen3-coder-next
+This model works well:
+```bash
 ollama pull devstral
 ```
 
+We need to extend the context window to make it usable for coding:
+```bash
+echo "FROM devstral:latest
+PARAMETER num_ctx 16000" > Modelfile
+
+ollama create devstral-16k -f Modelfile
+
+rm Modelfile
+```
+
 Then switch to Ollama in the settings
-![alt text](image.png)
+![NBI Ollama settings](nbi_ollama_settings.png)

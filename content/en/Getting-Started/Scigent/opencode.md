@@ -24,18 +24,32 @@ You can also configure your own model provider:
 - then ctrl+a to connect a different provider
 
 
-You can also self-host a model in Ollama on your computer. For this install Ollama on your system and start the neurodesktop container with these additional docker parameters:
+You can also self-host a model in Ollama on your computer (recommended Apple Silicon with at least 64GB RAM). For this install Ollama on your system and start the neurodesktop container with these additional docker parameters:
 ```
 --add-host=host.docker.internal:host-gateway \
 -e OLLAMA_HOST="http://host.docker.internal:11434" \
 ```
 
-These models work well:
-```
-ollama pull qwen3-coder-next
+This model works well:
+```bash
 ollama pull devstral
+```
+
+We need to extend the context window to make it usable for coding:
+```bash
+echo "FROM devstral:latest
+PARAMETER num_ctx 16000" > Modelfile
+
+ollama create devstral-16k -f Modelfile
+
+rm Modelfile
 ```
 
 Then switch the model to Ollama:
 - ctrl+p 
 - and select switch model 
+
+you can watch the model working and for errors:
+```bash
+tail -f ~/.ollama/logs/server.log
+```
