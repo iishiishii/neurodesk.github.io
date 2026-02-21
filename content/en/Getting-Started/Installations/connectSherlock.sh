@@ -13,6 +13,7 @@ random_tunnel_port() {
 function connectSherlock() {
     local LOGIN_NODE="sherlock"
     local JOB_NAME="neurodesktop"
+    local LOCAL_PORT=8888
     local CTRL_SOCKET="${HOME}/.ssh/sherlock_ctrl_$(date +%s)_${RANDOM}"
 
     # Start master connection
@@ -22,11 +23,11 @@ function connectSherlock() {
         echo "Authentication failed."
         return 1
     fi
-    # Close master connection and free up port 8888 on return
+    # Close master connection and free up local browser port on return
     trap 'ssh -S "'"$CTRL_SOCKET"'" -O exit "'"$LOGIN_NODE"'" 2>/dev/null; \
-          if lsof -Pi :8888 -sTCP:LISTEN -t >/dev/null 2>&1; then \
-              echo "Cleaning up port 8888..."; \
-              lsof -Pi :8888 -sTCP:LISTEN -t | xargs kill -9 2>/dev/null; \
+          if lsof -Pi :'"$LOCAL_PORT"' -sTCP:LISTEN -t >/dev/null 2>&1; then \
+              echo "Cleaning up port '"$LOCAL_PORT"'..."; \
+              lsof -Pi :'"$LOCAL_PORT"' -sTCP:LISTEN -t | xargs kill -9 2>/dev/null; \
           fi' RETURN
     
     # --- 1. CHECK FOR EXISTING "NEURODESKTOP" JOBS ---
@@ -43,7 +44,7 @@ function connectSherlock() {
         # Default to Yes
         if [[ ! "$reuse" =~ ^([nN][oO]|[nN])$ ]]; then
             echo "Reconnecting to $NODE_NAME..."
-            echo "ℹ️  Using existing tunnel on port 8888 (maintained by your original terminal)."
+            echo "ℹ️  Using existing tunnel on port $LOCAL_PORT (maintained by your original terminal)."
             ssh -S "$CTRL_SOCKET" -t "$LOGIN_NODE" "ssh $NODE_NAME"
             return
         fi
@@ -88,13 +89,13 @@ function connectSherlock() {
     fi
     echo "Establishing tunnel via Login Node port: $MIDDLE_PORT"
 
-    # --- 3. CHECK LOCAL PORT 8888 ---
-    # Check if port 8888 is occupied and kill the process(es) if so
-    if lsof -Pi :8888 -sTCP:LISTEN -t >/dev/null ; then
-        echo "Port 8888 is already in use."
+    # --- 3. CHECK LOCAL PORT ---
+    # Check if local browser port is occupied and kill the process(es) if so
+    if lsof -Pi :"$LOCAL_PORT" -sTCP:LISTEN -t >/dev/null ; then
+        echo "Port $LOCAL_PORT is already in use."
         local PIDS
-        PIDS=$(lsof -Pi :8888 -sTCP:LISTEN -t)
-        echo "Killing process(es) $PIDS to free up port 8888..."
+        PIDS=$(lsof -Pi :"$LOCAL_PORT" -sTCP:LISTEN -t)
+        echo "Killing process(es) $PIDS to free up port $LOCAL_PORT..."
         echo "$PIDS" | xargs kill -9 2>/dev/null
     fi
 
@@ -127,10 +128,22 @@ else
     echo \"~/neurodesktop-home/workdir found.\"
 fi
 
+NOTEBOOK_PORT=\"\${1:-8888}\"
+if [[ ! \"\$NOTEBOOK_PORT\" =~ ^[0-9]+$ ]]; then
+    echo \"Invalid notebook port: \$NOTEBOOK_PORT\"
+    exit 1
+fi
+
+DISPLAY_PORT=\"\${2:-\$NOTEBOOK_PORT}\"
+if [[ ! \"\$DISPLAY_PORT\" =~ ^[0-9]+$ ]]; then
+    echo \"Invalid display port: \$DISPLAY_PORT\"
+    exit 1
+fi
+
 
 #    --home \$HOME/neurodesktop-home:/home/jovyan \\
 
-echo \"Starting Neurodesktop container...\"
+echo \"Starting Neurodesktop container on internal port \$NOTEBOOK_PORT (displaying as localhost:\$DISPLAY_PORT)...\"
 # Using backslashes for line continuation in the remote file requires double backslash here
 apptainer run \\
    --nv \\
@@ -144,20 +157,40 @@ apptainer run \\
    --env NB_GID=\$(id -g) \\
    --env NEURODESKTOP_VERSION=latest \\
    \$GROUP_HOME/neurodesk/neurodesktop_latest.sif \\
-   start-notebook.py --allow-root
+   start-notebook.py --allow-root --port=\"\$NOTEBOOK_PORT\" --ServerApp.port_retries=0 --ServerApp.custom_display_url=\"http://127.0.0.1:\$DISPLAY_PORT\"
 EOF
 chmod +x ~/.neurodesk_setup.sh"
 
     # --- 4. LAUNCH ALLOCATION ---
     local GPU_FLAG=""
+    local MAX_PORT_ATTEMPTS=10
     if [[ "$GPU" != "none" && ! -z "$GPU" ]]; then
         GPU_FLAG="--gres=gpu:$GPU"
     fi
     
-    ssh -S "$CTRL_SOCKET" -t -L 8888:localhost:${MIDDLE_PORT} "$LOGIN_NODE" \
+    ssh -S "$CTRL_SOCKET" -t -L ${LOCAL_PORT}:localhost:${MIDDLE_PORT} "$LOGIN_NODE" \
         "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM $GPU_FLAG \
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
-                 ssh -t -L ${MIDDLE_PORT}:localhost:8888 \${SLURM_NODELIST} \"~/.neurodesk_setup.sh\"'"
+                 echo \"Open Neurodesktop in your local browser at: http://127.0.0.1:${LOCAL_PORT}\"; \
+                 max_attempts=${MAX_PORT_ATTEMPTS}; \
+                 attempt=1; \
+                 compute_port=${MIDDLE_PORT}; \
+                 while [ \$attempt -le \$max_attempts ]; do \
+                     echo \"Attempt \$attempt/\$max_attempts using compute-node notebook port: \$compute_port\"; \
+                     if ssh -t -L ${MIDDLE_PORT}:localhost:\$compute_port \${SLURM_NODELIST} \"~/.neurodesk_setup.sh \$compute_port ${LOCAL_PORT}\"; then \
+                         exit 0; \
+                     fi; \
+                     attempt=\$((attempt + 1)); \
+                     if [ \$attempt -le \$max_attempts ]; then \
+                         compute_port=\$((compute_port + 1)); \
+                         if [ \$compute_port -gt 65000 ]; then \
+                             compute_port=10000; \
+                         fi; \
+                         echo \"Port unavailable or startup failed. Retrying with compute-node notebook port: \$compute_port\"; \
+                     fi; \
+                 done; \
+                 echo \"Failed to start Neurodesktop after \$max_attempts attempts.\"; \
+                 exit 1'"
 }
 
 # Check if the script is being executed directly
