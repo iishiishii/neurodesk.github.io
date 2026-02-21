@@ -7,17 +7,17 @@ description: >
 ---
 
 Start Notebook Intelligence from the side panel:
-![Start Notebook Intelligence](nbi_start.png)
+![Start Notebook Intelligence](/static/docs/agents/nbi_start.png)
 
 Then connect Github Copilot (or Change the model provider)
 
 Switch to agent, select all tools (via the settings button next to the Agent Selector) and give it a task:
-![NBI tools](nbi_tools.png)
+![NBI tools](/static/docs/agents/nbi_tools.png)
 
 You can also ask it to fill in code in specific cells:
 
 For a more capable model you can also switch to Claude in the settings:
-![claude](nbi_claude.png)
+![claude](/static/docs/agents/nbi_claude.png)
 
 You can also self-host a model in Ollama on your computer. For this install Ollama on your system and start the neurodesktop container with these additional docker parameters:
 ```
@@ -41,4 +41,4 @@ rm Modelfile
 ```
 
 Then switch to Ollama in the settings
-![NBI Ollama settings](nbi_ollama_settings.png)
+![NBI Ollama settings](/static/docs/agents/nbi_ollama_settings.png)
