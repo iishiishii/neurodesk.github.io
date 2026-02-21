@@ -13,7 +13,6 @@ random_tunnel_port() {
 function connectSherlock() {
     local LOGIN_NODE="sherlock"
     local JOB_NAME="neurodesktop"
-    local LOCAL_PORT=8888
     local CTRL_SOCKET="${HOME}/.ssh/sherlock_ctrl_$(date +%s)_${RANDOM}"
 
     # Start master connection
@@ -23,12 +22,8 @@ function connectSherlock() {
         echo "Authentication failed."
         return 1
     fi
-    # Close master connection and free up local browser port on return
-    trap 'ssh -S "'"$CTRL_SOCKET"'" -O exit "'"$LOGIN_NODE"'" 2>/dev/null; \
-          if lsof -Pi :'"$LOCAL_PORT"' -sTCP:LISTEN -t >/dev/null 2>&1; then \
-              echo "Cleaning up port '"$LOCAL_PORT"'..."; \
-              lsof -Pi :'"$LOCAL_PORT"' -sTCP:LISTEN -t | xargs kill -9 2>/dev/null; \
-          fi' RETURN
+    # Close master connection on return
+    trap 'ssh -S "'"$CTRL_SOCKET"'" -O exit "'"$LOGIN_NODE"'" 2>/dev/null' RETURN
     
     # --- 1. CHECK FOR EXISTING "NEURODESKTOP" JOBS ---
     # We add --name="neurodesktop" to squeue so we don't accidentally 
@@ -44,7 +39,7 @@ function connectSherlock() {
         # Default to Yes
         if [[ ! "$reuse" =~ ^([nN][oO]|[nN])$ ]]; then
             echo "Reconnecting to $NODE_NAME..."
-            echo "ℹ️  Using existing tunnel on port $LOCAL_PORT (maintained by your original terminal)."
+            echo "Info: existing tunnel is maintained by your original terminal."
             ssh -S "$CTRL_SOCKET" -t "$LOGIN_NODE" "ssh $NODE_NAME"
             return
         fi
@@ -81,23 +76,27 @@ function connectSherlock() {
     read -r GPU
     GPU=${GPU:-none}
 
-    local MIDDLE_PORT
-    MIDDLE_PORT=$(random_tunnel_port)
-    if [[ ! "$MIDDLE_PORT" =~ ^[0-9]+$ ]]; then
-        echo "Failed to select a valid tunnel port."
+    local MIDDLE_PORT=""
+    local LOCAL_PORT=""
+    local PORT_SELECT_ATTEMPTS=25
+    local PORT_SELECT_TRY=1
+    while [ $PORT_SELECT_TRY -le $PORT_SELECT_ATTEMPTS ]; do
+        local CANDIDATE_PORT
+        CANDIDATE_PORT=$(random_tunnel_port)
+        if [[ "$CANDIDATE_PORT" =~ ^[0-9]+$ ]] && ! lsof -Pi :"$CANDIDATE_PORT" -sTCP:LISTEN -t >/dev/null 2>&1; then
+            MIDDLE_PORT="$CANDIDATE_PORT"
+            LOCAL_PORT="$CANDIDATE_PORT"
+            break
+        fi
+        PORT_SELECT_TRY=$((PORT_SELECT_TRY + 1))
+    done
+
+    if [[ -z "$MIDDLE_PORT" || -z "$LOCAL_PORT" ]]; then
+        echo "Failed to select a free local tunnel port."
         return 1
     fi
+    echo "Using local browser port: $LOCAL_PORT"
     echo "Establishing tunnel via Login Node port: $MIDDLE_PORT"
-
-    # --- 3. CHECK LOCAL PORT ---
-    # Check if local browser port is occupied and kill the process(es) if so
-    if lsof -Pi :"$LOCAL_PORT" -sTCP:LISTEN -t >/dev/null ; then
-        echo "Port $LOCAL_PORT is already in use."
-        local PIDS
-        PIDS=$(lsof -Pi :"$LOCAL_PORT" -sTCP:LISTEN -t)
-        echo "Killing process(es) $PIDS to free up port $LOCAL_PORT..."
-        echo "$PIDS" | xargs kill -9 2>/dev/null
-    fi
 
     echo "Preparing setup script..."
     ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh << 'EOF'
