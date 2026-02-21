@@ -1,5 +1,108 @@
 #!/bin/bash
 
+UPDATE_SOURCE_URL="https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/heads/main/content/en/Getting-Started/Installations/connectSherlock.sh"
+
+download_update_candidate() {
+    local target_file="$1"
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$UPDATE_SOURCE_URL" -o "$target_file"
+        return $?
+    fi
+
+    if command -v wget >/dev/null 2>&1; then
+        wget -qO "$target_file" "$UPDATE_SOURCE_URL"
+        return $?
+    fi
+
+    return 127
+}
+
+script_has_local_git_changes() {
+    local script_path="$1"
+    local script_dir=""
+    local script_abs=""
+    local repo_root=""
+    local script_rel=""
+    local git_status=""
+
+    if ! command -v git >/dev/null 2>&1; then
+        return 1
+    fi
+
+    script_dir="$(cd "$(dirname "$script_path")" 2>/dev/null && pwd -P)" || return 1
+    script_abs="${script_dir}/$(basename "$script_path")"
+    repo_root="$(git -C "$script_dir" rev-parse --show-toplevel 2>/dev/null)" || return 1
+
+    case "$script_abs" in
+        "$repo_root"/*)
+            script_rel="${script_abs#"$repo_root"/}"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
+    # Only guard tracked files to avoid false positives from unrelated paths.
+    if ! git -C "$repo_root" ls-files --error-unmatch -- "$script_rel" >/dev/null 2>&1; then
+        return 1
+    fi
+
+    git_status="$(git -C "$repo_root" status --porcelain -- "$script_rel" 2>/dev/null)" || return 1
+    if [[ -n "$git_status" ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+self_update_connect_sherlock() {
+    local script_path="$1"
+    shift
+    local script_args=("$@")
+
+    if [[ "${CONNECT_SHERLOCK_SKIP_UPDATE_REEXEC:-0}" == "1" ]]; then
+        return 0
+    fi
+
+    if script_has_local_git_changes "$script_path"; then
+        echo "Local git changes detected for $script_path; skipping auto-update."
+        return 0
+    fi
+
+    local tmp_file
+    tmp_file="$(mktemp "${TMPDIR:-/tmp}/connectSherlock.update.XXXXXX")" || return 0
+
+    if ! download_update_candidate "$tmp_file"; then
+        rm -f "$tmp_file"
+        echo "Update check skipped (unable to download update candidate)."
+        return 0
+    fi
+
+    if cmp -s "$script_path" "$tmp_file"; then
+        rm -f "$tmp_file"
+        return 0
+    fi
+
+    if ! head -n 1 "$tmp_file" | grep -q "^#!/bin/bash"; then
+        rm -f "$tmp_file"
+        echo "Update check skipped (downloaded script validation failed)."
+        return 0
+    fi
+
+    if ! cp "$tmp_file" "$script_path"; then
+        rm -f "$tmp_file"
+        echo "Update check failed (could not overwrite $script_path)."
+        return 0
+    fi
+
+    rm -f "$tmp_file"
+    chmod +x "$script_path" 2>/dev/null || true
+    echo "Updated connectSherlock.sh to latest version. Restarting with updated script..."
+    CONNECT_SHERLOCK_SKIP_UPDATE_REEXEC=1 exec bash "$script_path" "${script_args[@]}"
+    echo "Restart failed; continuing with current shell process."
+}
+
 random_tunnel_port() {
     # macOS does not ship `shuf` by default.
     if command -v shuf >/dev/null 2>&1; then
@@ -171,13 +274,20 @@ chmod +x ~/.neurodesk_setup.sh"
         "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM $GPU_FLAG \
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
                  echo \"Open Neurodesktop in your local browser at: http://127.0.0.1:${LOCAL_PORT}\"; \
+                 trap \"echo Session cancelled by user. Stopping retries.; exit 130\" INT TERM; \
                  max_attempts=${MAX_PORT_ATTEMPTS}; \
                  attempt=1; \
                  compute_port=${MIDDLE_PORT}; \
                  while [ \$attempt -le \$max_attempts ]; do \
                      echo \"Attempt \$attempt/\$max_attempts using compute-node notebook port: \$compute_port\"; \
-                     if ssh -t -L ${MIDDLE_PORT}:localhost:\$compute_port \${SLURM_NODELIST} \"~/.neurodesk_setup.sh \$compute_port ${LOCAL_PORT}\"; then \
+                     ssh -t -L ${MIDDLE_PORT}:localhost:\$compute_port \${SLURM_NODELIST} \"~/.neurodesk_setup.sh \$compute_port ${LOCAL_PORT}\"; \
+                     ssh_rc=\$?; \
+                     if [ \$ssh_rc -eq 0 ]; then \
                          exit 0; \
+                     fi; \
+                     if [ \$ssh_rc -eq 130 ] || [ \$ssh_rc -eq 143 ] || [ \$ssh_rc -eq 255 ]; then \
+                         echo \"Session interrupted or connection closed (exit \$ssh_rc). Stopping retries.\"; \
+                         exit \$ssh_rc; \
                      fi; \
                      attempt=\$((attempt + 1)); \
                      if [ \$attempt -le \$max_attempts ]; then \
@@ -194,5 +304,6 @@ chmod +x ~/.neurodesk_setup.sh"
 
 # Check if the script is being executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    self_update_connect_sherlock "${BASH_SOURCE[0]}" "$@"
     connectSherlock "$@"
 fi
