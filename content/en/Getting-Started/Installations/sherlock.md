@@ -215,7 +215,7 @@ The install of `pip install jupyterlab_slurm` added a plugin that allows monitor
 
 
 ## Using Neurodesk via a full neurodesktop session
-This is an ideal setup for visualizing results on Sherlock and for running GUI applications.
+This is an ideal setup for visualizing results on Sherlock and for running GUI applications. You need to run these commands on your computer (e.g. MacOS/Linux/Windows WSL2):
 
 ### downloading startup script
 ```bash
@@ -227,7 +227,7 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 bash connectSherlock.sh
 ```
 
-### start desktop manually when already inside a job
+## Alternative to running connectSherlock.sh: start neurodesktop manually when already inside a job on sherlock
 ```bash
 apptainer run \
    --fakeroot \
