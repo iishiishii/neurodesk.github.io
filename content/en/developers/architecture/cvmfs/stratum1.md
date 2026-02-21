@@ -113,4 +113,10 @@ sudo cvmfs_server update-geodb
 #test
 curl --head http://YOUR_IP_OR_DNS/cvmfs/neurodesk.ardc.edu.au/.cvmfspublished
 
+
+sudo crontab -e
+
+# Run CVMFS Stratum 1 Garbage Collection every Sunday at 3:00 AM
+0 3 * * 0 /usr/bin/cvmfs_server gc -a >> /var/log/cvmfs_gc.log 2>&1
+
 ```
