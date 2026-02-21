@@ -6,17 +6,7 @@ description: >
   Use OpenCode in Neurodesk - the open source coding agent
 ---
 
-start OpenCode on a terminal with `opencode`
-
-By default OpenCode is setup to use our own hosted version of devstral small. You need to register for an API key for that model:
-- go to https://llm.neurodesk.org/dashboard and signup through github
-- create an API key in the dashboard
-- copy that to Neurodesk and assign it to an environment varible and add it to your ~/.bashrc:
-```
-  echo 'export NEURODESK_API_KEY="PASTE_YOUR_KEY_HERE"' >> ~/.bashrc && source ~/.bashrc
-```
-
-When running on play-america.neurodesk.org or edu.neurodesk you can also switch to gpt-oss-120b. 
+start OpenCode on a terminal with `opencode`. Our Opencode wrapper script will walk you through setting it up depending on which models are available to you.
 
 You can also configure your own model provider:
 - ctrl+p 
