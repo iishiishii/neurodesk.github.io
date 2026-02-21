@@ -8,7 +8,7 @@ description: >
 
 
 Start codex on a terminal with `codex` then authenticate with your OpenAI account. You need to use the Device Code option:
-![codex setup device code](codex-device-code.png)
+![codex setup device code](/static/docs/agents/codex-device-code.png)
 
 
 Then give it a task.
