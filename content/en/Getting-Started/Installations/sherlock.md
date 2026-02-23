@@ -300,6 +300,11 @@ ml crush
 crush
 ```
 
+For best neurodesk integration make sure to download Neurodesk's AGENT.md file and place it in working directory:
+```
+wget https://raw.githubusercontent.com/neurodesk/neurodesktop/refs/heads/main/config/agents/AGENTS.md
+```
+
 ## Misc
 
 ### note on miniconda
@@ -425,7 +430,6 @@ cd $GROUP_HOME/neurodesk/local/containers/modules
 find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
 
 
-
 #Then fix for modules:
 cd $GROUP_HOME/neurodesk/local/containers/modules
 find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
@@ -436,21 +440,9 @@ find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-st
 ```
 
 ### Updating Neurodesktop image
+make sure to set the new versio before submitting:
 ```bash
-ssh sherlock
-sh_dev -m 32 -p normal -c 4
-export VERSION="2026-01-30"
-cd ${GROUP_HOME}/neurodesk
-export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp
-mkdir -p $APPTAINER_TMPDIR
-apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}
-rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif
-ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif 
-```
-
-Or submit the update as a single Slurm job:
-```bash
-sbatch -p normal -c 4 --mem=32G --job-name=neurodesktop-update --wrap 'export VERSION="2026-01-30"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
+sbatch -p normal -c 4 --mem=32G --job-name=neurodesktop-update --wrap 'export VERSION="2026-02-21"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
 
 
