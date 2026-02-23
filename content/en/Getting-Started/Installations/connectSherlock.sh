@@ -149,6 +149,15 @@ if [ -z \"\${MUNGE_SOCKET:-}\" ]; then
     fi
 fi
 
+SLURM_ENVS=(--env NEURODESKTOP_SLURM_MODE=host)
+if [ -n \"\${SLURM_CONF:-}\" ]; then
+    SLURM_ENVS+=(--env SLURM_CONF=\${SLURM_CONF})
+fi
+if [ -n \"\${MUNGE_SOCKET:-}\" ]; then
+    SLURM_ENVS+=(--env MUNGE_SOCKET=\${MUNGE_SOCKET})
+fi
+
+echo \"Host Slurm integration: mode=host conf=\${SLURM_CONF:-unset} munge=\${MUNGE_SOCKET:-unset}\"
 
 #    --home \$HOME/neurodesktop-home:/home/jovyan \\
 
@@ -161,13 +170,11 @@ apptainer run \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \\
    \"\${SLURM_BINDS[@]}\" \\
+   \"\${SLURM_ENVS[@]}\" \\
    --no-home \\
    --env CVMFS_DISABLE=true \\
    --env NB_UID=\$(id -u) \\
    --env NB_GID=\$(id -g) \\
-   --env NEURODESKTOP_SLURM_MODE=host \\
-   --env SLURM_CONF=\${SLURM_CONF:-} \\
-   --env MUNGE_SOCKET=\${MUNGE_SOCKET:-} \\
    --env NEURODESKTOP_VERSION=latest \\
    \$GROUP_HOME/neurodesk/neurodesktop_latest.sif \\
    start-notebook.py --allow-root
