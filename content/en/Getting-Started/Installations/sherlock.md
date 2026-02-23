@@ -227,7 +227,7 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 bash connectSherlock.sh
 ```
 
-## Alternative to running connectSherlock.sh: start neurodesktop manually when already inside a job on sherlock
+## Manual Alternative to using connectSherlock.sh: start neurodesktop manually when already inside a job on sherlock
 ```bash
 apptainer run \
    --fakeroot \
