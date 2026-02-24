@@ -131,33 +131,36 @@ SLURM_BINDS=()
 if [ -d /etc/slurm ]; then
     SLURM_BINDS+=(--bind /etc/slurm:/etc/slurm)
 fi
-if [ -S /run/munge/munge.socket.2 ] || [ -d /run/munge ]; then
+if [ -e /run/slurm ]; then
+    SLURM_BINDS+=(--bind /run/slurm:/run/slurm)
+fi
+if [ -e /run/slurmctld ]; then
+    SLURM_BINDS+=(--bind /run/slurmctld:/run/slurmctld)
+fi
+if [ -e /run/slurmdbd ]; then
+    SLURM_BINDS+=(--bind /run/slurmdbd:/run/slurmdbd)
+fi
+if [ -e /run/munge ]; then
     SLURM_BINDS+=(--bind /run/munge:/run/munge)
 fi
-if [ -S /var/run/munge/munge.socket.2 ] || [ -d /var/run/munge ]; then
+if [ -e /var/run/munge ]; then
     SLURM_BINDS+=(--bind /var/run/munge:/var/run/munge)
 fi
 
-if [ -z \"\${SLURM_CONF:-}\" ] && [ -f /etc/slurm/slurm.conf ]; then
-    export SLURM_CONF=/etc/slurm/slurm.conf
-fi
-if [ -z \"\${MUNGE_SOCKET:-}\" ]; then
+export APPTAINERENV_NEURODESKTOP_SLURM_MODE=host
+export APPTAINERENV_SLURM_CONF=/etc/slurm/slurm.conf
+
+if [ -n \"\${MUNGE_SOCKET:-}\" ]; then
+    export APPTAINERENV_MUNGE_SOCKET=\${MUNGE_SOCKET}
+else
     if [ -S /run/munge/munge.socket.2 ]; then
-        export MUNGE_SOCKET=/run/munge/munge.socket.2
+        export APPTAINERENV_MUNGE_SOCKET=/run/munge/munge.socket.2
     elif [ -S /var/run/munge/munge.socket.2 ]; then
-        export MUNGE_SOCKET=/var/run/munge/munge.socket.2
+        export APPTAINERENV_MUNGE_SOCKET=/var/run/munge/munge.socket.2
     fi
 fi
 
-SLURM_ENVS=(--env NEURODESKTOP_SLURM_MODE=host)
-if [ -n \"\${SLURM_CONF:-}\" ]; then
-    SLURM_ENVS+=(--env SLURM_CONF=\${SLURM_CONF})
-fi
-if [ -n \"\${MUNGE_SOCKET:-}\" ]; then
-    SLURM_ENVS+=(--env MUNGE_SOCKET=\${MUNGE_SOCKET})
-fi
-
-echo \"Host Slurm integration: mode=host conf=\${SLURM_CONF:-unset} munge=\${MUNGE_SOCKET:-unset}\"
+echo \"Host Slurm integration: mode=\${APPTAINERENV_NEURODESKTOP_SLURM_MODE:-unset} conf=\${APPTAINERENV_SLURM_CONF:-unset} munge=\${APPTAINERENV_MUNGE_SOCKET:-unset}\"
 
 #    --home \$HOME/neurodesktop-home:/home/jovyan \\
 
@@ -170,7 +173,6 @@ apptainer run \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \\
    --bind \$GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \\
    \"\${SLURM_BINDS[@]}\" \\
-   \"\${SLURM_ENVS[@]}\" \\
    --no-home \\
    --env CVMFS_DISABLE=true \\
    --env NB_UID=\$(id -u) \\
