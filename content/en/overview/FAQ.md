@@ -302,6 +302,9 @@ If this is the case, follow the manual install instructions to install [WSL 2]( 
 ####  Windows users: Not enough free space on the partition in Windows and WSL2
 This could help: https://yjmantilla.github.io/tutorials/wsl2-move-vhdx.html
 
+####  Windows users: Windows Security Alert for Docker Desktop "Do you want to allow public, private, and domain networks to access this app"
+This Windows Security alert is a standard firewall prompt asking you to grant network permissions to Docker Desktop. It is completely safe and essential to click Allow, as Docker relies on these network connections to run and communicate with your containers. If you click "Cancel," the firewall will block Docker's access, and your containers will fail to work correctly.
+
 ####  Windows users: Failure to connect to Neurodesktop in Firefox
 We recommend using Microsoft Edge or Google Chrome to access Neurodesktop. 
 
