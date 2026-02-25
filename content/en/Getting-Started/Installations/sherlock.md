@@ -226,7 +226,7 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 ```
 bash connectSherlock.sh
 ```
-After startup, open the printed URL `http://127.0.0.1:<random_port_and_token` in your browser.
+After startup, open the printed URL `http://127.0.0.1:<random_port>?token=<token>` in your browser.
 
 
 ## connecting with VScode

@@ -102,8 +102,17 @@ function connectSherlock() {
     echo "Preparing setup script..."
     ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh && chmod +x ~/.neurodesk_setup.sh" <<'EOF'
 #!/bin/bash
-cd $SCRATCH
 export PATH=$PATH:/sbin:/usr/sbin
+NEURODESKTOP_START_DIR="${NEURODESKTOP_START_DIR:-$HOME}"
+if [ ! -d "${NEURODESKTOP_START_DIR}" ]; then
+    echo "Requested start dir ${NEURODESKTOP_START_DIR} not found; falling back to \$SCRATCH."
+    NEURODESKTOP_START_DIR="$SCRATCH"
+fi
+if ! cd "${NEURODESKTOP_START_DIR}"; then
+    echo "ERROR: failed to cd into ${NEURODESKTOP_START_DIR}"
+    exit 1
+fi
+echo "Container start directory target: ${NEURODESKTOP_START_DIR}"
 echo "Using --writable-tmpfs (ephemeral writable container layer)."
 
 if [ ! -d ~/neurodesktop-home ]; then
@@ -350,6 +359,7 @@ fi
 echo "Starting Neurodesktop container..."
 NEURODESKTOP_NOTEBOOK_PORT="${NEURODESKTOP_NOTEBOOK_PORT:-8888}"
 NEURODESKTOP_DISPLAY_URL="${NEURODESKTOP_DISPLAY_URL:-http://127.0.0.1:8888}"
+NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS="${NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS:-{'jupyter_server_fileid': False, 'jupyter_server_ydoc': False}}"
 apptainer run \
    --nv \
    --writable-tmpfs \
@@ -366,7 +376,8 @@ apptainer run \
    start-notebook.py \
       --ServerApp.port="${NEURODESKTOP_NOTEBOOK_PORT}" \
       --ServerApp.port_retries=0 \
-      --ServerApp.custom_display_url="${NEURODESKTOP_DISPLAY_URL}"
+      --ServerApp.custom_display_url="${NEURODESKTOP_DISPLAY_URL}" \
+      --ServerApp.jpserver_extensions="${NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS}"
 EOF
 
     # --- 4. LAUNCH ALLOCATION ---
