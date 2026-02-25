@@ -226,22 +226,8 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 ```
 bash connectSherlock.sh
 ```
+After startup, open the printed URL `http://127.0.0.1:<random_port_and_token` in your browser.
 
-## Manual Alternative to using connectSherlock.sh: start neurodesktop manually when already inside a job on sherlock
-```bash
-apptainer run \
-   --fakeroot \
-   --nv \
-   --overlay $SCRATCH/neurodesktop-overlay.img \
-   --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
-   --no-home \
-   --env CVMFS_DISABLE=true \
-   --env NB_UID=$(id -u) \
-   --env NB_GID=$(id -g) \
-   --env NEURODESKTOP_VERSION=latest \
-   $GROUP_HOME/neurodesk/neurodesktop-neurodesktop_latest.sif \
-   start-notebook.py --allow-root
-```
 
 ## connecting with VScode
 VScode server does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container. However, it is possible to run vscode server through ondemand:
@@ -446,5 +432,3 @@ make sure to set the new versio before submitting:
 ssh sherlock
 sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-02-24"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
-
-
