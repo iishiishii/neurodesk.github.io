@@ -360,17 +360,24 @@ echo "Starting Neurodesktop container..."
 NEURODESKTOP_NOTEBOOK_PORT="${NEURODESKTOP_NOTEBOOK_PORT:-8888}"
 NEURODESKTOP_DISPLAY_URL="${NEURODESKTOP_DISPLAY_URL:-http://127.0.0.1:8888}"
 NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS="${NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS:-{'jupyter_server_fileid': False, 'jupyter_server_ydoc': False}}"
+NEURODESKTOP_UID=$(id -u)
+NEURODESKTOP_GID=$(id -g)
+SCRATCH_TRASH_DIR="${HOME}/neurodesktop-home/scratch-trash-${NEURODESKTOP_UID}"
+mkdir -p "${SCRATCH_TRASH_DIR}/files" "${SCRATCH_TRASH_DIR}/info"
+chmod 700 "${SCRATCH_TRASH_DIR}" "${SCRATCH_TRASH_DIR}/files" "${SCRATCH_TRASH_DIR}/info"
+echo "Binding per-user scratch trash dir at /scratch/.Trash-${NEURODESKTOP_UID}"
 apptainer run \
    --nv \
    --writable-tmpfs \
    --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
    --bind $GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \
+   --bind "${SCRATCH_TRASH_DIR}:/scratch/.Trash-${NEURODESKTOP_UID}" \
    "${SLURM_BINDS[@]}" \
    --no-home \
    --env CVMFS_DISABLE=true \
    --env TINI_SUBREAPER=1 \
-   --env NB_UID=$(id -u) \
-   --env NB_GID=$(id -g) \
+   --env NB_UID="${NEURODESKTOP_UID}" \
+   --env NB_GID="${NEURODESKTOP_GID}" \
    --env NEURODESKTOP_VERSION=latest \
    $GROUP_HOME/neurodesk/neurodesktop_latest.sif \
    start-notebook.py \
