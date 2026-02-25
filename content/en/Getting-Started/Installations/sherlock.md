@@ -411,6 +411,7 @@ export APPTAINER_BINDPATH=`pwd -P`
 ### Installing additional containers
 Everyone has write permissions and can download and install new containers.
 ```bash
+sh_dev
 cd $GROUP_HOME/neurodesk
 git pull
 bash build.sh
