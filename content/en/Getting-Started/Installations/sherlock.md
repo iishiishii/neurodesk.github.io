@@ -37,8 +37,8 @@ export APPTAINER_BINDPATH=/scratch,/tmp
 
 You can also add these to your ~/.bashrc:
 ```bash
-echo "module use $GROUP_HOME/modules/" >> ~/.bashrc
-echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
+echo "module use $GROUP_HOME/modules/" >> ~/.bash_profile
+echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bash_profile
 ```
 
 Now you can list all modules (Neurodesk modules are the first ones in the list):
