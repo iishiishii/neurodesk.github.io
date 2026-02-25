@@ -22,17 +22,24 @@ Help us build better neuroimaging infrastructure by writing code, improving our 
 
 ### Improve Documentation
 
-Good documentation makes tools accessible. Contribute tutorials, usage guides, or improve existing documentation.
+Good documentation makes tools accessible. Help improve our docs or developer guides.
 
-- [Submit a tutorial](https://neurodesk.org/edu/contribute/tutorials.html)
 - [Browse our Documentation Guide](/developers/documentation/)
+
+### Contribute to NeurodeskEDU
+
+[NeurodeskEDU](https://neurodesk.org/edu/intro.html) is our educational platform providing learning resources for neuroimaging analysis. It offers two complementary formats: **tutorials** (step-by-step guides with screenshots for GUI-based workflows) and **examples** (interactive Jupyter notebooks with executable code for scripting-focused learners). Resources span diffusion imaging, electrophysiology, functional imaging, structural imaging, and more.
+
+We welcome community contributions of both tutorials and example notebooks:
+
+- [Submit a tutorial](https://neurodesk.org/edu/contribute/tutorials.html) — write a step-by-step guide for a tool or workflow available in Neurodesk
+- [Submit an example notebook](https://neurodesk.org/edu/contribute/examples.html) — share a self-contained, reproducible Jupyter notebook
+- [Browse existing resources](https://neurodesk.org/edu/intro.html) for inspiration
+- [Visit the NeurodeskEDU GitHub repo](https://github.com/neurodesk/neurodeskedu) to see what's there and open a pull request
 
 ### Create or Share Workflows
 
 Make it easier for others to use Neurodesk by sharing reproducible analysis pipelines or creating new workflows.
-
-- [Submit an example notebook](https://neurodesk.org/edu/contribute/examples.html) 
-    (feel free to have a look at the [workflow examples](https://github.com/neurodesk/neurodeskedu) already available)
 
 ### Donate
 
