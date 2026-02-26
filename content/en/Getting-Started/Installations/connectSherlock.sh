@@ -196,7 +196,7 @@ if command -v ldd >/dev/null 2>&1; then
     rm -f "${SLURM_HOST_BIN_STAGING}"/* 2>/dev/null || true
     rm -f "${SLURM_HOST_LIB_STAGING}"/*.so* 2>/dev/null || true
 
-    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio sh_quota)
+    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio)
     for slurm_cmd in "${SLURM_HOST_CMDS[@]}"; do
         cmd_path=$(type -P "${slurm_cmd}" 2>/dev/null || true)
         if [ -z "${cmd_path}" ]; then
@@ -229,6 +229,23 @@ if command -v ldd >/dev/null 2>&1; then
             done < <(ldd "${cmd_path}" 2>/dev/null | awk '$2 == "=>" && $3 ~ /^\// {print $3} $1 ~ /^\// {print $1}')
         fi
     done
+
+    # Bind host quota helper directly (no wrapper LD_LIBRARY_PATH) to avoid
+    # leaking host lib paths into shell utilities used by the script.
+    HOST_SH_QUOTA_PATH=$(type -P sh_quota 2>/dev/null || true)
+    if [ -n "${HOST_SH_QUOTA_PATH}" ] && [ -x "${HOST_SH_QUOTA_PATH}" ]; then
+        add_slurm_bind "${HOST_SH_QUOTA_PATH}:${HOST_SH_QUOTA_PATH}"
+    fi
+    HOST_LFS_PATH=""
+    for lfs_candidate in /bin/lfs /usr/bin/lfs /usr/sbin/lfs /sbin/lfs; do
+        if [ -x "${lfs_candidate}" ]; then
+            HOST_LFS_PATH="${lfs_candidate}"
+            break
+        fi
+    done
+    if [ -n "${HOST_LFS_PATH}" ]; then
+        add_slurm_bind "${HOST_LFS_PATH}:/bin/lfs"
+    fi
 
     for plugin_dir in "${SLURM_PLUGIN_DIRS[@]}"; do
         [ -d "${plugin_dir}" ] || continue
