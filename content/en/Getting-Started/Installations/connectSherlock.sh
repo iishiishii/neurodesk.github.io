@@ -196,7 +196,7 @@ if command -v ldd >/dev/null 2>&1; then
     rm -f "${SLURM_HOST_BIN_STAGING}"/* 2>/dev/null || true
     rm -f "${SLURM_HOST_LIB_STAGING}"/*.so* 2>/dev/null || true
 
-    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio)
+    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio sh_quota)
     for slurm_cmd in "${SLURM_HOST_CMDS[@]}"; do
         cmd_path=$(type -P "${slurm_cmd}" 2>/dev/null || true)
         if [ -z "${cmd_path}" ]; then
@@ -360,11 +360,30 @@ echo "Starting Neurodesktop container..."
 NEURODESKTOP_NOTEBOOK_PORT="${NEURODESKTOP_NOTEBOOK_PORT:-8888}"
 NEURODESKTOP_DISPLAY_URL="${NEURODESKTOP_DISPLAY_URL:-http://127.0.0.1:8888}"
 NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS="${NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS:-{'jupyter_server_fileid': False, 'jupyter_server_ydoc': False}}"
+NEURODESKTOP_SHELL_PROMPT="${NEURODESKTOP_SHELL_PROMPT:-neurodesk@sherlock:\\w\\$ }"
 NEURODESKTOP_UID=$(id -u)
 NEURODESKTOP_GID=$(id -g)
+NEURODESKTOP_ENABLE_GPU="${NEURODESKTOP_ENABLE_GPU:-0}"
+APPTAINER_GPU_ARGS=()
+if [ "${NEURODESKTOP_ENABLE_GPU}" = "1" ]; then
+    APPTAINER_GPU_ARGS+=(--nv)
+    if [ -n "${CUDA_VISIBLE_DEVICES:-}" ]; then
+        export APPTAINERENV_CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}"
+    fi
+    if [ -n "${NVIDIA_VISIBLE_DEVICES:-}" ]; then
+        export APPTAINERENV_NVIDIA_VISIBLE_DEVICES="${NVIDIA_VISIBLE_DEVICES}"
+    elif [ -n "${CUDA_VISIBLE_DEVICES:-}" ]; then
+        export APPTAINERENV_NVIDIA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}"
+    fi
+    echo "GPU passthrough enabled for container (--nv)."
+else
+    unset APPTAINERENV_CUDA_VISIBLE_DEVICES
+    unset APPTAINERENV_NVIDIA_VISIBLE_DEVICES
+    echo "GPU passthrough disabled for container."
+fi
 echo "Jupyter trash is disabled on Sherlock scratch mounts; deletes are permanent."
 apptainer run \
-   --nv \
+   "${APPTAINER_GPU_ARGS[@]}" \
    --writable-tmpfs \
    --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
    --bind $GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \
@@ -374,6 +393,7 @@ apptainer run \
    --env TINI_SUBREAPER=1 \
    --env NB_UID="${NEURODESKTOP_UID}" \
    --env NB_GID="${NEURODESKTOP_GID}" \
+   --env PS1="${NEURODESKTOP_SHELL_PROMPT}" \
    --env NEURODESKTOP_VERSION=latest \
    $GROUP_HOME/neurodesk/neurodesktop_latest.sif \
    start-notebook.py \
@@ -386,14 +406,16 @@ EOF
 
     # --- 4. LAUNCH ALLOCATION ---
     local GPU_FLAG=""
-    if [[ "$GPU" != "none" && ! -z "$GPU" ]]; then
+    local ENABLE_GPU_CONTAINER=0
+    if [[ -n "$GPU" && ! "$GPU" =~ ^([nN][oO][nN][eE]|0)$ ]]; then
         GPU_FLAG="--gres=gpu:$GPU"
+        ENABLE_GPU_CONTAINER=1
     fi
     
     ssh -S "$CTRL_SOCKET" -t -L ${TUNNEL_PORT}:localhost:${TUNNEL_PORT} "$LOGIN_NODE" \
         "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM $GPU_FLAG \
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
-                 ssh -t -L ${TUNNEL_PORT}:localhost:${TUNNEL_PORT} \${SLURM_NODELIST} \"SLURM_CONF=\${SLURM_CONF:-} SLURM_SACK_SOCKET=\${SLURM_SACK_SOCKET:-} MUNGE_SOCKET=\${MUNGE_SOCKET:-} NEURODESKTOP_NOTEBOOK_PORT=${TUNNEL_PORT} NEURODESKTOP_DISPLAY_URL=http://127.0.0.1:${TUNNEL_PORT} ~/.neurodesk_setup.sh\"'"
+                 ssh -t -L ${TUNNEL_PORT}:localhost:${TUNNEL_PORT} \${SLURM_NODELIST} \"SLURM_CONF=\${SLURM_CONF:-} SLURM_SACK_SOCKET=\${SLURM_SACK_SOCKET:-} MUNGE_SOCKET=\${MUNGE_SOCKET:-} NEURODESKTOP_ENABLE_GPU=${ENABLE_GPU_CONTAINER} NEURODESKTOP_NOTEBOOK_PORT=${TUNNEL_PORT} NEURODESKTOP_DISPLAY_URL=http://127.0.0.1:${TUNNEL_PORT} ~/.neurodesk_setup.sh\"'"
 }
 
 # Check if the script is being executed directly

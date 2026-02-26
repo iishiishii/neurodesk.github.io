@@ -35,7 +35,7 @@ module use $GROUP_HOME/modules
 export APPTAINER_BINDPATH=/scratch,/tmp
 ```
 
-You can also add these to your ~/.bashrc:
+You can also add these to your ~/.bash_profile:
 ```bash
 echo "module use $GROUP_HOME/modules/" >> ~/.bash_profile
 echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bash_profile
@@ -82,11 +82,7 @@ then submit:
 sbatch submit.sbatch
 ```
 
-to size jobs you can use ruse https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#sizing-a-job
-```bash
-module load system ruse
-ruse ./myapp
-```
+
 
 or parallize across subjects:
 ```bash
@@ -136,6 +132,11 @@ scancel --name=my_job_name
 ```
 more details https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
+to find out how much resources you need to request for jobs you can use the tool ruse https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#sizing-a-job
+```bash
+module load system ruse
+ruse ./myapp
+```
 
 ### Using GUI applications
 First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk or from a mac with https://www.xquartz.org/ installed, or from windows using Mobaxterm)
@@ -161,7 +162,21 @@ bash runme_gpu.sh
 ```
 
 
+## Storage on Sherlock:
+here is a great overview of where to store files on Sherlock: https://www.sherlock.stanford.edu/docs/storage/
 
+TLDR:
+- important scripts in $HOME 
+- important scripts and software you want to share with your group in $GROUP_HOME
+- temporary data (deleted after 90days) goes in $SCRATCH
+- temporary data (deleted after 90days) to share with your group in $GROUP_SCRATCH
+- data to keep for a few years in $OAK
+- data to archive in $ELM
+
+use `sh_quota` to check how much is consumed:
+```bash
+sh_quota
+```
 
 ## Using Neurodesk on Sherlock via Ondemand
 <!-- markdown-link-check-disable -->
@@ -395,7 +410,7 @@ export APPTAINER_BINDPATH=`pwd -P`
 ```
 
 ### Installing additional containers
-Everyone has write permissions and can download and install new containers.
+Check that you have write permissions and can download and install new containers and then run:
 ```bash
 sh_dev
 cd $GROUP_HOME/neurodesk
