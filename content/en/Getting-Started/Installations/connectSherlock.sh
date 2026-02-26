@@ -188,81 +188,134 @@ SLURM_WRAPPER_LIB_PATH="/opt/slurm-host-libs"
 SLURM_WRAPPER_BIN_PATH="/opt/slurm-host-bin"
 unset APPTAINERENV_PREPEND_PATH
 unset APPTAINERENV_PATH
+resolve_slurm_cmd_path() {
+    local slurm_cmd_name="$1"
+    local slurm_cmd_path=""
+    slurm_cmd_path=$(type -P "${slurm_cmd_name}" 2>/dev/null || true)
+    if [ -z "${slurm_cmd_path}" ]; then
+        for candidate in /usr/bin /usr/local/bin /bin; do
+            if [ -x "${candidate}/${slurm_cmd_name}" ]; then
+                slurm_cmd_path="${candidate}/${slurm_cmd_name}"
+                break
+            fi
+        done
+    fi
+    echo "${slurm_cmd_path}"
+}
+file_mtime_epoch() {
+    local path="$1"
+    if [ ! -e "${path}" ]; then
+        echo 0
+        return
+    fi
+    stat -c %Y "${path}" 2>/dev/null || stat -f %m "${path}" 2>/dev/null || echo 0
+}
+hash_text_value() {
+    local value="$1"
+    if command -v sha256sum >/dev/null 2>&1; then
+        printf '%s' "${value}" | sha256sum | awk '{print $1}'
+    elif command -v shasum >/dev/null 2>&1; then
+        printf '%s' "${value}" | shasum -a 256 | awk '{print $1}'
+    else
+        printf '%s' "${value}" | cksum | awk '{print $1}'
+    fi
+}
 if command -v ldd >/dev/null 2>&1; then
+    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio)
+    SLURM_CACHE_DIR="$SCRATCH/neurodesktop-slurm-cache"
+    SLURM_CACHE_SIG_FILE="${SLURM_CACHE_DIR}/signature.txt"
+    SLURM_CACHE_TTL_SECONDS="${NEURODESKTOP_SLURM_CACHE_TTL_SECONDS:-86400}"
+    if [[ ! "${SLURM_CACHE_TTL_SECONDS}" =~ ^[0-9]+$ ]]; then
+        SLURM_CACHE_TTL_SECONDS=86400
+    fi
+    mkdir -p "${SLURM_CACHE_DIR}"
     mkdir -p "${SLURM_HOST_BIN_REAL_STAGING}"
     mkdir -p "${SLURM_HOST_BIN_STAGING}"
     mkdir -p "${SLURM_HOST_LIB_STAGING}"
-    rm -f "${SLURM_HOST_BIN_REAL_STAGING}"/* 2>/dev/null || true
-    rm -f "${SLURM_HOST_BIN_STAGING}"/* 2>/dev/null || true
-    rm -f "${SLURM_HOST_LIB_STAGING}"/*.so* 2>/dev/null || true
-
-    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio)
-    for slurm_cmd in "${SLURM_HOST_CMDS[@]}"; do
-        cmd_path=$(type -P "${slurm_cmd}" 2>/dev/null || true)
-        if [ -z "${cmd_path}" ]; then
-            for candidate in /usr/bin /usr/local/bin /bin; do
-                if [ -x "${candidate}/${slurm_cmd}" ]; then
-                    cmd_path="${candidate}/${slurm_cmd}"
-                    break
-                fi
-            done
-        fi
-        if [ -n "${cmd_path}" ] && [ -x "${cmd_path}" ]; then
-            cp -Lf "${cmd_path}" "${SLURM_HOST_BIN_REAL_STAGING}/${slurm_cmd}" 2>/dev/null || true
-            printf '%s\n' \
-                '#!/bin/bash' \
-                "export LD_LIBRARY_PATH=${SLURM_WRAPPER_LIB_PATH}\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}" \
-                "exec /opt/slurm-host-bin-real/${slurm_cmd} \"\$@\"" \
-                > "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}"
-            chmod +x "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}" 2>/dev/null || true
-            # Force replacement of container slurm client command paths so PATH changes cannot bypass wrappers.
-            add_slurm_bind "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}:${cmd_path}"
-            while read -r dep_path; do
-                [ -z "${dep_path}" ] && continue
-                dep_base=$(basename "${dep_path}")
-                case "${dep_base}" in
-                    libc.so.*|libm.so.*|libpthread.so.*|libdl.so.*|librt.so.*|ld-linux*.so.*)
-                        continue
-                        ;;
-                esac
-                cp -Lf "${dep_path}" "${SLURM_HOST_LIB_STAGING}/${dep_base}" 2>/dev/null || true
-            done < <(ldd "${cmd_path}" 2>/dev/null | awk '$2 == "=>" && $3 ~ /^\// {print $3} $1 ~ /^\// {print $1}')
-        fi
-    done
-
-    # Bind host quota helper directly (no wrapper LD_LIBRARY_PATH) to avoid
-    # leaking host lib paths into shell utilities used by the script.
-    HOST_SH_QUOTA_PATH=$(type -P sh_quota 2>/dev/null || true)
-    if [ -n "${HOST_SH_QUOTA_PATH}" ] && [ -x "${HOST_SH_QUOTA_PATH}" ]; then
-        add_slurm_bind "${HOST_SH_QUOTA_PATH}:${HOST_SH_QUOTA_PATH}"
-    fi
-    HOST_LFS_PATH=""
-    for lfs_candidate in /bin/lfs /usr/bin/lfs /usr/sbin/lfs /sbin/lfs; do
-        if [ -x "${lfs_candidate}" ]; then
-            HOST_LFS_PATH="${lfs_candidate}"
-            break
-        fi
-    done
-    if [ -n "${HOST_LFS_PATH}" ]; then
-        add_slurm_bind "${HOST_LFS_PATH}:/bin/lfs"
-    fi
-
+    SLURM_CACHE_INPUT="host=$(hostname 2>/dev/null || echo unknown)
+slurm_conf=${HOST_SLURM_CONF_REAL}
+slurm_conf_mtime=$(file_mtime_epoch "${HOST_SLURM_CONF_REAL}")
+plugin_dirs=${SLURM_PLUGIN_DIRS_RAW:-unset}"
     for plugin_dir in "${SLURM_PLUGIN_DIRS[@]}"; do
-        [ -d "${plugin_dir}" ] || continue
-        while read -r plugin_file; do
-            [ -r "${plugin_file}" ] || continue
-            while read -r dep_path; do
-                [ -z "${dep_path}" ] && continue
-                dep_base=$(basename "${dep_path}")
-                case "${dep_base}" in
-                    libc.so.*|libm.so.*|libpthread.so.*|libdl.so.*|librt.so.*|ld-linux*.so.*)
-                        continue
-                        ;;
-                esac
-                cp -Lf "${dep_path}" "${SLURM_HOST_LIB_STAGING}/${dep_base}" 2>/dev/null || true
-            done < <(ldd "${plugin_file}" 2>/dev/null | awk '$2 == "=>" && $3 ~ /^\// {print $3} $1 ~ /^\// {print $1}')
-        done < <(find "${plugin_dir}" -maxdepth 4 -type f -name '*.so*' 2>/dev/null)
+        [ -z "${plugin_dir}" ] && continue
+        SLURM_CACHE_INPUT="${SLURM_CACHE_INPUT}
+plugin_dir=${plugin_dir}|mtime=$(file_mtime_epoch "${plugin_dir}")"
     done
+    for slurm_cmd in "${SLURM_HOST_CMDS[@]}"; do
+        cmd_path=$(resolve_slurm_cmd_path "${slurm_cmd}")
+        SLURM_CACHE_INPUT="${SLURM_CACHE_INPUT}
+cmd=${slurm_cmd}|path=${cmd_path:-missing}|mtime=$(file_mtime_epoch "${cmd_path}")"
+    done
+    SLURM_CACHE_SIGNATURE=$(hash_text_value "${SLURM_CACHE_INPUT}")
+
+    NEED_CACHE_REBUILD=1
+    if [ -f "${SLURM_CACHE_SIG_FILE}" ] && [ -s "${SLURM_CACHE_SIG_FILE}" ]; then
+        CACHED_SIGNATURE=$(head -n 1 "${SLURM_CACHE_SIG_FILE}" 2>/dev/null || echo "")
+        CACHE_SIG_MTIME=$(file_mtime_epoch "${SLURM_CACHE_SIG_FILE}")
+        CACHE_NOW_EPOCH=$(date +%s)
+        CACHE_AGE=$((CACHE_NOW_EPOCH - CACHE_SIG_MTIME))
+        if [ "${CACHED_SIGNATURE}" = "${SLURM_CACHE_SIGNATURE}" ] && \
+           [ "${CACHE_AGE}" -ge 0 ] && [ "${CACHE_AGE}" -le "${SLURM_CACHE_TTL_SECONDS}" ] && \
+           ls "${SLURM_HOST_BIN_REAL_STAGING}"/* >/dev/null 2>&1 && \
+           ls "${SLURM_HOST_BIN_STAGING}"/* >/dev/null 2>&1; then
+            NEED_CACHE_REBUILD=0
+        fi
+    fi
+
+    if [ "${NEED_CACHE_REBUILD}" -eq 1 ]; then
+        echo "Preparing host Slurm compatibility assets (initial run or cache refresh)..."
+        rm -f "${SLURM_HOST_BIN_REAL_STAGING}"/* 2>/dev/null || true
+        rm -f "${SLURM_HOST_BIN_STAGING}"/* 2>/dev/null || true
+        rm -f "${SLURM_HOST_LIB_STAGING}"/*.so* 2>/dev/null || true
+
+        echo "Scanning host Slurm command dependencies..."
+        for slurm_cmd in "${SLURM_HOST_CMDS[@]}"; do
+            cmd_path=$(resolve_slurm_cmd_path "${slurm_cmd}")
+            if [ -n "${cmd_path}" ] && [ -x "${cmd_path}" ]; then
+                cp -Lf "${cmd_path}" "${SLURM_HOST_BIN_REAL_STAGING}/${slurm_cmd}" 2>/dev/null || true
+                printf '%s\n' \
+                    '#!/bin/bash' \
+                    "export LD_LIBRARY_PATH=${SLURM_WRAPPER_LIB_PATH}\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}" \
+                    "exec /opt/slurm-host-bin-real/${slurm_cmd} \"\$@\"" \
+                    > "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}"
+                chmod +x "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}" 2>/dev/null || true
+                while read -r dep_path; do
+                    [ -z "${dep_path}" ] && continue
+                    dep_base=$(basename "${dep_path}")
+                    case "${dep_base}" in
+                        libc.so.*|libm.so.*|libpthread.so.*|libdl.so.*|librt.so.*|ld-linux*.so.*)
+                            continue
+                            ;;
+                    esac
+                    cp -Lf "${dep_path}" "${SLURM_HOST_LIB_STAGING}/${dep_base}" 2>/dev/null || true
+                done < <(ldd "${cmd_path}" 2>/dev/null | awk '$2 == "=>" && $3 ~ /^\// {print $3} $1 ~ /^\// {print $1}')
+            fi
+        done
+
+        if [ -n "${SLURM_PLUGIN_DIRS_RAW}" ]; then
+            echo "Scanning Slurm plugin dependencies..."
+        fi
+        for plugin_dir in "${SLURM_PLUGIN_DIRS[@]}"; do
+            [ -d "${plugin_dir}" ] || continue
+            while read -r plugin_file; do
+                [ -r "${plugin_file}" ] || continue
+                while read -r dep_path; do
+                    [ -z "${dep_path}" ] && continue
+                    dep_base=$(basename "${dep_path}")
+                    case "${dep_base}" in
+                        libc.so.*|libm.so.*|libpthread.so.*|libdl.so.*|librt.so.*|ld-linux*.so.*)
+                            continue
+                            ;;
+                    esac
+                    cp -Lf "${dep_path}" "${SLURM_HOST_LIB_STAGING}/${dep_base}" 2>/dev/null || true
+                done < <(ldd "${plugin_file}" 2>/dev/null | awk '$2 == "=>" && $3 ~ /^\// {print $3} $1 ~ /^\// {print $1}')
+            done < <(find "${plugin_dir}" -maxdepth 4 -type f -name '*.so*' 2>/dev/null)
+        done
+
+        printf '%s\n' "${SLURM_CACHE_SIGNATURE}" > "${SLURM_CACHE_SIG_FILE}"
+    else
+        echo "Using cached host Slurm compatibility assets."
+    fi
 
     if ls "${SLURM_HOST_BIN_REAL_STAGING}"/* >/dev/null 2>&1; then
         add_slurm_bind "${SLURM_HOST_BIN_REAL_STAGING}:/opt/slurm-host-bin-real"
@@ -273,9 +326,48 @@ if command -v ldd >/dev/null 2>&1; then
         # Explicitly set PATH to keep wrapper precedence even if startup scripts reset PATH.
         export APPTAINERENV_PATH="${SLURM_WRAPPER_BIN_PATH}:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     fi
+    for slurm_cmd in "${SLURM_HOST_CMDS[@]}"; do
+        cmd_path=$(resolve_slurm_cmd_path "${slurm_cmd}")
+        if [ -n "${cmd_path}" ] && [ -x "${cmd_path}" ] && [ -x "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}" ]; then
+            # Force replacement of container slurm client command paths so PATH changes cannot bypass wrappers.
+            add_slurm_bind "${SLURM_HOST_BIN_STAGING}/${slurm_cmd}:${cmd_path}"
+        fi
+    done
     if ls "${SLURM_HOST_LIB_STAGING}"/*.so* >/dev/null 2>&1; then
         add_slurm_bind "${SLURM_HOST_LIB_STAGING}:${SLURM_WRAPPER_LIB_PATH}"
         SLURM_LD_LIBRARY_PATH="${SLURM_WRAPPER_LIB_PATH} (wrapper scoped)"
+    fi
+
+    # Ensure legacy cached sh_quota wrappers do not survive cache reuse.
+    rm -f "${SLURM_HOST_BIN_REAL_STAGING}/sh_quota" 2>/dev/null || true
+
+    # Install a clean sh_quota shim into wrapper PATH that explicitly unsets
+    # LD_LIBRARY_PATH before executing the host helper.
+    HOST_SH_QUOTA_PATH=$(type -P sh_quota 2>/dev/null || true)
+    if [ -n "${HOST_SH_QUOTA_PATH}" ] && [ -x "${HOST_SH_QUOTA_PATH}" ]; then
+        printf '%s\n' \
+            '#!/bin/bash' \
+            'unset LD_LIBRARY_PATH' \
+            "exec \"${HOST_SH_QUOTA_PATH}\" \"\$@\"" \
+            > "${SLURM_HOST_BIN_STAGING}/sh_quota"
+        chmod +x "${SLURM_HOST_BIN_STAGING}/sh_quota" 2>/dev/null || true
+        add_slurm_bind "${HOST_SH_QUOTA_PATH}:${HOST_SH_QUOTA_PATH}"
+    else
+        rm -f "${SLURM_HOST_BIN_STAGING}/sh_quota" 2>/dev/null || true
+    fi
+    HOST_LFS_PATH=$(type -P lfs 2>/dev/null || true)
+    if [ -z "${HOST_LFS_PATH}" ]; then
+        for lfs_candidate in /bin/lfs /usr/bin/lfs /usr/sbin/lfs /sbin/lfs /usr/local/bin/lfs; do
+            if [ -x "${lfs_candidate}" ]; then
+                HOST_LFS_PATH="${lfs_candidate}"
+                break
+            fi
+        done
+    fi
+    if [ -n "${HOST_LFS_PATH}" ] && [ -x "${HOST_LFS_PATH}" ]; then
+        add_slurm_bind "${HOST_LFS_PATH}:/bin/lfs"
+    else
+        echo "WARNING: host lfs command not found; sh_quota may not report Lustre quotas."
     fi
 fi
 if [ -e /run/slurm ]; then
