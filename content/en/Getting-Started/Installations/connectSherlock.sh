@@ -114,19 +114,23 @@ if ! cd "${NEURODESKTOP_START_DIR}"; then
 fi
 echo "Container start directory target: ${NEURODESKTOP_START_DIR}"
 echo "Using --writable-tmpfs (ephemeral writable container layer)."
+NEURODESKTOP_ASSET_BASE="${SCRATCH:-$HOME}"
+NEURODESKTOP_ASSET_BASE="${NEURODESKTOP_ASSET_BASE%/}/neurodesktop"
+NEURODESKTOP_HOME_DIR="${NEURODESKTOP_ASSET_BASE}/home"
+NEURODESKTOP_WORKDIR="${NEURODESKTOP_HOME_DIR}/workdir"
 
-if [ ! -d ~/neurodesktop-home ]; then
-    echo "Creating ~/neurodesktop-home..."
-    mkdir -p ~/neurodesktop-home
+if [ ! -d "${NEURODESKTOP_HOME_DIR}" ]; then
+    echo "Creating ${NEURODESKTOP_HOME_DIR}..."
+    mkdir -p "${NEURODESKTOP_HOME_DIR}"
 else
-    echo "~/neurodesktop-home found."
+    echo "${NEURODESKTOP_HOME_DIR} found."
 fi
 
-if [ ! -d ~/neurodesktop-home/workdir ]; then
-    echo "Creating ~/neurodesktop-home/workdir..."
-    mkdir -p ~/neurodesktop-home/workdir
+if [ ! -d "${NEURODESKTOP_WORKDIR}" ]; then
+    echo "Creating ${NEURODESKTOP_WORKDIR}..."
+    mkdir -p "${NEURODESKTOP_WORKDIR}"
 else
-    echo "~/neurodesktop-home/workdir found."
+    echo "${NEURODESKTOP_WORKDIR} found."
 fi
 
 SLURM_BINDS=()
@@ -181,9 +185,14 @@ if [ -n "${SLURM_PLUGIN_DIRS_RAW}" ]; then
 fi
 
 SLURM_LD_LIBRARY_PATH=""
-SLURM_HOST_BIN_REAL_STAGING="$SCRATCH/neurodesktop-slurm-bin-real"
-SLURM_HOST_BIN_STAGING="$SCRATCH/neurodesktop-slurm-bin"
-SLURM_HOST_LIB_STAGING="$SCRATCH/neurodesktop-slurm-libs"
+if [ -z "${NEURODESKTOP_ASSET_BASE:-}" ]; then
+    NEURODESKTOP_ASSET_BASE="${SCRATCH:-$HOME}"
+    NEURODESKTOP_ASSET_BASE="${NEURODESKTOP_ASSET_BASE%/}/neurodesktop"
+fi
+SLURM_ASSET_ROOT="${NEURODESKTOP_ASSET_BASE}/slurm"
+SLURM_HOST_BIN_REAL_STAGING="${SLURM_ASSET_ROOT}/bin-real"
+SLURM_HOST_BIN_STAGING="${SLURM_ASSET_ROOT}/bin"
+SLURM_HOST_LIB_STAGING="${SLURM_ASSET_ROOT}/libs"
 SLURM_WRAPPER_LIB_PATH="/opt/slurm-host-libs"
 SLURM_WRAPPER_BIN_PATH="/opt/slurm-host-bin"
 unset APPTAINERENV_PREPEND_PATH
@@ -193,7 +202,7 @@ resolve_slurm_cmd_path() {
     local slurm_cmd_path=""
     slurm_cmd_path=$(type -P "${slurm_cmd_name}" 2>/dev/null || true)
     if [ -z "${slurm_cmd_path}" ]; then
-        for candidate in /usr/bin /usr/local/bin /bin; do
+        for candidate in /usr/bin /usr/local/bin /bin /usr/sbin /sbin; do
             if [ -x "${candidate}/${slurm_cmd_name}" ]; then
                 slurm_cmd_path="${candidate}/${slurm_cmd_name}"
                 break
@@ -221,8 +230,8 @@ hash_text_value() {
     fi
 }
 if command -v ldd >/dev/null 2>&1; then
-    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio)
-    SLURM_CACHE_DIR="$SCRATCH/neurodesktop-slurm-cache"
+    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio lfs)
+    SLURM_CACHE_DIR="${SLURM_ASSET_ROOT}/cache"
     SLURM_CACHE_SIG_FILE="${SLURM_CACHE_DIR}/signature.txt"
     SLURM_CACHE_TTL_SECONDS="${NEURODESKTOP_SLURM_CACHE_TTL_SECONDS:-86400}"
     if [[ ! "${SLURM_CACHE_TTL_SECONDS}" =~ ^[0-9]+$ ]]; then
@@ -355,19 +364,17 @@ cmd=${slurm_cmd}|path=${cmd_path:-missing}|mtime=$(file_mtime_epoch "${cmd_path}
     else
         rm -f "${SLURM_HOST_BIN_STAGING}/sh_quota" 2>/dev/null || true
     fi
-    HOST_LFS_PATH=$(type -P lfs 2>/dev/null || true)
-    if [ -z "${HOST_LFS_PATH}" ]; then
-        for lfs_candidate in /bin/lfs /usr/bin/lfs /usr/sbin/lfs /sbin/lfs /usr/local/bin/lfs; do
-            if [ -x "${lfs_candidate}" ]; then
-                HOST_LFS_PATH="${lfs_candidate}"
-                break
-            fi
-        done
-    fi
-    if [ -n "${HOST_LFS_PATH}" ] && [ -x "${HOST_LFS_PATH}" ]; then
-        add_slurm_bind "${HOST_LFS_PATH}:/bin/lfs"
+    if [ -x "${SLURM_HOST_BIN_STAGING}/lfs" ]; then
+        # sh_quota calls /bin/lfs directly on Sherlock, so provide wrapper there.
+        add_slurm_bind "${SLURM_HOST_BIN_STAGING}/lfs:/bin/lfs"
     else
-        echo "WARNING: host lfs command not found; sh_quota may not report Lustre quotas."
+        HOST_LFS_PATH=$(resolve_slurm_cmd_path lfs)
+        if [ -n "${HOST_LFS_PATH}" ] && [ -x "${HOST_LFS_PATH}" ]; then
+            echo "WARNING: using unwrapped host lfs at ${HOST_LFS_PATH}; Lustre libs may be missing in container."
+            add_slurm_bind "${HOST_LFS_PATH}:/bin/lfs"
+        else
+            echo "WARNING: host lfs command not found; sh_quota may not report Lustre quotas."
+        fi
     fi
 fi
 if [ -e /run/slurm ]; then
