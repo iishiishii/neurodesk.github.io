@@ -10,11 +10,86 @@ random_tunnel_port() {
     echo $((10000 + RANDOM % 55001))
 }
 
+ssh_config_has_host_alias() {
+    local SSH_CONFIG_FILE="$1"
+    local TARGET_ALIAS="$2"
+
+    if [ ! -f "$SSH_CONFIG_FILE" ]; then
+        return 1
+    fi
+
+    awk -v target="$TARGET_ALIAS" '
+        /^[[:space:]]*#/ { next }
+        /^[[:space:]]*[Hh][Oo][Ss][Tt][[:space:]]+/ {
+            line = $0
+            sub(/^[[:space:]]*[Hh][Oo][Ss][Tt][[:space:]]+/, "", line)
+            split(line, host_patterns, /[[:space:]]+/)
+            for (i in host_patterns) {
+                if (tolower(host_patterns[i]) == tolower(target)) {
+                    found = 1
+                }
+            }
+        }
+        END { exit(found ? 0 : 1) }
+    ' "$SSH_CONFIG_FILE"
+}
+
+ensure_sherlock_ssh_config() {
+    local LOGIN_ALIAS="$1"
+    local SSH_DIR="${HOME}/.ssh"
+    local SSH_CONFIG_FILE="${SSH_DIR}/config"
+    local USER_CHOICE
+    local SHERLOCK_USER
+
+    mkdir -p "$SSH_DIR"
+    chmod 700 "$SSH_DIR" 2>/dev/null || true
+
+    if ssh_config_has_host_alias "$SSH_CONFIG_FILE" "$LOGIN_ALIAS"; then
+        return 0
+    fi
+
+    echo "No SSH config entry found for '${LOGIN_ALIAS}' in ${SSH_CONFIG_FILE}."
+    echo "This script connects using the '${LOGIN_ALIAS}' SSH alias."
+    echo -n "Add a Sherlock SSH config entry now? [Y/n] "
+    read -r USER_CHOICE
+
+    if [[ "$USER_CHOICE" =~ ^([nN][oO]|[nN])$ ]]; then
+        echo "Skipping SSH config update."
+        return 1
+    fi
+
+    echo -n "Sherlock username (SUNet ID) [${USER}]: "
+    read -r SHERLOCK_USER
+    SHERLOCK_USER=${SHERLOCK_USER:-$USER}
+
+    if [ -f "$SSH_CONFIG_FILE" ] && [ -s "$SSH_CONFIG_FILE" ]; then
+        printf "\n" >> "$SSH_CONFIG_FILE"
+    fi
+
+    cat >> "$SSH_CONFIG_FILE" <<EOF
+Host ${LOGIN_ALIAS}
+    ControlMaster auto
+    ControlPath ~/.ssh/%l%r@%h:%p
+    HostName login.sherlock.stanford.edu
+    User ${SHERLOCK_USER}
+    ControlPersist 1h
+EOF
+    chmod 600 "$SSH_CONFIG_FILE" 2>/dev/null || true
+    echo "Added SSH config entry for '${LOGIN_ALIAS}' to ${SSH_CONFIG_FILE}."
+    return 0
+}
+
 function connectSherlock() {
     local LOGIN_NODE="sherlock"
     local JOB_NAME="neurodesktop"
     local CTRL_SOCKET="${HOME}/.ssh/sherlock_ctrl_$(date +%s)_${RANDOM}"
     local TUNNEL_PORT
+
+    if ! ensure_sherlock_ssh_config "$LOGIN_NODE"; then
+        echo "Please add a valid SSH entry for '${LOGIN_NODE}' and run the script again."
+        return 1
+    fi
+
     TUNNEL_PORT=$(random_tunnel_port)
     if [[ ! "$TUNNEL_PORT" =~ ^[0-9]+$ ]]; then
         echo "Failed to select a valid tunnel port."
