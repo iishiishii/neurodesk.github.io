@@ -59,9 +59,20 @@ jobs:
       - name: Write applist.json
         env:
           ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+          FAIL_ON_APPLIST_ERROR: ${{ vars.FAIL_ON_APPLIST_ERROR }}
         run: |
           if [ -n "$ZENODO_TOKEN" ]; then
-            python .github/workflows/write-app-json.py --zenodo_token "$ZENODO_TOKEN"
+            EXTRA_ARGS=()
+            case "${FAIL_ON_APPLIST_ERROR,,}" in
+              true|1|yes)
+                echo "FAIL_ON_APPLIST_ERROR is enabled; running in strict mode."
+                EXTRA_ARGS+=(--fail-on-error)
+                ;;
+              *)
+                echo "FAIL_ON_APPLIST_ERROR is not enabled; running in best-effort mode."
+                ;;
+            esac
+            python .github/workflows/write-app-json.py --zenodo_token "$ZENODO_TOKEN" "${EXTRA_ARGS[@]}"
           else
             echo "ZENODO_TOKEN not set — skipping write-app-json.py"
           fi
