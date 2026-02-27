@@ -162,7 +162,7 @@ bash runme_gpu.sh
 ```
 
 
-## Storage on Sherlock:
+## Storage on Sherlock
 here is a great overview of where to store files on Sherlock: https://www.sherlock.stanford.edu/docs/storage/
 
 TLDR:
