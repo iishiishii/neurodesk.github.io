@@ -183,6 +183,7 @@ jobs:
       - name: Push built site to prod repo
         env:
           GH_TOKEN: ${{ secrets.PROD_REPO_TOKEN }}
+          INCLUDE_EDU: ${{ github.event_name != 'workflow_dispatch' || inputs.include_edu }}
         run: |
           set -e
           WORK=/tmp/prod-site
@@ -201,7 +202,13 @@ jobs:
             git checkout --orphan "${{ env.PROD_BRANCH }}"
           fi
           # Sync built files into repo root, but NEVER delete .git
-          rsync -av --delete --exclude='.git' "${GITHUB_WORKSPACE}/public/" ./
+          if [ "${INCLUDE_EDU}" = "true" ]; then
+            echo "Including edu in this promotion"
+            rsync -av --delete --exclude='.git' "${GITHUB_WORKSPACE}/public/" ./
+          else
+            echo "Preserving existing edu content in prod (include_edu=false)"
+            rsync -av --delete --exclude='.git' --exclude='edu/' "${GITHUB_WORKSPACE}/public/" ./
+          fi
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to deploy"
