@@ -178,21 +178,12 @@ function connectSherlock() {
     ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh && chmod +x ~/.neurodesk_setup.sh" <<'EOF'
 #!/bin/bash
 export PATH=$PATH:/sbin:/usr/sbin
-NEURODESKTOP_START_DIR="${NEURODESKTOP_START_DIR:-$HOME}"
-if [ ! -d "${NEURODESKTOP_START_DIR}" ]; then
-    echo "Requested start dir ${NEURODESKTOP_START_DIR} not found; falling back to \$SCRATCH."
-    NEURODESKTOP_START_DIR="$SCRATCH"
-fi
-if ! cd "${NEURODESKTOP_START_DIR}"; then
-    echo "ERROR: failed to cd into ${NEURODESKTOP_START_DIR}"
-    exit 1
-fi
-echo "Container start directory target: ${NEURODESKTOP_START_DIR}"
-echo "Using --writable-tmpfs (ephemeral writable container layer)."
-NEURODESKTOP_ASSET_BASE="${SCRATCH:-$HOME}"
-NEURODESKTOP_ASSET_BASE="${NEURODESKTOP_ASSET_BASE%/}/neurodesktop"
+NEURODESKTOP_ASSET_BASE="${HOME%/}/neurodesk"
 NEURODESKTOP_HOME_DIR="${NEURODESKTOP_ASSET_BASE}/home"
 NEURODESKTOP_WORKDIR="${NEURODESKTOP_HOME_DIR}/workdir"
+NEURODESKTOP_CONTAINER_USER="${NEURODESKTOP_CONTAINER_USER:-jovyan}"
+NEURODESKTOP_CONTAINER_HOME="${NEURODESKTOP_CONTAINER_HOME:-/home/${NEURODESKTOP_CONTAINER_USER}}"
+NEURODESKTOP_SCRATCH_DIR="${SCRATCH:-/scratch/users/${USER:-neurodesk}}"
 
 if [ ! -d "${NEURODESKTOP_HOME_DIR}" ]; then
     echo "Creating ${NEURODESKTOP_HOME_DIR}..."
@@ -208,6 +199,21 @@ else
     echo "${NEURODESKTOP_WORKDIR} found."
 fi
 
+NEURODESKTOP_START_DIR="${NEURODESKTOP_START_DIR:-${NEURODESKTOP_SCRATCH_DIR}}"
+if [ ! -d "${NEURODESKTOP_START_DIR}" ]; then
+    echo "Requested start dir ${NEURODESKTOP_START_DIR} not found; falling back to ${NEURODESKTOP_WORKDIR}."
+    NEURODESKTOP_START_DIR="${NEURODESKTOP_WORKDIR}"
+fi
+NEURODESKTOP_CONTAINER_WORKDIR="${NEURODESKTOP_CONTAINER_WORKDIR:-${NEURODESKTOP_START_DIR}}"
+if ! cd "${NEURODESKTOP_START_DIR}"; then
+    echo "ERROR: failed to cd into ${NEURODESKTOP_START_DIR}"
+    exit 1
+fi
+echo "Container start directory target: ${NEURODESKTOP_START_DIR}"
+echo "Container working directory path: ${NEURODESKTOP_CONTAINER_WORKDIR}"
+echo "Container home mapping: ${NEURODESKTOP_HOME_DIR} -> ${NEURODESKTOP_CONTAINER_HOME}"
+echo "Using --writable-tmpfs (ephemeral writable container layer)."
+
 SLURM_BINDS=()
 add_slurm_bind() {
     local bind_spec="$1"
@@ -219,6 +225,10 @@ add_slurm_bind() {
     done
     SLURM_BINDS+=(--bind "${bind_spec}")
 }
+# Ensure the notebook start/work directory is available at the same path in the container.
+if [ -d "${NEURODESKTOP_START_DIR}" ]; then
+    add_slurm_bind "${NEURODESKTOP_START_DIR}:${NEURODESKTOP_START_DIR}"
+fi
 HOST_SLURM_CONF="${SLURM_CONF:-/etc/slurm/slurm.conf}"
 HOST_SLURM_CONF_DIR=/etc/slurm
 if [ -n "${HOST_SLURM_CONF}" ]; then
@@ -261,8 +271,7 @@ fi
 
 SLURM_LD_LIBRARY_PATH=""
 if [ -z "${NEURODESKTOP_ASSET_BASE:-}" ]; then
-    NEURODESKTOP_ASSET_BASE="${SCRATCH:-$HOME}"
-    NEURODESKTOP_ASSET_BASE="${NEURODESKTOP_ASSET_BASE%/}/neurodesktop"
+    NEURODESKTOP_ASSET_BASE="${HOME%/}/neurodesk"
 fi
 SLURM_ASSET_ROOT="${NEURODESKTOP_ASSET_BASE}/slurm"
 SLURM_HOST_BIN_REAL_STAGING="${SLURM_ASSET_ROOT}/bin-real"
@@ -572,19 +581,53 @@ else
     unset APPTAINERENV_NVIDIA_VISIBLE_DEVICES
     echo "GPU passthrough disabled for container."
 fi
+
+REQUIRED_APPTAINER_BINDPATH="/scratch,/tmp,/oak"
+APPTAINER_BINDPATH_OK=1
+if [ -z "${APPTAINER_BINDPATH:-}" ]; then
+    APPTAINER_BINDPATH_OK=0
+else
+    for required_bind in /scratch /tmp /oak; do
+        case ",${APPTAINER_BINDPATH}," in
+            *",${required_bind},"*|*",${required_bind}:"*|*",${required_bind}/,"*|*",${required_bind}/:"*)
+                ;;
+            *)
+                APPTAINER_BINDPATH_OK=0
+                break
+                ;;
+        esac
+    done
+fi
+if [ "${APPTAINER_BINDPATH_OK}" -eq 1 ]; then
+    echo "APPTAINER_BINDPATH includes required paths: ${APPTAINER_BINDPATH}"
+else
+    export APPTAINER_BINDPATH="${REQUIRED_APPTAINER_BINDPATH}"
+    echo "Set APPTAINER_BINDPATH=${APPTAINER_BINDPATH}"
+fi
+
+NEURODESKTOP_SHARED_CONTAINER_STORE="${GROUP_HOME}/neurodesk/local/containers"
+mkdir -p "${NEURODESKTOP_SHARED_CONTAINER_STORE}"
+CONTAINER_STORE_BIND_SPEC="${NEURODESKTOP_SHARED_CONTAINER_STORE}:${NEURODESKTOP_SHARED_CONTAINER_STORE}"
+CONTAINER_STORE_NEURODESKTOP_BIND_SPEC="${NEURODESKTOP_SHARED_CONTAINER_STORE}:/neurodesktop-storage/containers"
+echo "Shared container store mapping: ${CONTAINER_STORE_BIND_SPEC}"
+echo "Neurodesktop container store mapping: ${CONTAINER_STORE_NEURODESKTOP_BIND_SPEC}"
+
+unset APPTAINERENV_HOME
 echo "Jupyter trash is disabled on Sherlock scratch mounts; deletes are permanent."
 apptainer run \
    "${APPTAINER_GPU_ARGS[@]}" \
    --writable-tmpfs \
-   --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
-   --bind $GROUP_HOME/neurodesk/local/containers/:/neurocommand/local/containers \
+   --bind "${CONTAINER_STORE_BIND_SPEC}" \
+   --bind "${CONTAINER_STORE_NEURODESKTOP_BIND_SPEC}" \
    "${SLURM_BINDS[@]}" \
-   --no-home \
+   --home "${NEURODESKTOP_HOME_DIR}:${NEURODESKTOP_CONTAINER_HOME}" \
+   --pwd "${NEURODESKTOP_CONTAINER_WORKDIR}" \
    --env CVMFS_DISABLE=true \
    --env TINI_SUBREAPER=1 \
    --env NB_UID="${NEURODESKTOP_UID}" \
    --env NB_GID="${NEURODESKTOP_GID}" \
    --env PS1="${NEURODESKTOP_SHELL_PROMPT}" \
+   --env NEURODESKTOP_LOCAL_CONTAINERS="${GROUP_HOME}/neurodesk/local/containers" \
    --env NEURODESKTOP_VERSION=latest \
    $GROUP_HOME/neurodesk/neurodesktop_latest.sif \
    start-notebook.py \
