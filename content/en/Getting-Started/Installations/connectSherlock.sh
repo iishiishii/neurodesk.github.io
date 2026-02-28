@@ -314,7 +314,7 @@ hash_text_value() {
     fi
 }
 if command -v ldd >/dev/null 2>&1; then
-    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio lfs)
+    SLURM_HOST_CMDS=(sinfo squeue scontrol sacct srun sbatch scancel salloc sstat sprio quota lfs)
     SLURM_CACHE_DIR="${SLURM_ASSET_ROOT}/cache"
     SLURM_CACHE_SIG_FILE="${SLURM_CACHE_DIR}/signature.txt"
     SLURM_CACHE_TTL_SECONDS="${NEURODESKTOP_SLURM_CACHE_TTL_SECONDS:-86400}"
@@ -447,6 +447,14 @@ cmd=${slurm_cmd}|path=${cmd_path:-missing}|mtime=$(file_mtime_epoch "${cmd_path}
         add_slurm_bind "${HOST_SH_QUOTA_PATH}:${HOST_SH_QUOTA_PATH}"
     else
         rm -f "${SLURM_HOST_BIN_STAGING}/sh_quota" 2>/dev/null || true
+    fi
+    if [ -x "${SLURM_HOST_BIN_STAGING}/quota" ]; then
+        # sh_quota may call quota via different absolute paths on Sherlock.
+        for quota_path in /usr/bin/quota /usr/sbin/quota /bin/quota /sbin/quota; do
+            if [ -x "${quota_path}" ]; then
+                add_slurm_bind "${SLURM_HOST_BIN_STAGING}/quota:${quota_path}"
+            fi
+        done
     fi
     if [ -x "${SLURM_HOST_BIN_STAGING}/lfs" ]; then
         # sh_quota calls /bin/lfs directly on Sherlock, so provide wrapper there.

@@ -373,13 +373,19 @@ brew install fuse-t-sshfs
 then mount for macos:
 ```bash
 mkdir ~/sherlock_scratch
-sshfs sciget@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
+sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
+
+mkdir ~/sherlock_oak
+sshfs <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/ ~/sherlock_oak -o subtype=fuse-t
 ```
 
 on linux:
 ```bash
 mkdir ~/sherlock_scratch
 sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch
+
+mkdir ~/sherlock_oak
+sshfs <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/ ~/sherlock_oak
 ```
 
 ### Transfer files using datalad
@@ -399,6 +405,19 @@ scp foo <sunetid>@dtn.sherlock.stanford.edu:
 scp -r <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
 ```
 
+### Transfer files via rsync
+``` 
+# this will transfer a files from your computer to your scratch space
+rsync -av foo <sunetid>@dtn.sherlock.stanford.edu:
+
+# or to oak:
+rsync -av foo <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/
+
+
+# this will transfer a directory from sherlock to your computer:
+rsync -av <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
+```
+
 ## Managing Neurodesk on Sherlock
 ### Installing Neurodesk for a lab
 This is already done and doesn't need to be run again!
@@ -415,6 +434,7 @@ export APPTAINER_BINDPATH=`pwd -P`
 ### Installing additional containers
 Check that you have write permissions and can download and install new containers and then run:
 ```bash
+ssh sherlock
 sh_dev
 cd $GROUP_HOME/neurodesk
 git pull
@@ -448,5 +468,5 @@ find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-st
 make sure to set the new versio before submitting:
 ```bash
 ssh sherlock
-sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-02-26"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
+sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-02-27"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
