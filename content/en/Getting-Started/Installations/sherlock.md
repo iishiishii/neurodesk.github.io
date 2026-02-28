@@ -445,24 +445,6 @@ bash containers.sh freesurfer
 # then install the choosen version by copy and pasting the specific command install command displayed
 ```
 
-If a new container was installed from Neurodesktop, the paths will need to be adjusted to work outside of Neurodesktop for the rest of sherlock:
-```bash
-sh_dev
-#First, test if that happened:
-cd $GROUP_HOME/neurodesk/local/containers/
-find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
-cd $GROUP_HOME/neurodesk/local/containers/modules
-find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
-
-
-#Then fix for modules:
-cd $GROUP_HOME/neurodesk/local/containers/modules
-find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
-
-#Then fix for containers:
-cd $GROUP_HOME/neurodesk/local/containers
-find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
-```
 
 ### Updating Neurodesktop image
 make sure to set the new versio before submitting:
