@@ -408,14 +408,14 @@ scp -r <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<yo
 ### Transfer files via rsync
 ``` 
 # this will transfer a files from your computer to your scratch space
-rsync -av foo <sunetid>@dtn.sherlock.stanford.edu:
+rsync -avP foo <sunetid>@dtn.sherlock.stanford.edu:
 
 # or to oak:
-rsync -av foo <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/
+rsync -avP foo <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/
 
 
 # this will transfer a directory from sherlock to your computer:
-rsync -av <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
+rsync -avP <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
 ```
 
 ## Managing Neurodesk on Sherlock
