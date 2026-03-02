@@ -425,6 +425,9 @@ This is already done and doesn't need to be run again!
 cd $GROUP_HOME/
 git clone https://github.com/neurodesk/neurocommand.git neurodesk
 cd neurodesk 
+git config core.sharedRepository group
+chmod -R g+rwX .
+find . -type d -exec chmod g+s {} +
 pip3 install -r neurodesk/requirements.txt --user 
 bash build.sh --cli
 bash containers.sh
