@@ -13,16 +13,10 @@ Neurodesk relies on your support to cover our infrastructure costs. Support Neur
 
 ## For users outside the United States
 
-<iframe
-  src="https://donations.uq.edu.au/EAINNEUR"
-  title="Neurodesk donations"
-  frameborder="0"
-  width="100%"
-  height="900"
-  style="border: 0; display: block;">
-</iframe>
-
-If the form does not load in your browser, use this direct link: [https://donations.uq.edu.au/EAINNEUR](https://donations.uq.edu.au/EAINNEUR)
+<div style="max-width: 760px; margin: 1rem 0 2rem; padding: 1.25rem 1.5rem; border: 1px solid #d8e3ea; border-radius: 12px; background: linear-gradient(135deg, #f7fbff 0%, #eef6ff 100%);">
+  <p style="margin: 0 0 0.9rem 0;"><strong>Donate securely through UQ Giving.</strong> This opens in a new tab.</p>
+  <a href="https://donations.uq.edu.au/EAINNEUR" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #005b96; color: #ffffff; padding: 0.7rem 1.15rem; border-radius: 999px; font-weight: 600; text-decoration: none;">Donate</a>
+</div>
 
 
 ## For users in the United States
@@ -45,4 +39,3 @@ If the form does not load in your browser, use this direct link: [https://tuqia.
 The University of Queensland in America, Inc. (“TUQIA”), E.I. Number 27-4495703, is a Delaware nonstock corporation that has received a ruling from the U.S. Internal Revenue Service that it is a tax-exempt organization under section 501(c)(3) of the Internal Revenue Code of 1986, as amended (“the Code”).   Charitable contributions to TUQIA are tax-deductible to U.S. taxpayers to the extent permitted by section 170 of the Code.   In accordance with applicable U.S. law, all donations received are at the disposition of TUQIA’s board of directors.
 
 A receipt will be issued for all gifts. All gifts to (TUQIA) are processed in US dollars and are tax-deductible in the United States to the extent allowed by law.
-
