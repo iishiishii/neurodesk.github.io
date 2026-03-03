@@ -42,4 +42,7 @@ This option is tax deductible in the United states:
 
 If the form does not load in your browser, use this direct link: [https://tuqia.org/donate-online/](https://tuqia.org/donate-online/) and enter Neurodesk in the UQ fund field.
 
+The University of Queensland in America, Inc. (“TUQIA”), E.I. Number 27-4495703, is a Delaware nonstock corporation that has received a ruling from the U.S. Internal Revenue Service that it is a tax-exempt organization under section 501(c)(3) of the Internal Revenue Code of 1986, as amended (“the Code”).   Charitable contributions to TUQIA are tax-deductible to U.S. taxpayers to the extent permitted by section 170 of the Code.   In accordance with applicable U.S. law, all donations received are at the disposition of TUQIA’s board of directors.
+
+A receipt will be issued for all gifts. All gifts to (TUQIA) are processed in US dollars and are tax-deductible in the United States to the extent allowed by law.
 
