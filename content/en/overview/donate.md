@@ -20,7 +20,7 @@ Neurodesk relies on your support to cover our infrastructure costs. Support Neur
 
 
 ## For users in the United States
-This option is tax deductible in the United states:
+This option is tax-deductible in the United States:
 <iframe
   src="https://donorbox.org/embed/tuqia-donations?designation=Neurodesk"
   name="donorbox"
