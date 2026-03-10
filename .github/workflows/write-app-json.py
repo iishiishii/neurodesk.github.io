@@ -12,7 +12,7 @@ from urllib3.util.retry import Retry
 APPS_JSON_URL = (
     "https://raw.githubusercontent.com/neurodesk/neurocommand/refs/heads/main/neurodesk/apps.json"
 )
-ZENODO_DEPOSITIONS_URL = "https://sandbox.zenodo.org/api/deposit/depositions"
+ZENODO_DEPOSITIONS_URL = "https://zenodo.org/api/deposit/depositions"
 CONNECT_TIMEOUT_SECONDS = 5
 READ_TIMEOUT_SECONDS = 30
 
