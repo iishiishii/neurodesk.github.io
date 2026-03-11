@@ -42,6 +42,13 @@ We have documented installations at several institutions:
   - Check our [HPC documentation](/getting-started/neurocommand/linux-and-hpc/) for general setup instructions
   - Work with your HPC administrators to enable Neurodesk support
 
+### 3. Neurodesk Webapps
+**Best for**: Fast browser-based image processing
+- No installation required
+- All processing runs locally in the browser
+- No data is transferred to the cloud
+- [Explore Neurodesk Webapps →](/getting-started/hosted/webapps)
+
 
 ## Choosing the Right Option
 
