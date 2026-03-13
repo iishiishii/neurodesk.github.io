@@ -244,6 +244,8 @@ bash connectSherlock.sh
 ```
 After startup, open the printed URL `http://127.0.0.1:<random_port>?token=<token>` in your browser.
 
+If you submit `sbatch`, `srun`, or `salloc` from inside this full Neurodesktop session, the launcher strips inherited `APPTAINER*` and `SINGULARITY*` variables before calling Slurm. This avoids nested container jobs reusing bind mounts from the interactive Neurodesktop container, which can otherwise cause errors such as missing `/opt/slurm-host-bin` mount sources. If a batch job needs specific container settings such as `APPTAINER_TMPDIR`, set them explicitly inside the batch script or `--wrap` command.
+
 
 ## connecting with VScode
 VScode server does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container. However, it is possible to run vscode server through ondemand:
@@ -453,5 +455,5 @@ bash containers.sh freesurfer
 make sure to set the new versio before submitting:
 ```bash
 ssh sherlock
-sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-03-03"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
+sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-03-12"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
