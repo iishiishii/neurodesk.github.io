@@ -85,7 +85,7 @@ type: landing
                         </div>
                         <div class="eval-card-content">
                             <span class="eval-card-title">Choose your Interface</span>
-                            <span class="eval-card-desc">Supports gaphical desktops, command line and computational notebooks</span>
+                            <span class="eval-card-desc">Supports graphical desktops, command line and computational notebooks</span>
                         </div>
                     </div>
                 </a>
