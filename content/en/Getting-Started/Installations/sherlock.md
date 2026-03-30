@@ -95,6 +95,15 @@ done
 
 if you need lots of jobs, consider using array jobs: https://www.sherlock.stanford.edu/docs/advanced-topics/job-management/?h=array+jobs
 
+e.g.:
+```bash
+#!/bin/bash
+#SBATCH --array=1-10
+#SBATCH -n 1
+
+touch ~/test/${SLURM_ARRAY_TASK_ID}
+```
+
 starting a matlab job:
 ```bash
 #!/bin/bash
