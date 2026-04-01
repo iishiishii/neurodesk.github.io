@@ -95,6 +95,22 @@ done
 
 if you need lots of jobs, consider using array jobs: https://www.sherlock.stanford.edu/docs/advanced-topics/job-management/?h=array+jobs
 
+e.g.:
+```bash
+#!/bin/bash
+#SBATCH --job-name=test
+#SBATCH --time=01:00:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
+#SBATCH -p normal
+#SBATCH --array=1-10
+
+touch test_${SLURM_ARRAY_TASK_ID}
+```
+
 starting a matlab job:
 ```bash
 #!/bin/bash
@@ -173,7 +189,7 @@ TLDR:
 - temporary data (deleted after 90days) to share with your group in $GROUP_SCRATCH (100TB)
 - temporary job data (deleted after job ends) in $L_SCRATCH (a few TB)
 - data to keep for a few years in $OAK (what you pay for, e.g. 20TB)
-- data to archive in ELM (you pay what you store)
+- data to archive in ELM (you pay what you store there)
 
 use `sh_quota` to check how much is available:
 ```bash
@@ -244,7 +260,7 @@ bash connectSherlock.sh
 ```
 After startup, open the printed URL `http://127.0.0.1:<random_port>?token=<token>` in your browser.
 
-If you submit `sbatch`, `srun`, or `salloc` from inside this full Neurodesktop session, the launcher strips inherited `APPTAINER*` and `SINGULARITY*` variables before calling Slurm. This avoids nested container jobs reusing bind mounts from the interactive Neurodesktop container, which can otherwise cause errors such as missing `/opt/slurm-host-bin` mount sources. If a batch job needs specific container settings such as `APPTAINER_TMPDIR`, set them explicitly inside the batch script or `--wrap` command.
+You can submit `sbatch` jobs from inside this full Neurodesktop session, but make sure that the sbatch job file is stored in a location that's identical between Neurodesktop and the sherlock cluster, so for example /oak/... - important: Do not submit batch jobs from within the jovyan homedirectory /home/jovyan as this will not be accessible to slurm on the cluster under that path.
 
 
 ## connecting with VScode
