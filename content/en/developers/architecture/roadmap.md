@@ -3,66 +3,86 @@ title: "Project Roadmap"
 linkTitle: "Roadmap"
 weight: 100
 description: >-
-     This page lists ideas we have planned for Neurodesk - If any of these things sound exciting to you, get in touch and we help you to become a contributor.
+     This page outlines our development priorities for Neurodesk. If any of these sound exciting to you, get in touch and we'll help you become a contributor!
 ---
 
-All things we are currently working on and are planning to do are listed here: https://github.com/orgs/neurodesk/projects/9/views/4
+Our detailed task tracking lives on the [Neurodesk Project Board](https://github.com/orgs/neurodesk/projects/9/views/4). Below is a summary of the larger themes guiding development.
 
-The larger themes and subthemes are:
+---
 
+## Streamlining the container build and release process
 
-# Streamlining container build and release process
-## Improving the workflow of how users can add new applications to Neurodesk
-Adding new applications to Neurodesk requires multiple steps and back-and-forth between contributors and maintainers. We are aiming to simplify this process by developing an interactive workflow based on our current interactive container builder and the existing github workflows. 
+### Improving the workflow for adding new applications
 
-Some issues in this theme are:
-- https://github.com/neurodesk/neurocontainers/issues/127
+We have built a [container builder UI](https://neurodesk.org/neurocontainers-ui/) that lets contributors define new applications interactively. We continue to improve this workflow and the underlying GitHub Actions pipelines to make it even easier to add, test, and publish containers.
 
-## Standardizing the container deployment
-Currently, deploying the application containers happens through a connection of various custom scripts distributed across various repositories (apps.json in neurocommand repository, neurocontainers, transparent singularity). 
-We would like to adopt community standard tools, like SHPC, that can perform some of these tasks. The goal is to remove duplication of effort and maintenance. 
+### Standardizing container deployment
 
-Some issues in this theme are:
-- https://github.com/neurodesk/transparent-singularity/issues/7
-- https://github.com/neurodesk/neurocommand/issues/152
-- https://github.com/neurodesk/transparent-singularity/issues/8
-- https://github.com/neurodesk/neurocommand/issues/187
-- https://github.com/neurodesk/neurocontainers/issues/504
+Container deployment currently relies on a chain of custom scripts spread across several repositories. We want to adopt community-standard tools like [SHPC](https://singularity-hpc.readthedocs.io/) to reduce duplication and maintenance burden.
 
-## Reuse and citability of containers
-Currently, there is no good way of describing and citing the individual software containers. We want to increase the reusability and citability of the software containers.
+Related issues:
 
-Some issues in this theme are:
-- https://github.com/neurodesk/neurocontainers/issues/218
-- https://github.com/neurodesk/neurocontainers/issues/217
-- https://github.com/neurodesk/neurocontainers/issues/142
-- https://github.com/neurodesk/neurocommand/issues/212
+- [Use SHPC to manage singularity containers and build module files](https://github.com/neurodesk/transparent-singularity/issues/7)
+- [Make the module system more flexible](https://github.com/neurodesk/neurocommand/issues/152)
+- [Sign commits and containers we build](https://github.com/neurodesk/neurocontainers/issues/504)
 
+### Reuse and citability of containers
 
-# Improving user experience
-## Improving documentation
-We would love to have more tutorials and examples that help people perform Neuroimaging analyses in Neurodesk. When we developed our current documentation system (https://neurodesk.org/edu/), we wanted to develop an interactive documentation system that ensures that examples always work correctly because they are automatically tested. We have a first proof-of-concept that runs jupyter notebooks and converts them to a website: https://neurodesk.org/edu - but currently errors are not flagged automatically and it needs manual checking.
+There is currently no good way to describe and cite individual software containers. We want to increase the reusability and citability of Neurodesk containers through better metadata and tooling.
 
-Some issues in this theme are:
-- https://github.com/neurodesk/neurodesk.github.io/issues/54
-- https://github.com/neurodesk/neurodesk.github.io/issues/373
-- https://github.com/neurodesk/neurodesk.github.io/issues/37
+Related issues:
 
-## Facilitating the use of Neurodesk in teaching and workshops
-Neurodesk is a great fit for teaching Neuroimaging methods. Currently, however, it's not easy to run a custom Neurodesk instance for a larger group. We would like to make it easier for users to deploy Neurodesk for classes and workshops with a shared data storage location and we would love to support advanced features for cost saving (e.g. autoscaling, support of ARM processors) on various cloud providers (e.g. Google Cloud, Amazon, Azure, OpenStack, OpenShift). 
+- [Metadata and a database for all containers](https://github.com/neurodesk/neurocontainers/issues/218)
+- [Boutiques descriptors for containers](https://github.com/neurodesk/neurocontainers/issues/217)
 
+---
 
+## Improving user experience
 
-# Support of advanced workflows
-## Deeper Integration of containers and jupyter notebook system
-We want to integrate the software containers deeper into the jupyter notebook system. Ideally, it is possible to use a jupyter kernel from within a software container.
+### Documentation and tutorials
 
-Some issues in this theme are:
-- https://github.com/neurodesk/neurocommand/issues/175
+The [education platform](https://neurodesk.org/edu/) hosts both static tutorials and interactive notebooks, with an integrated review system to help maintain tutorial quality. We want to continue expanding coverage of neuroimaging workflows and improve automated testing of tutorial content.
 
+### Teaching and workshops
 
-## Support of scheduling workflows
-Currently, all Neurodesk work is entirely interactive. We want to add a way of scheduling workflows and jobs so that larger computations can be managed efficiently.
+Neurodesk is a great fit for teaching neuroimaging methods, but it's not yet easy to run a custom instance for a larger group. We want to make it simpler to deploy Neurodesk for classes and workshops with shared data storage, autoscaling, ARM processor support, and multi-cloud compatibility (Google Cloud, AWS, Azure, OpenStack, OpenShift).
 
-Some issues in this theme are:
-- https://github.com/neurodesk/neurodesktop/issues/97
+---
+
+## Expanding platform capabilities
+
+### Container and application improvements
+
+We are actively working on expanding the container ecosystem, including logging, labelling, and porting existing containers to ARM architecture.
+
+Current work in progress:
+
+- [Logging of container runs](https://github.com/neurodesk/neurodesktop/issues/336)
+- [Container labelling](https://github.com/neurodesk/neurodesktop/issues/347)
+- [Port existing containers to ARM](https://github.com/neurodesk/neurocontainers/issues/1252)
+
+### Migration to Jupyter Book v2
+
+We are migrating to Jupyter Book v2, along with UI improvements for the learning experience.
+
+Current work in progress:
+
+- [Update to Jupyter Book v2](https://github.com/neurodesk/neurodeskedu/issues/10)
+- [Adding home button to Jupyter 2](https://github.com/neurodesk/neurodeskedu/issues/25)
+- [Dropdown launcher for play servers](https://github.com/neurodesk/neurodeskedu/issues/26)
+
+### Desktop environment and app improvements
+
+We are working on improving the desktop environment and the Neurodesk application experience.
+
+Current work in progress:
+
+- [Use LXQt for desktop](https://github.com/neurodesk/neurodesktop/issues/320)
+- [Getting started notebook as startup page](https://github.com/neurodesk/neurodesktop/issues/319)
+- [Safari copy/paste fix](https://github.com/neurodesk/neurodesktop/issues/101)
+
+---
+
+## Get involved
+
+Check the [project board](https://github.com/orgs/neurodesk/projects/9/views/4) for the full list of open tasks, or see our [contribution guide](/overview/contribute/) to get started.
