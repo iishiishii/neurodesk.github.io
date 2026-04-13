@@ -16,11 +16,13 @@ description: >
 ## Drag and Drop
 
 ### Uploading files
+
 You can drag-and-drop files into the browser window to get files into Neurodesktop. This will then start a file upload:
 
 ![{538BB51E-0FEB-46EA-B1B8-FDF122776735}](https://user-images.githubusercontent.com/4021595/160577507-b5159bae-13c0-4fbf-85da-0ce55fd481f3.png)
 
 ### Downloading files
+
 To download files from the desktop using the same mechanism you will need to open the guacamole settings by pressing CTRL-ALT-SHIFT (Control-Command-Shift on Mac). This will open a menu on the side:
 
 ![{A12EDB8A-3D01-4524-A7B5-24E5E94FB418}](https://user-images.githubusercontent.com/4021595/160577828-0f8ba04e-aed7-4c26-a8d2-baf6c4be317a.png)
@@ -43,9 +45,11 @@ zip files.zip files/
 ```
 
 ## Local storage
+
 If you are running Neurodesktop on your own hardware there will be a direct connection between the "Storage" folder on the Desktop, which is a link between "/neurodesktop-storage" in neurodesktop and the "neurodesktop-storage" folder on your C-drive (Windows) or home directory (Mac/Linux). This connection can be used for data processing and data transfer.
 
 ### Mounting external storage on your host-computer
+
 The -v C:/neurodesktop-storage:/neurodesktop-storage part of the docker command links the directory "neurodesktop-storage" on the “C drive” of your Windows computer to the directory /neurodesktop-storage inside the Desktop environment. Everything you store in there will be available inside the desktop and on the host computer. You can also mount additional directories by adding another -v parameter set (e.g. -v D:/moredata:/data) - this will mount the directory moredata from your D drive to /data inside neurodesktop. Important: the mountpoint inside neurodesktop needs to be named /data, otherwise the applications will not see the files without modifying the SINGULARITY_BINDPATH variable in your .bashrc.
 
 If you are using the NeurodeskApp, you can set an additional storage location through the [settings](https://neurodesk.org/docs/getting-started/neurodesktop/neurodeskapp/#add-a-custom-data-directory)
