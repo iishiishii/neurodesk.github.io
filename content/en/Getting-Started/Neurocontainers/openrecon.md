@@ -195,6 +195,15 @@ Turn the license off by commenting it out. Add `#` in front of the relevant line
 Restart the whole system. Restarting the workspace is not enough.
 
 ### Cleaning up package on the scanner
+
 After installing a few different versions the container library can get full.
 
 Download the tool "wip_OpenRecon_PackageRemover_Tool.exe" from the Siemens magnetom.net forum. Make sure to follow the installation instructions. Then run `wip_OpenRecon_PackageRemover_Tool.exe -p` to cleanup old versions.
+
+For the deletion to work (and for the tool to see your OpenRecon package), the package needs to be labeled as Research - it will not touch OpenRecon tools labels as Product.
+
+so check, that you have this in your OpenReconLabel.json file:
+
+```json
+    "content_qualification_type": "RESEARCH"
+```
