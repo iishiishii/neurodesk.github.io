@@ -193,3 +193,8 @@ Activating this license takes memory away from the main ICE recon system, so nor
 Turn the license off by commenting it out. Add `#` in front of the relevant lines in `C:\Program Files\Siemens\Numaris\bin\Common\Licensing\license.dat`.
 
 Restart the whole system. Restarting the workspace is not enough.
+
+### Cleaning up package on the scanner
+After installing a few different versions the container library can get full.
+
+Download the tool "wip_OpenRecon_PackageRemover_Tool.exe" from the Siemens magnetom.net forum. Make sure to follow the installation instructions. Then run `wip_OpenRecon_PackageRemover_Tool.exe -p` to cleanup old versions.
