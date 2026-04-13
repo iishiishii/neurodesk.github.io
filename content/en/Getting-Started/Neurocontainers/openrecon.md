@@ -10,7 +10,7 @@ description: >
 
 {{< toc >}}
 
-# Building an OpenRecon Container
+## Building an OpenRecon Container
 
 These instructions were tested on GitHub Codespaces, and we recommend Codespaces as a starting point.
 
@@ -137,7 +137,7 @@ You need a public GitHub account so the container can be submitted to the public
 12. To build a container ready for the scanner, first open a pull request. For example: `Add projectname container for OpenRecon MRD server`. In the pull request description, include the `neurodocker.yaml` build instructions, the customized MRD Python scripts, and the Codespaces testing notes.
 13. The second step is to write a recipe for [`neurodesk/openrecon`](https://github.com/neurodesk/openrecon). Because it is a separate repository, fork it, navigate to `recipes`, create a folder for your project, and add `OpenReconLabel.json` and `params.sh` with the version number. `OpenReconLabel.json` defines how the container description and UI options appear on the scanner. Then open a pull request. Updating the version number will trigger the container to be rebuilt, and instructions for downloading and installing the container will appear as an issue in that repository.
 
-## Tips, tricks, and troubleshooting OpenRecon
+## Tips, tricks, and troubleshooting for OpenRecon
 
 ### Installing and testing a new OpenRecon package
 
