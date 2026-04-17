@@ -36,17 +36,17 @@ For all environments, we recommend keeping a copy of important data in an extern
 
 You can drag-and-drop files into the browser window to get files into the Neurodesktop desktop. This will then start a file upload:
 
-![Neurodesktop desktop showing files being uploaded via drag-and-drop, with the File Transfers panel visible in the bottom-right corner](/docs/getting-started/neurodesktop/datastorage/drag-drop.png)
+![Neurodesktop desktop showing files being uploaded via drag-and-drop, with the File Transfers panel visible in the bottom-right corner](static/docs/getting-started/neurodesktop/datastorage/drag-drop.png)
 
 **Downloading files**
 
 To download files from the desktop you will need to open the Guacamole settings by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd> (<kbd>Control</kbd>+<kbd>Command</kbd>+<kbd>Shift</kbd> on Mac). This will open a menu on the side:
 
-![Guacamole side menu opened with CTRL-ALT-SHIFT, showing connection settings and the Shared Drive option](/docs/getting-started/neurodesktop/datastorage/guacamole-settings.png)
+![Guacamole side menu opened with CTRL-ALT-SHIFT, showing connection settings and the Shared Drive option](static/docs/getting-started/neurodesktop/datastorage/guacamole-settings.png)
 
 where you can click on "Shared Drive":
 
-![Guacamole Shared Drive panel listing files available for download](/docs/getting-started/neurodesktop/datastorage/guacamole-upload.png)
+![Guacamole Shared Drive panel listing files available for download](static/docs/getting-started/neurodesktop/datastorage/guacamole-upload.png)
 
 A click (or double click on Mac) on the file will start the download.
 
@@ -67,13 +67,13 @@ zip files.zip files/
 
 You can drag-and-drop files directly into the JupyterLab file browser panel on the left side. Alternatively, click the upload button (upward arrow icon) at the top of the file browser to select files from your computer.
 
-![JupyterLab interface with an arrow highlighting the upload button in the file browser toolbar](/docs/getting-started/neurodesktop/datastorage/jupyter-upload.png)
+![JupyterLab interface with an arrow highlighting the upload button in the file browser toolbar](static/docs/getting-started/neurodesktop/datastorage/jupyter-upload.png)
 
 **Downloading files**
 
 To download a file, right-click on it in the JupyterLab file browser and select "Download".
 
-![JupyterLab file browser showing the right-click context menu with the Download option](/docs/getting-started/neurodesktop/datastorage/jupyter-download.png)
+![JupyterLab file browser showing the right-click context menu with the Download option](static/docs/getting-started/neurodesktop/datastorage/jupyter-download.png)
 
 {{% /tab %}}
 {{< /tabpane >}}
@@ -170,7 +170,7 @@ and then add the paths required and hit Save:
 
 Then you can go to the [Globus file manager](https://app.globus.org/file-manager) and your Neurodesktop instance will be an endpoint for Globus. You can change the path to any location you specified in the Preferences:
 
-<img width="2847" alt="Globus file manager web interface showing the Neurodesktop endpoint and its file listing" src="https://github.com/neurodesk/neurodesk.github.io/assets/4021595/35dcfc7a-2975-4fcc-8c49-dbe9c43b6433">
+<img width="1000" alt="Globus file manager web interface showing the Neurodesktop endpoint and its file listing" src="https://github.com/neurodesk/neurodesk.github.io/assets/4021595/35dcfc7a-2975-4fcc-8c49-dbe9c43b6433">
 
 #### Mount volume using SSHFS
 It is theoretically possible to mount an SSH target inside Neurodesktop, but it's not a very reliable way of mounting storage:
