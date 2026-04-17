@@ -133,6 +133,86 @@ runPingTest();
 We provide several methods to transfer your files in and out of Neurodesk Play, including drag-and-drop and cloud storage integration. 
 [View Data Transfer Documentation &rarr;](/docs/neurodesktop/storage)
 
+## SSH connection
+It is possible to connect to Play instances using SSH, including from VS Code Remote SSH. Neurodesk Play uses [`jupyter-sshd-proxy`](https://pypi.org/project/jupyter-sshd-proxy/) to proxy SSH over the authenticated JupyterHub connection.
+
+### 1. Install `websocat` on your local computer
+
+The SSH client connects through a WebSocket proxy, so `websocat` must be available on the computer where you run `ssh`.
+
+On macOS:
+
+```bash
+brew install websocat
+```
+
+For Linux and Windows, install `websocat` from your package manager or download a binary from the [websocat releases](https://github.com/vi/websocat/releases).
+
+### 2. Start your Neurodesk Play session
+
+Launch one of the Play servers above and wait until JupyterLab has started. Keep this browser session running while you use SSH.
+
+You will need three values:
+
+- **Play domain:** for example `play-america.neurodesk.org`, `play-europe.neurodesk.org`, or `play.neurodesk.cloud.edu.au`.
+- **JupyterHub username:** copy this from the browser URL. In a URL like `https://play-america.neurodesk.org/user/myname/lab`, the username is `myname`. If the URL contains encoded characters such as `%40`, use the URL value exactly as shown.
+
+### 3. Create a JupyterHub token
+
+In JupyterLab, open **File > Hub Control Panel**, then select **Token** and create a new token. 
+
+Treat this token like a password to your play instance. Set an expiry date for best practice and not the expiry date in your calendar.
+
+### 4. Add your SSH public key inside Play
+
+Open a terminal in JupyterLab and add the public key that matches the private key on your local computer. If your public keys are available from GitHub, you can use:
+
+```bash
+mkdir -p ~/.ssh
+wget https://github.com/<YOUR-GITHUB-USERNAME>.keys -O ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Replace `<YOUR-GITHUB-USERNAME>` with your GitHub username.
+
+### 5. Configure SSH on your local computer
+
+Add an entry like this to `~/.ssh/config` on your local computer:
+
+```sshconfig
+Host neurodesk-play
+    HostName <PLAY-DOMAIN>
+    User jovyan
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    ProxyCommand websocat --binary -H="Authorization: token <JUPYTERHUB-TOKEN>" asyncstdio: wss://%h/user/<JUPYTERHUB-USERNAME>/sshd/
+```
+
+Replace:
+
+- `<PLAY-DOMAIN>` with the server you are using, for example `play-america.neurodesk.org`.
+- `<JUPYTERHUB-TOKEN>` with the token you created.
+- `<JUPYTERHUB-USERNAME>` with the username from your JupyterHub URL.
+- `~/.ssh/id_ed25519` with the private key that matches the public key you added to `authorized_keys`.
+
+### 6. Connect
+
+From your local terminal:
+
+```bash
+ssh neurodesk-play
+```
+
+You can use the same SSH host in VS Code Remote SSH by connecting to `neurodesk-play`.
+
+You can also copy files with `scp` or `sftp`, for example:
+
+```bash
+scp local-file.txt neurodesk-play:~/
+sftp neurodesk-play
+```
+
 ## Usage Acknowledgments
 
 When using these services for research, please include the appropriate acknowledgment:
@@ -145,4 +225,3 @@ When using these services for research, please include the appropriate acknowled
 
 **🇦🇺 Australia (ARDC / Nectar)**
 > "This research was supported by use of the Nectar Research Cloud, a collaborative Australian research platform supported by the NCRIS-funded Australian Research Data Commons (ARDC)."
-

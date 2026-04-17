@@ -45,7 +45,7 @@ Make it easier for others to use Neurodesk by sharing reproducible analysis pipe
 
 Support our mission to make neuroimaging tools more accessible and reproducible. Every contribution helps sustain open infrastructure. Donations go towards paying for our cloud services and organising workshops.
 
-- [Donate here](https://donations.uq.edu.au/EAINNEUR)
+- [Donate here](/overview/donate/)
 
 ---
 
@@ -70,4 +70,3 @@ Get to know the contributors powering Neurodesk.
 Want to help shape what’s next for Neurodesk?
 
 - [See our Roadmap](/developers/architecture/roadmap/)
-

@@ -35,10 +35,11 @@ module use $GROUP_HOME/modules
 export APPTAINER_BINDPATH=/scratch,/tmp
 ```
 
-You can also add these to your ~/.bashrc:
+You can also add these to your ~/.bash_profile:
 ```bash
-echo "module use $GROUP_HOME/modules/" >> ~/.bashrc
-echo "export APPTAINER_BINDPATH=/scratch,/tmp" >> ~/.bashrc
+echo "module use $GROUP_HOME/modules/" >> ~/.bash_profile
+echo "export APPTAINER_BINDPATH=/scratch,/tmp,/oak" >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
 Now you can list all modules (Neurodesk modules are the first ones in the list):
@@ -82,11 +83,7 @@ then submit:
 sbatch submit.sbatch
 ```
 
-to size jobs you can use ruse https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#sizing-a-job
-```bash
-module load system ruse
-ruse ./myapp
-```
+
 
 or parallize across subjects:
 ```bash
@@ -97,6 +94,22 @@ done
 ```
 
 if you need lots of jobs, consider using array jobs: https://www.sherlock.stanford.edu/docs/advanced-topics/job-management/?h=array+jobs
+
+e.g.:
+```bash
+#!/bin/bash
+#SBATCH --job-name=test
+#SBATCH --time=01:00:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
+#SBATCH -p normal
+#SBATCH --array=1-10
+
+touch test_${SLURM_ARRAY_TASK_ID}
+```
 
 starting a matlab job:
 ```bash
@@ -136,6 +149,11 @@ scancel --name=my_job_name
 ```
 more details https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#example-sbatch-script
 
+to find out how much resources you need to request for jobs you can use the tool ruse https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/#sizing-a-job
+```bash
+module load system ruse
+ruse ./myapp
+```
 
 ### Using GUI applications
 First you need to connect to Sherlock with SSH forwarding (e.g. from a Linux machine or from your local neurodesk or from a mac with https://www.xquartz.org/ installed, or from windows using Mobaxterm)
@@ -161,7 +179,22 @@ bash runme_gpu.sh
 ```
 
 
+## Storage on Sherlock
+here is a great overview of where to store files on Sherlock: https://www.sherlock.stanford.edu/docs/storage/
 
+TLDR:
+- important scripts in $HOME (15GB)
+- important scripts and software you want to share with your group in $GROUP_HOME (1TB)
+- temporary data (deleted after 90days) goes in $SCRATCH (100TB)
+- temporary data (deleted after 90days) to share with your group in $GROUP_SCRATCH (100TB)
+- temporary job data (deleted after job ends) in $L_SCRATCH (a few TB)
+- data to keep for a few years in $OAK (what you pay for, e.g. 20TB)
+- data to archive in ELM (you pay what you store there)
+
+use `sh_quota` to check how much is available:
+```bash
+sh_quota
+```
 
 ## Using Neurodesk on Sherlock via Ondemand
 <!-- markdown-link-check-disable -->
@@ -213,7 +246,6 @@ nv
 The install of `pip install jupyterlab_slurm` added a plugin that allows monitoring slurm jobs.
 
 
-
 ## Using Neurodesk via a full neurodesktop session
 This is an ideal setup for visualizing results on Sherlock and for running GUI applications. You need to run these commands on your computer (e.g. MacOS/Linux/Windows WSL2):
 
@@ -226,22 +258,10 @@ curl -J -O https://raw.githubusercontent.com/neurodesk/neurodesk.github.io/refs/
 ```
 bash connectSherlock.sh
 ```
+After startup, open the printed URL `http://127.0.0.1:<random_port>?token=<token>` in your browser.
 
-## Alternative to running connectSherlock.sh: start neurodesktop manually when already inside a job on sherlock
-```bash
-apptainer run \
-   --fakeroot \
-   --nv \
-   --overlay $SCRATCH/neurodesktop-overlay.img \
-   --bind $GROUP_HOME/neurodesk/local/containers/:/neurodesktop-storage/containers \
-   --no-home \
-   --env CVMFS_DISABLE=true \
-   --env NB_UID=$(id -u) \
-   --env NB_GID=$(id -g) \
-   --env NEURODESKTOP_VERSION=latest \
-   $GROUP_HOME/neurodesk/neurodesktop-neurodesktop_latest.sif \
-   start-notebook.py --allow-root
-```
+You can submit `sbatch` jobs from inside this full Neurodesktop session, but make sure that the sbatch job file is stored in a location that's identical between Neurodesktop and the sherlock cluster, so for example /oak/... - important: Do not submit batch jobs from within the jovyan homedirectory /home/jovyan as this will not be accessible to slurm on the cluster under that path.
+
 
 ## connecting with VScode
 VScode server does not work on he login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container. However, it is possible to run vscode server through ondemand:
@@ -259,14 +279,16 @@ and for checking on slurm jobs in vscode:
 - slurm--
 
 and for matlab scripts:
-- MATLAB Extension for Windsurf
--- path is: /share/software/user/restricted/matlab/R2022b/
+- MATLAB Extension: Download it in a terminal in vscode and then install it through the vscode extension manager:
+```
+wget https://github.com/mathworks/MATLAB-extension-for-vscode/releases/download/v1.3.8/language-matlab-1.3.8.vsix"
+```
 
 useful shortcuts:
 - you can execute a line from your scripts on the terminal via setting a keyboard shortcut to "Terminal: Run Selected Text in Active Terminal" - that makes testing scripts and debugging them quite quick
 
 ## connecting with Cursor
-Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container.
+Cursor does not work on the login nodes due to resource restrictions. It might be possible to run it inside a compute job and inside a container, but I didn't get that to work yet.
 
 
 ## using coding agents on sherlock
@@ -298,6 +320,11 @@ Crush CLI — an all-around CLI assistant from the Charmbracelet Go-based “eco
 ```
 ml crush
 crush
+```
+
+For best neurodesk integration make sure to download Neurodesk's AGENT.md file and place it in working directory:
+```
+wget https://raw.githubusercontent.com/neurodesk/neurodesktop/refs/heads/main/config/agents/AGENTS.md
 ```
 
 ## Misc
@@ -364,13 +391,19 @@ brew install fuse-t-sshfs
 then mount for macos:
 ```bash
 mkdir ~/sherlock_scratch
-sshfs sciget@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
+sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
+
+mkdir ~/sherlock_oak
+sshfs <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/ ~/sherlock_oak -o subtype=fuse-t
 ```
 
 on linux:
 ```bash
 mkdir ~/sherlock_scratch
 sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch
+
+mkdir ~/sherlock_oak
+sshfs <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/ ~/sherlock_oak
 ```
 
 ### Transfer files using datalad
@@ -390,6 +423,19 @@ scp foo <sunetid>@dtn.sherlock.stanford.edu:
 scp -r <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
 ```
 
+### Transfer files via rsync
+``` 
+# this will transfer a files from your computer to your scratch space
+rsync -avP foo <sunetid>@dtn.sherlock.stanford.edu:
+
+# or to oak:
+rsync -avP foo <sunetid>@dtn.sherlock.stanford.edu:/oak/stanford/groups/<your_group_here>/
+
+
+# this will transfer a directory from sherlock to your computer:
+rsync -avP <sunetid>@dtn.sherlock.stanford.edu:/scratch/groups/<your_group_here>/<your_directory_here> .
+```
+
 ## Managing Neurodesk on Sherlock
 ### Installing Neurodesk for a lab
 This is already done and doesn't need to be run again!
@@ -397,6 +443,9 @@ This is already done and doesn't need to be run again!
 cd $GROUP_HOME/
 git clone https://github.com/neurodesk/neurocommand.git neurodesk
 cd neurodesk 
+git config core.sharedRepository group
+chmod -R g+rwX .
+find . -type d -exec chmod g+s {} +
 pip3 install -r neurodesk/requirements.txt --user 
 bash build.sh --cli
 bash containers.sh
@@ -404,8 +453,10 @@ export APPTAINER_BINDPATH=`pwd -P`
 ```
 
 ### Installing additional containers
-Everyone has write permissions and can download and install new containers.
+Check that you have write permissions and can download and install new containers and then run:
 ```bash
+ssh sherlock
+sh_dev
 cd $GROUP_HOME/neurodesk
 git pull
 bash build.sh
@@ -415,42 +466,10 @@ bash containers.sh freesurfer
 # then install the choosen version by copy and pasting the specific command install command displayed
 ```
 
-If a new container was installed from Neurodesktop, the paths will need to be adjusted to work outside of Neurodesktop for the rest of sherlock:
-```bash
-sh_dev
-#First, test if that happened:
-cd $GROUP_HOME/neurodesk/local/containers/
-find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
-cd $GROUP_HOME/neurodesk/local/containers/modules
-find . -maxdepth 2 -type f -exec grep -l '/home/jovyan/' {} \; 2>/dev/null
-
-
-
-#Then fix for modules:
-cd $GROUP_HOME/neurodesk/local/containers/modules
-find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
-
-#Then fix for containers:
-cd $GROUP_HOME/neurodesk/local/containers
-find . -maxdepth 2 -type f -exec sh -c 'if grep -q "/home/jovyan/neurodesktop-storage/containers/" "$1"; then sed -i "s|/home/jovyan/neurodesktop-storage/containers/|${GROUP_HOME}/neurodesk/local/containers/|g" "$1" && echo "Updated: $1"; fi' sh {} \;
-```
 
 ### Updating Neurodesktop image
+make sure to set the new versio before submitting:
 ```bash
 ssh sherlock
-sh_dev -m 32 -p normal -c 4
-export VERSION="2026-01-30"
-cd ${GROUP_HOME}/neurodesk
-export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp
-mkdir -p $APPTAINER_TMPDIR
-apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}
-rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif
-ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif 
+sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-04-15"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
-
-Or submit the update as a single Slurm job:
-```bash
-sbatch -p normal -c 4 --mem=32G --job-name=neurodesktop-update --wrap 'export VERSION="2026-01-30"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
-```
-
-
