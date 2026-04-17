@@ -382,13 +382,22 @@ vi ~/.config/rclone/rclone.conf
 ```
 
 ### mounting sherlock files on your computer through sshfs
-install sshfs for your operating system, e.g. on MacOS:
+
+ensure you got brew installed, if not install via:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
+
+install sshfs for your operating system, e.g. on MacOS:
+
+```bash
 brew tap macos-fuse-t/homebrew-cask
 brew install fuse-t-sshfs
 ```
 
 then mount for macos:
+
 ```bash
 mkdir ~/sherlock_scratch
 sshfs <sunetid>@dtn.sherlock.stanford.edu:./ ~/sherlock_scratch -o subtype=fuse-t
