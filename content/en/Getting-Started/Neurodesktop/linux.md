@@ -64,6 +64,8 @@ sudo docker run \
   --shm-size=1gb -it --security-opt apparmor=neurodeskapp --privileged --user=root --name neurodesktop \
   -v ~/neurodesktop-storage:/neurodesktop-storage \
   --mount source=neurodesk-home,target=/home/jovyan \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_HOST="http://host.docker.internal:11434" \
   -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
   -p 8888:8888 \
   -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
@@ -76,6 +78,8 @@ sudo docker run \
   --shm-size=1gb -it --security-opt apparmor=neurodeskapp --privileged --user=root --name neurodesktop \
   -v ~/neurodesktop-storage:/neurodesktop-storage \
   --mount source=neurodesk-home,target=/home/jovyan \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_HOST="http://host.docker.internal:11434" \
   -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
   -p 8888:8888 \
   -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} ghcr.io/neurodesk/neurodesktop/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
@@ -131,6 +135,8 @@ sudo docker run \
   --dns 8.8.8.8 \
   -v ~/neurodesktop-storage:/neurodesktop-storage \
   --mount source=neurodesk-home,target=/home/jovyan \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_HOST="http://host.docker.internal:11434" \
   -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
   -p 8888:8888 \
   -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
