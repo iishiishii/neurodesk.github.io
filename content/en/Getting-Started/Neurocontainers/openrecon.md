@@ -157,6 +157,78 @@ Once the log file is written, you can open a protocol and check whether the pack
 
 Run the sequence with OpenRecon enabled and check for errors in the log viewer at `C:\ProgramData\Siemens\Numaris\log\OpenRecon.utr`.
 
+### Choice parameters need a non-empty default
+
+If a `choice` parameter in `OpenReconLabel.json` has an empty default value, the OpenRecon package validates OK and can still install successfully, but the tool will not be selectable in the sequence tab (it shows in the list, but when clicking on it nothing happens).
+
+For example, this can fail because `"default": ""` does not match any entry in `values`:
+
+```json
+{
+  "id": "metricsregion",
+  "label": { "en": "Metrics Region" },
+  "type": "choice",
+  "values": [
+    {
+      "id": "wholebody",
+      "name": { "en": "wholebody" }
+    },
+    {
+      "id": "abdomen",
+      "name": { "en": "abdomen" }
+    },
+    {
+      "id": "pelvis",
+      "name": { "en": "pelvis" }
+    },
+    {
+      "id": "thigh",
+      "name": { "en": "thigh" }
+    },
+    {
+      "id": "leg",
+      "name": { "en": "leg" }
+    }
+  ],
+  "default": "",
+  "information": { "en": "Region passed to MuscleMap metrics" }
+}
+```
+
+Set the default to one of the available `values` IDs instead:
+
+```json
+{
+  "id": "metricsregion",
+  "label": { "en": "Metrics Region" },
+  "type": "choice",
+  "values": [
+    {
+      "id": "wholebody",
+      "name": { "en": "wholebody" }
+    },
+    {
+      "id": "abdomen",
+      "name": { "en": "abdomen" }
+    },
+    {
+      "id": "pelvis",
+      "name": { "en": "pelvis" }
+    },
+    {
+      "id": "thigh",
+      "name": { "en": "thigh" }
+    },
+    {
+      "id": "leg",
+      "name": { "en": "leg" }
+    }
+  ],
+  "default": "wholebody",
+  "information": { "en": "Region passed to MuscleMap metrics" }
+}
+```
+
 ### Do not use Prio Recon with OpenRecon
 
 This option has to be disabled in an OpenRecon sequence:
