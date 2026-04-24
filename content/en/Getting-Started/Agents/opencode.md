@@ -26,18 +26,13 @@ You can also self-host a model in Ollama on your computer (recommended hardware:
 One example model:
 
 ```bash
-ollama pull devstral
+ollama pull qwen3.6:35b-a3b-coding-mxfp8
 ```
 
-We need to extend the context window to make it usable for coding:
+Qwen3.6 supports a 256k context window, but Ollama may allocate a smaller runtime context depending on your available memory. For coding agents, set the Ollama context length in the Ollama app settings, or start Ollama with a larger context length:
 
 ```bash
-echo "FROM devstral:latest
-PARAMETER num_ctx 32768" > Modelfile
-
-ollama create devstral-32k -f Modelfile
-
-rm Modelfile
+OLLAMA_CONTEXT_LENGTH=64000 ollama serve
 ```
 
 Then switch the model to Ollama:
@@ -91,11 +86,8 @@ create an API key at <https://llm.neurodesk.org> and add it to your opencode con
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "devstral-32k": {
-          "name": "Devstral"
-        },
-        "qwen3-16k": {
-          "name": "Qwen3"
+        "qwen3.6:35b-a3b-coding-mxfp8": {
+          "name": "Qwen3.6 35B A3B Coding MXFP8"
         }
       }
     }
