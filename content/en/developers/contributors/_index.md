@@ -269,6 +269,13 @@ We try to update this page based on the git commit history:
 
 - bidscoin
 
+## **Farwa Abbas** - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="25" alt="GitHub logo"> <a href="https://github.com/Farwa-Abbas" target="_blank" rel="noopener noreferrer">Farwa-Abbas</a>
+### Adelaide University, Australia
+
+- Initial container setup for nftsim
+- Testing and validation for nftsim
+- [Institutional profile](https://researchers.adelaide.edu.au/profile/farwa.abbas)
+
 <div style="border-left: 4px solid #4CAF50; background-color: #ffffff; padding: 1em; margin: 1em 0;">
 
 ## Steering Committee members without code contributions:

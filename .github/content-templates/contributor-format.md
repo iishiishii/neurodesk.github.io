@@ -2,6 +2,8 @@
 
 Use this format when adding contributor information to a tool page, release note, or documentation section. This ensures consistent credit across the project.
 
+Do not replace the example text in this template with your personal details. Copy the block below and paste it into the page you are updating, such as `content/en/developers/contributors/_index.md`.
+
 ## Format
 Copy the code below changing:
 - Full Name in --> **Full Name**
