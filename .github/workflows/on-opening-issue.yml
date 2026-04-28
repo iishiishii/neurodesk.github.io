@@ -4,6 +4,9 @@ on:
   issues:
     types: [opened, reopened]
 
+permissions:
+  contents: read
+
 jobs:
   add-issue-to-project:
     uses: neurodesk/neurodesk.github.io/.github/workflows/add-issue-to-project.yml@main
