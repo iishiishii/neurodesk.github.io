@@ -16,7 +16,7 @@ Latest Version
 
 Please consult [this page](https://github.com/neurodesk/neurodesk.github.io/blob/main/.github/content-templates/release-history-template.md) for the template for new releases.
 
-## 2026-04-21
+## 2026-04-28
 ### New Features
 - added slurm
 - added opencode, codex, claude agent apps
