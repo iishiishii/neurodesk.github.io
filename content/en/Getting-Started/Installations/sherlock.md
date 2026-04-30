@@ -208,7 +208,7 @@ TLDR:
 - temporary data (deleted after 90days) goes in $SCRATCH (100TB)
 - temporary data (deleted after 90days) to share with your group in $GROUP_SCRATCH (100TB)
 - temporary job data (deleted after job ends) in $L_SCRATCH (a few TB)
-- data to keep for a few years in $OAK (what you pay for, e.g. 20TB)
+- data to keep for a few years in $OAK (what you pay for, e.g. 20TB) - note: users need to be added to the OAK workgroup: https://workgroup.stanford.edu/ords/regapps/r/wgadmin/inbound?clear=702&p702_wg_id=oak:GROUPNAME
 - data to archive in ELM (you pay what you store there)
 
 use `sh_quota` to check how much is available:
@@ -546,5 +546,5 @@ make sure to set the new versio before submitting:
 
 ```bash
 ssh sherlock
-sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-04-21"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
+sbatch -p normal -c 4 --mem=32G --time=04:00:00 --job-name=neurodesktop-update --wrap 'export VERSION="2026-04-28"; cd ${GROUP_HOME}/neurodesk; export APPTAINER_TMPDIR=$SCRATCH/apptainer_temp; mkdir -p $APPTAINER_TMPDIR; apptainer pull docker://ghcr.io/neurodesk/neurodesktop/neurodesktop:${VERSION}; rm ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif; ln -s ${GROUP_HOME}/neurodesk/neurodesktop_${VERSION}.sif ${GROUP_HOME}/neurodesk/neurodesktop_latest.sif'
 ```
