@@ -157,6 +157,14 @@ Once the log file is written, you can open a protocol and check whether the pack
 
 Run the sequence with OpenRecon enabled and check for errors in the log viewer at `C:\ProgramData\Siemens\Numaris\log\OpenRecon.utr`.
 
+### Sent image values must fit within a 4096-value range
+
+OpenRecon can send a maximum integer range of `4096` values back to the scanner.
+
+If the returned images exceed that range, the values can wrap around instead of clipping. The symptom is that the sent images show repeating integer wraps and can look a bit like phase images.
+
+Scale or clamp derived image data into the scanner-safe range before sending it from the MRD server.
+
 ### Choice parameters need a non-empty default
 
 If a `choice` parameter in `OpenReconLabel.json` has an empty default value, the OpenRecon package validates OK and can still install successfully, but the tool will not be selectable in the sequence tab (it shows in the list, but when clicking on it nothing happens).
