@@ -87,6 +87,32 @@ use sh_part to see which partitions and limits are available:
 sh_part
 ```
 
+### Partition choices for Sherlock owners
+
+Sherlock owners have exclusive access to their own nodes. To submit jobs to those nodes, use the owner's partition:
+
+```bash
+#SBATCH -p <partition_name>
+```
+
+or on the command line:
+
+```bash
+sbatch -p <partition_name> submit.sbatch
+```
+
+The partition name is usually the PI's SUNet ID.
+
+Owners can also submit lower-priority jobs to other owners' nodes with the shared `owners` partition:
+
+```bash
+sbatch -p owners submit.sbatch
+```
+
+Jobs submitted to `-p owners` can run on available owner nodes, but they are preemptible. For example, if ownerA's job is running on ownerB's node through the `owners` partition and ownerB submits a job to their own partition, ownerA's job can be killed so ownerB gets immediate access to their node.
+
+This is useful for less important background jobs that can tolerate interruption. Owners can also continue to use the general pool of nodes, for example with `-p normal`.
+
 then submit:
 
 ```bash
