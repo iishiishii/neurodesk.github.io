@@ -36,17 +36,17 @@ For all environments, we recommend keeping a copy of important data in an extern
 
 You can drag-and-drop files into the browser window to get files into the Neurodesktop desktop. This will then start a file upload:
 
-![Neurodesktop desktop showing files being uploaded via drag-and-drop, with the File Transfers panel visible in the bottom-right corner](static/docs/getting-started/neurodesktop/datastorage/drag-drop.png)
+![Neurodesktop desktop showing files being uploaded via drag-and-drop, with the File Transfers panel visible in the bottom-right corner](/static/docs/getting-started/neurodesktop/datastorage/drag-drop.png)
 
 **Downloading files**
 
 To download files from the desktop you will need to open the Guacamole settings by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd> (<kbd>Control</kbd>+<kbd>Command</kbd>+<kbd>Shift</kbd> on Mac). This will open a menu on the side:
 
-![Guacamole side menu opened with CTRL-ALT-SHIFT, showing connection settings and the Shared Drive option](static/docs/getting-started/neurodesktop/datastorage/guacamole-settings.png)
+![Guacamole side menu opened with CTRL-ALT-SHIFT, showing connection settings and the Shared Drive option](/static/docs/getting-started/neurodesktop/datastorage/guacamole-settings.png)
 
 where you can click on "Shared Drive":
 
-![Guacamole Shared Drive panel listing files available for download](static/docs/getting-started/neurodesktop/datastorage/guacamole-upload.png)
+![Guacamole Shared Drive panel listing files available for download](/static/docs/getting-started/neurodesktop/datastorage/guacamole-upload.png)
 
 A click (or double click on Mac) on the file will start the download.
 
@@ -67,13 +67,13 @@ zip files.zip files/
 
 You can drag-and-drop files directly into the JupyterLab file browser panel on the left side. Alternatively, click the upload button (upward arrow icon) at the top of the file browser to select files from your computer.
 
-![JupyterLab interface with an arrow highlighting the upload button in the file browser toolbar](static/docs/getting-started/neurodesktop/datastorage/jupyter-upload.png)
+![JupyterLab interface with an arrow highlighting the upload button in the file browser toolbar](/static/docs/getting-started/neurodesktop/datastorage/jupyter-upload.png)
 
 **Downloading files**
 
 To download a file, right-click on it in the JupyterLab file browser and select "Download".
 
-![JupyterLab file browser showing the right-click context menu with the Download option](static/docs/getting-started/neurodesktop/datastorage/jupyter-download.png)
+![JupyterLab file browser showing the right-click context menu with the Download option](/static/docs/getting-started/neurodesktop/datastorage/jupyter-download.png)
 
 {{% /tab %}}
 {{< /tabpane >}}
@@ -203,5 +203,4 @@ Then add the following line to the docker run command when starting Neurodesktop
 ```bash
 sshfs -o IdentityFile=~/.ssh/id_rsa,allow_root,ServerAliveInterval=5,ServerAliveCountMax=3 USER@TARGET_HOST:TARGET_PATH/MyData SOURCE_PATH/SSHFS_Mounts/MyData
 ```
-
 
