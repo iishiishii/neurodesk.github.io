@@ -47,10 +47,10 @@
 		<li>	
 			{{ .application }} 
 			{{ range .categories }}
-			<a class="taxonomy-term">{{ . }}</a>
+			<a class="taxonomy-term" href="#" data-category="{{ . }}">{{ . }}</a>
 			{{ end }}
 			{{ if .doi }}
-			<a class="taxonomy-term doi" href={{ .doi_url }}>{{ .doi }}</a>
+			<a class="taxonomy-term doi" href="{{ .doi_url }}" target="_blank" rel="noopener">{{ .doi }}</a>
 			{{ end }}
 		</li>
 		{{ end }}
