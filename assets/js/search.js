@@ -212,6 +212,8 @@
   // const getCountEl = () => document.getElementById(COUNT_ID);
   const getListEl = () => document.getElementById(LIST_ID);
 
+  const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
   const fetchJsonIndex = () => {
     const startTime = performance.now();
     const url = `${window.location.origin}/index.json`;
@@ -223,6 +225,9 @@
         // console.log(list);
         filteredList = data.list;
         logPerformance("fetchJsonIndex", startTime, performance.now());
+        if (getSearchEl().value) {
+          handleSearchEvent();
+        }
       })
       .catch((error) =>
         console.error(`Failed to fetch JSON index: ${error.message}`)
@@ -230,26 +235,20 @@
   };
 
   const filterList = () => {
-    const regexQuery = new RegExp(getSearchEl().value, "ig");
+    const regexQuery = new RegExp(escapeRegExp(getSearchEl().value), "i");
     console.log(regexQuery);
     filteredList = list.filter((item) => {
       const title = item.application;
       const categories = item.categories.join();
       //   console.log(categories);
-      if (!item.doi) {
-        item.doi = "";
-      }
-      if (!item.doi_url) {
-        item.doi_url = "";
-      }
-      const doi = item.doi;
-      const doi_url = item.doi_url;
+      const doi = item.doi || "";
+      const doi_url = item.doi_url || "";
 
       return (
-        title.match(regexQuery) ||
-        categories.match(regexQuery) ||
-        doi.match(regexQuery) ||
-        doi_url.match(regexQuery)
+        regexQuery.test(title) ||
+        regexQuery.test(categories) ||
+        regexQuery.test(doi) ||
+        regexQuery.test(doi_url)
       );
     });
     console.log(filteredList);
@@ -266,6 +265,8 @@
       item.categories.forEach((category) => {
         const tag = document.createElement("a");
         tag.classList.add("taxonomy-term");
+        tag.href = "#";
+        tag.dataset.category = category;
         let cat = document.createTextNode(category);
         tag.appendChild(cat);
         app.appendChild(tag);
@@ -274,6 +275,9 @@
         const doi_tag = document.createElement("a");
         doi_tag.classList.add("taxonomy-term");
         doi_tag.classList.add("doi");
+        doi_tag.href = item.doi_url;
+        doi_tag.target = "_blank";
+        doi_tag.rel = "noopener";
         let doi_node = document.createTextNode(item.doi);
         doi_tag.appendChild(doi_node);
         app.appendChild(doi_tag);
@@ -287,14 +291,32 @@
   };
 
   const handleSearchEvent = () => {
+    if (!list) {
+      return;
+    }
+
     const startTime = performance.now();
     filterList();
     renderList();
     logPerformance("handleSearchEvent", startTime, performance.now());
   };
 
+  const handleCategoryClickEvent = (event) => {
+    const tag = event.target.closest
+      ? event.target.closest(`#${LIST_ID} .taxonomy-term:not(.doi)`)
+      : null;
+    if (!tag || !getSearchEl()) {
+      return;
+    }
+
+    event.preventDefault();
+    getSearchEl().value = tag.dataset.category || tag.textContent.trim();
+    handleSearchEvent();
+  };
+
   const addEventListeners = () => {
     getSearchEl().addEventListener("input", handleSearchEvent);
+    document.addEventListener("click", handleCategoryClickEvent);
   };
 
   const main = () => {
