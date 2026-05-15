@@ -10,13 +10,21 @@ description: >
 
 Neurodesk offers a set of browser-native webapps for protocol comparison, QSM processing, medical image segmentation and many more tasks. They run directly in the browser, so there is no desktop installation step before you can start working.
 
-## Privacy and sensitive data
+Privacy and sensitive data: Files are processed locally in the browser and are NOT uploaded to a server or cloud service. In practice, your data stays on your machine while the app is running, which makes these tools well suited to sensitive patient data workflows.
 
-Files are processed locally in the browser and are NOT uploaded to a server or cloud service. In practice, your data stays on your machine while the app is running, which makes these tools well suited to sensitive patient data workflows.
 
-## Available webapps
+{{< toc >}}
 
-### dicompare
+## CALMaR Co-designed Automated Lesion Mapping and Reporting
+
+<a href="https://calmar.neurodesk.org/" target="_blank" rel="noopener noreferrer">calmar.neurodesk.org</a>
+
+CALMaR performs brain extraction, lesion masking, MNI registration, atlas overlap, functional-connectivity mapping, and reportable tables for stroke lesions.
+
+<img src="https://github.com/user-attachments/assets/2db78ffd-187c-486f-b348-de4986e3ec71" class="img-fluid border rounded shadow-sm" alt="calmar screenshot" loading="lazy">
+
+
+## dicompare
 
 <a href="https://dicompare.neurodesk.org" target="_blank" rel="noopener noreferrer">dicompare.neurodesk.org</a>
 
@@ -24,15 +32,8 @@ dicompare is a browser-based tool for sharing, comparing, and validating DICOM a
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/dicompare.png" >}}" class="img-fluid border rounded shadow-sm" alt="dicompare screenshot" loading="lazy">
 
-### QSMbly
 
-<a href="https://qsmbly.neurodesk.org" target="_blank" rel="noopener noreferrer">qsmbly.neurodesk.org</a>
-
-QSMbly provides a full Quantitative Susceptibility Mapping workflow in the browser. It supports DICOM and NIfTI input data and exposes the main preparation, masking, SWI, and QSM pipeline steps through a guided interface.
-
-<img src="{{< relurl "/static/docs/getting-started/hosted/webapps/qsmbly.png" >}}" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
-
-### MuscleMap
+## MuscleMap
 
 <a href="https://musclemap.neurodesk.org" target="_blank" rel="noopener noreferrer">musclemap.neurodesk.org</a>
 
@@ -40,7 +41,25 @@ MuscleMap performs browser-based muscle segmentation from MRI data. It is design
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/musclemap.png" >}}" class="img-fluid border rounded shadow-sm" alt="MuscleMap screenshot" loading="lazy">
 
-### VesselBoost
+
+## QSMbly
+
+<a href="https://qsmbly.neurodesk.org" target="_blank" rel="noopener noreferrer">qsmbly.neurodesk.org</a>
+
+QSMbly provides a full Quantitative Susceptibility Mapping workflow in the browser. It supports DICOM and NIfTI input data and exposes the main preparation, masking, SWI, and QSM pipeline steps through a guided interface.
+
+<img src="{{< relurl "/static/docs/getting-started/hosted/webapps/qsmbly.png" >}}" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
+
+
+## Spinal Cord Toolbox 
+
+<a href="https://sct.neurodesk.org" target="_blank" rel="noopener noreferrer">sct.neurodesk.org</a>
+
+This is a browser-based implementation of the Spinal Cord Toolbox MRI segmentation workflows.
+
+<img src="https://github.com/user-attachments/assets/496b35d2-fa8b-4e04-a628-21aab752b9d9" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
+
+## VesselBoost
 
 <a href="https://vesselboost.neurodesk.org" target="_blank" rel="noopener noreferrer">vesselboost.neurodesk.org</a>
 
