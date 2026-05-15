@@ -16,6 +16,18 @@ Files are processed locally in the browser and are NOT uploaded to a server or c
 
 ## Available webapps
 
+{{< toc >}}
+
+
+### CALMaR Co-designed Automated Lesion Mapping and Reporting
+
+<a href="https://calmar.neurodesk.org/" target="_blank" rel="noopener noreferrer">calmar.neurodesk.org</a>
+
+CALMaR performs brain extraction, lesion masking, MNI registration, atlas overlap, functional-connectivity mapping, and reportable tables for stroke lesions.
+
+<img src="https://github.com/user-attachments/assets/2db78ffd-187c-486f-b348-de4986e3ec71" class="img-fluid border rounded shadow-sm" alt="calmar screenshot" loading="lazy">
+
+
 ### dicompare
 
 <a href="https://dicompare.neurodesk.org" target="_blank" rel="noopener noreferrer">dicompare.neurodesk.org</a>
@@ -23,6 +35,16 @@ Files are processed locally in the browser and are NOT uploaded to a server or c
 dicompare is a browser-based tool for sharing, comparing, and validating DICOM acquisition protocols. It is useful when teams want to standardize scanner protocols across sites, compare local scans against agreed standards, and generate shareable schemas and compliance reports.
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/dicompare.png" >}}" class="img-fluid border rounded shadow-sm" alt="dicompare screenshot" loading="lazy">
+
+
+### MuscleMap
+
+<a href="https://musclemap.neurodesk.org" target="_blank" rel="noopener noreferrer">musclemap.neurodesk.org</a>
+
+MuscleMap performs browser-based muscle segmentation from MRI data. It is designed for whole-body and regional muscle analysis and provides an interactive viewer for reviewing segmentation outputs.
+
+<img src="{{< relurl "/static/docs/getting-started/hosted/webapps/musclemap.png" >}}" class="img-fluid border rounded shadow-sm" alt="MuscleMap screenshot" loading="lazy">
+
 
 ### QSMbly
 
@@ -32,13 +54,13 @@ QSMbly provides a full Quantitative Susceptibility Mapping workflow in the brows
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/qsmbly.png" >}}" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
 
-### MuscleMap
 
-<a href="https://musclemap.neurodesk.org" target="_blank" rel="noopener noreferrer">musclemap.neurodesk.org</a>
+### Spinal Cord Toolbox 
+<a href="https://sct.neurodesk.org" target="_blank" rel="noopener noreferrer">sct.neurodesk.org</a>
 
-MuscleMap performs browser-based muscle segmentation from MRI data. It is designed for whole-body and regional muscle analysis and provides an interactive viewer for reviewing segmentation outputs.
+This is a browser-based implementation of the Spinal Cord Toolbox MRI segmentation workflows.
 
-<img src="{{< relurl "/static/docs/getting-started/hosted/webapps/musclemap.png" >}}" class="img-fluid border rounded shadow-sm" alt="MuscleMap screenshot" loading="lazy">
+<img src="https://github.com/user-attachments/assets/496b35d2-fa8b-4e04-a628-21aab752b9d9" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
 
 ### VesselBoost
 
