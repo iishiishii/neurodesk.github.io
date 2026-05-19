@@ -175,9 +175,9 @@ squeue --me
 # or to watch it continuesly:
 watch -n 5 "squeue -u $USER"
 # or get more details:
-squeue --me -o "%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m"
+squeue --me -o "%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m %.12b"
 # or create an alias:
-echo 'alias sq="squeue --me -o \"%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m\""' >> ~/.bashrc
+echo 'alias sq="squeue --me -o \"%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %.4C %.10m %.12b\""' >> ~/.bashrc
 ```
 
 cancel jobs:
