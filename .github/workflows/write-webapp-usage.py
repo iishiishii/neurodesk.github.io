@@ -137,6 +137,7 @@ def empty_usage(generated_at: str, period_days: int, unavailable: bool = False) 
         data["apps"].append(
             {
                 **app,
+                "users": 0,
                 "visits": 0,
                 "pageViews": 0,
                 "daily": [],
@@ -169,6 +170,7 @@ def normalize_dimension(value: Any, fallback: str) -> str:
 
 
 def add_metric(bucket: dict[str, Any], visits: int, page_views: int) -> None:
+    bucket["users"] += page_views
     bucket["visits"] += visits
     bucket["pageViews"] += page_views
 
@@ -176,7 +178,7 @@ def add_metric(bucket: dict[str, Any], visits: int, page_views: int) -> None:
 def sorted_metric_rows(rows: dict[str, dict[str, Any]], key_name: str) -> list[dict[str, Any]]:
     return sorted(
         rows.values(),
-        key=lambda row: (-row["visits"], -row["pageViews"], str(row[key_name]).lower()),
+        key=lambda row: (-row.get("users", row["pageViews"]), -row["pageViews"], str(row[key_name]).lower()),
     )
 
 
@@ -185,7 +187,7 @@ def summarize_app(app: dict[str, str], groups: list[dict[str, Any]]) -> dict[str
     countries: dict[str, dict[str, Any]] = {}
     device_types: dict[str, dict[str, Any]] = {}
     browsers: dict[str, dict[str, Any]] = {}
-    totals = {"visits": 0, "pageViews": 0}
+    totals = {"users": 0, "visits": 0, "pageViews": 0}
 
     for group in groups:
         dimensions = group.get("dimensions") or {}
@@ -194,28 +196,45 @@ def summarize_app(app: dict[str, str], groups: list[dict[str, Any]]) -> dict[str
 
         totals["visits"] += visits
         totals["pageViews"] += page_views
+        totals["users"] += page_views
 
         date = normalize_dimension(dimensions.get("date"), "unknown")
         if date != "unknown":
-            add_metric(daily.setdefault(date, {"date": date, "visits": 0, "pageViews": 0}), visits, page_views)
+            daily_bucket = daily.setdefault(
+                date,
+                {"date": date, "users": 0, "visits": 0, "pageViews": 0},
+            )
+            add_metric(daily_bucket, visits, page_views)
 
         country = normalize_dimension(dimensions.get("countryName"), "Unknown")
+        country_bucket = countries.setdefault(
+            country,
+            {"countryName": country, "users": 0, "visits": 0, "pageViews": 0},
+        )
         add_metric(
-            countries.setdefault(country, {"countryName": country, "visits": 0, "pageViews": 0}),
+            country_bucket,
             visits,
             page_views,
         )
 
         device_type = normalize_dimension(dimensions.get("deviceType"), "Unknown")
+        device_type_bucket = device_types.setdefault(
+            device_type,
+            {"deviceType": device_type, "users": 0, "visits": 0, "pageViews": 0},
+        )
         add_metric(
-            device_types.setdefault(device_type, {"deviceType": device_type, "visits": 0, "pageViews": 0}),
+            device_type_bucket,
             visits,
             page_views,
         )
 
         browser = normalize_dimension(dimensions.get("userAgentBrowser"), "Unknown")
+        browser_bucket = browsers.setdefault(
+            browser,
+            {"userAgentBrowser": browser, "users": 0, "visits": 0, "pageViews": 0},
+        )
         add_metric(
-            browsers.setdefault(browser, {"userAgentBrowser": browser, "visits": 0, "pageViews": 0}),
+            browser_bucket,
             visits,
             page_views,
         )

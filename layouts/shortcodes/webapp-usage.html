@@ -63,8 +63,7 @@
     var summary = document.createElement("div");
     summary.className = "webapp-usage__summary";
     summary.append(
-      createMetric("visits", app.visits),
-      createMetric("page views", app.pageViews)
+      createMetric("users", app.users || app.pageViews)
     );
 
     var details = document.createElement("span");
