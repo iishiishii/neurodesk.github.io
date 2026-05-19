@@ -15,7 +15,7 @@ import requests
 
 
 CLOUDFLARE_GRAPHQL_URL = "https://api.cloudflare.com/client/v4/graphql"
-CLOUDFLARE_ACCOUNT_ID = "mail.neurodesk@gmail.com"
+CLOUDFLARE_ACCOUNT_ID_ENV = "CLOUDFLARE_ACCOUNT_ID"
 CLOUDFLARE_TOKEN_ENV = "CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS"
 DEFAULT_PERIOD_DAYS = 30
 GROUP_LIMIT = 10000
@@ -82,7 +82,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--account-id",
-        default=os.environ.get("CLOUDFLARE_ACCOUNT_ID", CLOUDFLARE_ACCOUNT_ID),
+        default=os.environ.get(CLOUDFLARE_ACCOUNT_ID_ENV, ""),
         help="Cloudflare account id passed as the GraphQL accountTag.",
     )
     parser.add_argument(
@@ -269,6 +269,11 @@ def main() -> int:
         write_json(args.output, empty_usage(generated_at, args.period_days, unavailable=True))
         return 0
 
+    account_id = args.account_id.strip()
+    if not account_id:
+        print(f"{CLOUDFLARE_ACCOUNT_ID_ENV} is not set", file=sys.stderr)
+        return 1
+
     end = utc_now()
     start = end - dt.timedelta(days=args.period_days)
     usage = empty_usage(generated_at, args.period_days)
@@ -277,7 +282,7 @@ def main() -> int:
     for app in WEBAPPS:
         groups = query_cloudflare(
             token=token,
-            account_id=args.account_id,
+            account_id=account_id,
             host=app["host"],
             start=isoformat_z(start),
             end=isoformat_z(end),

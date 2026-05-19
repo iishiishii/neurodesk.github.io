@@ -78,6 +78,7 @@ jobs:
 
       - name: Build webapp usage statistics
         env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS: ${{ secrets.CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS }}
         run: |
           python .github/workflows/write-webapp-usage.py
