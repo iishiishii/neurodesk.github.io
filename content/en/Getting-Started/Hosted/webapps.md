@@ -50,6 +50,13 @@ QSMbly provides a full Quantitative Susceptibility Mapping workflow in the brows
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/qsmbly.png" >}}" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
 
+## SeedSeg
+
+<a href="https://seedseg.neurodesk.org/" target="_blank" rel="noopener noreferrer">seedseg.neurodesk.org</a>
+
+SeedSeg performs browser-based segmentation of intraprostatic gold fiducial markers in prostate MRI using a 3D U-Net model. It supports DICOM and NIfTI input data. 
+
+<img src="https://github.com/user-attachments/assets/0cdfe3d6-77e0-483a-a64a-763337bc03b2" class="img-fluid border rounded shadow-sm" alt="SeedSeg screenshot" loading="lazy">
 
 ## Spinal Cord Toolbox 
 
