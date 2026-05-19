@@ -1,11 +1,22 @@
 {
-  "generatedAt": "2026-05-19T18:38:06Z",
+  "generatedAt": "2026-05-19T19:01:34Z",
   "periodDays": 30,
   "apps": [
     {
       "id": "calmar",
       "name": "CALMaR",
       "host": "calmar.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    },
+    {
+      "id": "dicompare",
+      "name": "dicompare",
+      "host": "dicompare.neurodesk.org",
       "visits": 0,
       "pageViews": 0,
       "daily": [],
@@ -25,9 +36,20 @@
       "browsers": []
     },
     {
-      "id": "vesselboost",
-      "name": "VesselBoost",
-      "host": "vesselboost.neurodesk.org",
+      "id": "qsmbly",
+      "name": "QSMbly",
+      "host": "qsmbly.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    },
+    {
+      "id": "seedseg",
+      "name": "SeedSeg",
+      "host": "seedseg.neurodesk.org",
       "visits": 0,
       "pageViews": 0,
       "daily": [],
@@ -39,6 +61,17 @@
       "id": "sct",
       "name": "Spinal Cord Toolbox",
       "host": "sct.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    },
+    {
+      "id": "vesselboost",
+      "name": "VesselBoost",
+      "host": "vesselboost.neurodesk.org",
       "visits": 0,
       "pageViews": 0,
       "daily": [],

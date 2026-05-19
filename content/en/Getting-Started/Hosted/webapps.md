@@ -30,6 +30,8 @@ CALMaR performs brain extraction, lesion masking, MNI registration, atlas overla
 
 <a href="https://dicompare.neurodesk.org" target="_blank" rel="noopener noreferrer">dicompare.neurodesk.org</a>
 
+{{< webapp-usage id="dicompare" >}}
+
 dicompare is a browser-based tool for sharing, comparing, and validating DICOM acquisition protocols. It is useful when teams want to standardize scanner protocols across sites, compare local scans against agreed standards, and generate shareable schemas and compliance reports.
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/dicompare.png" >}}" class="img-fluid border rounded shadow-sm" alt="dicompare screenshot" loading="lazy">
@@ -50,6 +52,8 @@ MuscleMap performs browser-based muscle segmentation from MRI data. It is design
 
 <a href="https://qsmbly.neurodesk.org" target="_blank" rel="noopener noreferrer">qsmbly.neurodesk.org</a>
 
+{{< webapp-usage id="qsmbly" >}}
+
 QSMbly provides a full Quantitative Susceptibility Mapping workflow in the browser. It supports DICOM and NIfTI input data and exposes the main preparation, masking, SWI, and QSM pipeline steps through a guided interface.
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/qsmbly.png" >}}" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">
@@ -57,6 +61,8 @@ QSMbly provides a full Quantitative Susceptibility Mapping workflow in the brows
 ## SeedSeg
 
 <a href="https://seedseg.neurodesk.org/" target="_blank" rel="noopener noreferrer">seedseg.neurodesk.org</a>
+
+{{< webapp-usage id="seedseg" >}}
 
 SeedSeg performs browser-based segmentation of intraprostatic gold fiducial markers in prostate MRI using a 3D U-Net model. It supports DICOM and NIfTI input data. 
 

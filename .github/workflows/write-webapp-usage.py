@@ -27,19 +27,34 @@ WEBAPPS = [
         "host": "calmar.neurodesk.org",
     },
     {
+        "id": "dicompare",
+        "name": "dicompare",
+        "host": "dicompare.neurodesk.org",
+    },
+    {
         "id": "musclemap",
         "name": "MuscleMap",
         "host": "musclemap.neurodesk.org",
     },
     {
-        "id": "vesselboost",
-        "name": "VesselBoost",
-        "host": "vesselboost.neurodesk.org",
+        "id": "qsmbly",
+        "name": "QSMbly",
+        "host": "qsmbly.neurodesk.org",
+    },
+    {
+        "id": "seedseg",
+        "name": "SeedSeg",
+        "host": "seedseg.neurodesk.org",
     },
     {
         "id": "sct",
         "name": "Spinal Cord Toolbox",
         "host": "sct.neurodesk.org",
+    },
+    {
+        "id": "vesselboost",
+        "name": "VesselBoost",
+        "host": "vesselboost.neurodesk.org",
     },
 ]
 
