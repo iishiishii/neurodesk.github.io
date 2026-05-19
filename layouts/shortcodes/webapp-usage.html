@@ -1,0 +1,126 @@
+{{- $appId := .Get "id" | default (.Get 0) -}}
+{{- $usageURL := "static/data/webapp-usage.json" | relURL -}}
+<div class="webapp-usage" data-webapp-usage-id="{{ $appId }}" data-webapp-usage-url="{{ $usageURL }}">
+  <span class="webapp-usage__status">Loading usage statistics...</span>
+</div>
+
+{{- if not (.Page.Scratch.Get "webapp-usage-script-loaded") -}}
+{{- .Page.Scratch.Set "webapp-usage-script-loaded" true -}}
+<script>
+(function () {
+  function formatNumber(value) {
+    return new Intl.NumberFormat().format(Number(value || 0));
+  }
+
+  function formatDate(value) {
+    if (!value) {
+      return "";
+    }
+    var date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC"
+    });
+  }
+
+  function createMetric(label, value) {
+    var metric = document.createElement("span");
+    metric.className = "webapp-usage__metric";
+
+    var number = document.createElement("strong");
+    number.textContent = formatNumber(value);
+
+    var text = document.createElement("span");
+    text.textContent = label;
+
+    metric.append(number, text);
+    return metric;
+  }
+
+  function topLabel(rows, key) {
+    if (!Array.isArray(rows) || rows.length === 0 || !rows[0][key]) {
+      return "";
+    }
+    return rows[0][key];
+  }
+
+  function renderUsage(block, app, data) {
+    block.textContent = "";
+
+    if (!app || data.unavailable) {
+      var unavailable = document.createElement("span");
+      unavailable.className = "webapp-usage__status";
+      unavailable.textContent = "Usage statistics are not available in this build.";
+      block.append(unavailable);
+      return;
+    }
+
+    var summary = document.createElement("div");
+    summary.className = "webapp-usage__summary";
+    summary.append(
+      createMetric("visits", app.visits),
+      createMetric("page views", app.pageViews)
+    );
+
+    var details = document.createElement("span");
+    details.className = "webapp-usage__details";
+    details.textContent = "Last " + (data.periodDays || 30) + " days";
+
+    var topCountry = topLabel(app.countries, "countryName");
+    var topDevice = topLabel(app.deviceTypes, "deviceType");
+    var topBrowser = topLabel(app.browsers, "userAgentBrowser");
+    var segments = [topCountry, topDevice, topBrowser].filter(Boolean);
+    if (segments.length) {
+      details.textContent += " · top segments: " + segments.join(", ");
+    }
+
+    var generatedAt = formatDate(data.generatedAt);
+    if (generatedAt) {
+      details.textContent += " · updated " + generatedAt;
+    }
+
+    block.append(summary, details);
+  }
+
+  function renderAll(data) {
+    var apps = new Map((data.apps || []).map(function (app) {
+      return [app.id, app];
+    }));
+
+    document.querySelectorAll("[data-webapp-usage-id]").forEach(function (block) {
+      renderUsage(block, apps.get(block.dataset.webappUsageId), data);
+    });
+  }
+
+  function renderError() {
+    document.querySelectorAll("[data-webapp-usage-id]").forEach(function (block) {
+      block.textContent = "";
+      var status = document.createElement("span");
+      status.className = "webapp-usage__status";
+      status.textContent = "Usage statistics could not be loaded.";
+      block.append(status);
+    });
+  }
+
+  var firstBlock = document.querySelector("[data-webapp-usage-url]");
+  if (!firstBlock) {
+    return;
+  }
+
+  fetch(firstBlock.dataset.webappUsageUrl, { credentials: "same-origin" })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Usage statistics request failed: " + response.status);
+      }
+      return response.json();
+    })
+    .then(renderAll)
+    .catch(renderError);
+}());
+</script>
+{{- end -}}

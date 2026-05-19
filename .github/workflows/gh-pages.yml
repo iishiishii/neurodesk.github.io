@@ -5,8 +5,8 @@ on:
     branches: ["main"]
   repository_dispatch:
   workflow_dispatch:
-#  schedule: ## Run at 12.am daily to check for broken links automatically
- #   - cron: '0 0 * * *'
+  schedule:
+    - cron: '0 3 * * *'
 
 permissions:
   contents: read
@@ -30,8 +30,8 @@ jobs:
     steps:
       - name: Install Hugo CLI
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          wget -O "${{ runner.temp }}/hugo.deb" "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb" \
+          && sudo dpkg -i "${{ runner.temp }}/hugo.deb"
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v5
 
       - name: Install dependencies
         run: | 
@@ -76,6 +76,21 @@ jobs:
           else
             echo "ZENODO_TOKEN not set — skipping write-app-json.py"
           fi
+
+      - name: Write webapp usage statistics
+        env:
+          CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS: ${{ secrets.CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS }}
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS" ]; then
+            python .github/workflows/write-webapp-usage.py
+          elif [[ "${{ github.repository }}" == "neurodesk/neurodesk.github.io" ]]; then
+            echo "CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS is required for the upstream docs build"
+            exit 1
+          else
+            echo "CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS not set — writing unavailable placeholder for fork build"
+            python .github/workflows/write-webapp-usage.py --allow-missing-token
+          fi
+
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
@@ -112,7 +127,7 @@ jobs:
             # For forks, strip the repo path prefix to get the actual file location
             if [[ "${{ github.repository }}" != "neurodesk/neurodesk.github.io" ]]; then
               # Transform /<owner>.github.io/<repo>/static/... → /static/...
-              FILE_PATH="${p#/${REPO_PATH}}"
+              FILE_PATH="${p#/"${REPO_PATH}"}"
               echo "DEBUG: Checking $p → ${FILE_PATH}"
             else
               FILE_PATH="${p}"

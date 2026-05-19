@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-05-19T17:37:07Z",
+  "periodDays": 30,
+  "apps": [
+    {
+      "id": "calmar",
+      "name": "CALMaR",
+      "host": "calmar.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    },
+    {
+      "id": "musclemap",
+      "name": "MuscleMap",
+      "host": "musclemap.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    },
+    {
+      "id": "vesselboost",
+      "name": "VesselBoost",
+      "host": "vesselboost.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    }
+  ],
+  "unavailable": true
+}

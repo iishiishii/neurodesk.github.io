@@ -19,6 +19,8 @@ Privacy and sensitive data: Files are processed locally in the browser and are N
 
 <a href="https://calmar.neurodesk.org/" target="_blank" rel="noopener noreferrer">calmar.neurodesk.org</a>
 
+{{< webapp-usage id="calmar" >}}
+
 CALMaR performs brain extraction, lesion masking, MNI registration, atlas overlap, functional-connectivity mapping, and reportable tables for stroke lesions.
 
 <img src="https://github.com/user-attachments/assets/2db78ffd-187c-486f-b348-de4986e3ec71" class="img-fluid border rounded shadow-sm" alt="calmar screenshot" loading="lazy">
@@ -36,6 +38,8 @@ dicompare is a browser-based tool for sharing, comparing, and validating DICOM a
 ## MuscleMap
 
 <a href="https://musclemap.neurodesk.org" target="_blank" rel="noopener noreferrer">musclemap.neurodesk.org</a>
+
+{{< webapp-usage id="musclemap" >}}
 
 MuscleMap performs browser-based muscle segmentation from MRI data. It is designed for whole-body and regional muscle analysis and provides an interactive viewer for reviewing segmentation outputs.
 
@@ -69,6 +73,8 @@ This is a browser-based implementation of the Spinal Cord Toolbox MRI segmentati
 ## VesselBoost
 
 <a href="https://vesselboost.neurodesk.org" target="_blank" rel="noopener noreferrer">vesselboost.neurodesk.org</a>
+
+{{< webapp-usage id="vesselboost" >}}
 
 VesselBoost is a browser-based blood vessel segmentation tool. It combines preprocessing and inference steps in a guided workflow so users can segment vessel structures from MRI angiography data directly on their own machine.
 
