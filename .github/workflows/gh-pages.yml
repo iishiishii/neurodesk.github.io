@@ -5,8 +5,8 @@ on:
     branches: ["main"]
   repository_dispatch:
   workflow_dispatch:
-#  schedule: ## Run at 12.am daily to check for broken links automatically
- #   - cron: '0 0 * * *'
+  schedule:
+    - cron: '0 3 * * *'
 
 permissions:
   contents: read
@@ -30,16 +30,16 @@ jobs:
     steps:
       - name: Install Hugo CLI
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          wget -O "${{ runner.temp }}/hugo.deb" "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb" \
+          && sudo dpkg -i "${{ runner.temp }}/hugo.deb"
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.10'
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v6
 
       - name: Install dependencies
         run: | 
@@ -76,6 +76,22 @@ jobs:
           else
             echo "ZENODO_TOKEN not set — skipping write-app-json.py"
           fi
+
+      - name: Write webapp usage statistics
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS: ${{ secrets.CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS }}
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS" ]; then
+            python .github/workflows/write-webapp-usage.py
+          elif [[ "${{ github.repository }}" == "neurodesk/neurodesk.github.io" ]]; then
+            echo "CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS is required for the upstream docs build"
+            exit 1
+          else
+            echo "CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS not set — writing unavailable placeholder for fork build"
+            python .github/workflows/write-webapp-usage.py --allow-missing-token
+          fi
+
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
@@ -112,7 +128,7 @@ jobs:
             # For forks, strip the repo path prefix to get the actual file location
             if [[ "${{ github.repository }}" != "neurodesk/neurodesk.github.io" ]]; then
               # Transform /<owner>.github.io/<repo>/static/... → /static/...
-              FILE_PATH="${p#/${REPO_PATH}}"
+              FILE_PATH="${p#/"${REPO_PATH}"}"
               echo "DEBUG: Checking $p → ${FILE_PATH}"
             else
               FILE_PATH="${p}"
@@ -163,7 +179,7 @@ jobs:
           fi
           
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3.0.1
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
@@ -171,19 +187,55 @@ jobs:
     runs-on: ubuntu-24.04
     needs: build
     steps:
-      - uses: actions/checkout@v4
-      - name: Run linkspector with reviewdog
-        uses: UmbrellaDocs/action-linkspector@v1.3.6  
+      - uses: actions/checkout@v6
+
+      - name: Set up Node.js for Linkspector
+        uses: actions/setup-node@v6
         with:
-          fail_on_error: true
-          reporter: github-pr-check
-          config_file: .linkspector.yml
-          filter_mode: nofilter
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          show_stats: true
-          level: error
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Set up reviewdog
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: v0.21.0
+
+      - name: Run Linkspector with reviewdog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          echo '::group::Installing linkspector'
+          npm install -g @umbrelladocs/linkspector@0.5.2
+          linkspector --version
+          echo '::endgroup::'
+
+          echo '::group::Setting up Chrome Linux sandbox'
+          if [ "$(lsb_release -rs)" = "24.04" ]; then
+            echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+          fi
+          echo '::endgroup::'
+
+          echo '::group::Running linkspector with reviewdog'
+          set +e
+          linkspector check -c .linkspector.yml -j |
+            reviewdog -f=rdjson \
+              -name="Linkspector" \
+              -reporter="github-pr-check" \
+              -filter-mode="nofilter" \
+              -fail-level="any" \
+              -level="error"
+          linkspector_status=$?
+          set -e
+          echo '::endgroup::'
+
+          echo '::group::Running linkspector stats'
+          linkspector check -c .linkspector.yml -s || true
+          echo '::endgroup::'
+
+          exit "$linkspector_status"
 
   deploy:
     environment:
@@ -194,7 +246,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       # - name: Algolia crawler creation and crawl
       #   uses: algolia/algoliasearch-crawler-github-actions@v1.1.9
