@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-19T17:37:07Z",
+  "generatedAt": "2026-05-19T18:38:06Z",
   "periodDays": 30,
   "apps": [
     {
@@ -28,6 +28,17 @@
       "id": "vesselboost",
       "name": "VesselBoost",
       "host": "vesselboost.neurodesk.org",
+      "visits": 0,
+      "pageViews": 0,
+      "daily": [],
+      "countries": [],
+      "deviceTypes": [],
+      "browsers": []
+    },
+    {
+      "id": "sct",
+      "name": "Spinal Cord Toolbox",
+      "host": "sct.neurodesk.org",
       "visits": 0,
       "pageViews": 0,
       "daily": [],

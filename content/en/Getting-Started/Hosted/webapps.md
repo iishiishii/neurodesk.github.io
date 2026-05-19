@@ -66,6 +66,8 @@ SeedSeg performs browser-based segmentation of intraprostatic gold fiducial mark
 
 <a href="https://sct.neurodesk.org" target="_blank" rel="noopener noreferrer">sct.neurodesk.org</a>
 
+{{< webapp-usage id="sct" >}}
+
 This is a browser-based implementation of the Spinal Cord Toolbox MRI segmentation workflows.
 
 <img src="https://github.com/user-attachments/assets/496b35d2-fa8b-4e04-a628-21aab752b9d9" class="img-fluid border rounded shadow-sm" alt="QSMbly screenshot" loading="lazy">

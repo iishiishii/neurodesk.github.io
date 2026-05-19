@@ -36,6 +36,11 @@ WEBAPPS = [
         "name": "VesselBoost",
         "host": "vesselboost.neurodesk.org",
     },
+    {
+        "id": "sct",
+        "name": "Spinal Cord Toolbox",
+        "host": "sct.neurodesk.org",
+    },
 ]
 
 QUERY = """
