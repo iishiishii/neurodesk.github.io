@@ -42,13 +42,6 @@
     return metric;
   }
 
-  function topLabel(rows, key) {
-    if (!Array.isArray(rows) || rows.length === 0 || !rows[0][key]) {
-      return "";
-    }
-    return rows[0][key];
-  }
-
   function renderUsage(block, app, data) {
     block.textContent = "";
 
@@ -69,14 +62,6 @@
     var details = document.createElement("span");
     details.className = "webapp-usage__details";
     details.textContent = "Last " + (data.periodDays || 30) + " days";
-
-    var topCountry = topLabel(app.countries, "countryName");
-    var topDevice = topLabel(app.deviceTypes, "deviceType");
-    var topBrowser = topLabel(app.browsers, "userAgentBrowser");
-    var segments = [topCountry, topDevice, topBrowser].filter(Boolean);
-    if (segments.length) {
-      details.textContent += " · top segments: " + segments.join(", ");
-    }
 
     var generatedAt = formatDate(data.generatedAt);
     if (generatedAt) {
