@@ -13,4 +13,4 @@ aliveStatusCodes:
   - 403
 replacementPatterns:
   - pattern: "^/"
-    replacement: "https://neurodesk.org/"
+    replacement: "https://neurodesk.github.io/"
