@@ -2,13 +2,16 @@
 .iaward-banner {
     background: linear-gradient(135deg, #f0f7e7 0%, #e6f1d6 100%) !important;
     color: #161c10 !important;
-    padding: 75px 0 10px 0 !important;
+    padding: 10px 0 !important;
     position: relative;
     overflow: hidden;
     border-bottom: 3px solid #6aa329;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
+    /* Break out of the parent .container-fluid gutter so the banner spans edge-to-edge */
+    margin-left: calc(var(--bs-gutter-x, 1.5rem) * -0.5);
+    margin-right: calc(var(--bs-gutter-x, 1.5rem) * -0.5);
 }
 
 .iaward-banner .award-content {

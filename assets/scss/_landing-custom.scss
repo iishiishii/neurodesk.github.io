@@ -205,20 +205,22 @@
 /* Validation Badges - Centered Below Buttons */
 .validation-badges {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
+  gap: 1rem 2rem;
   color: rgba(255, 255, 255, 0.9);
   margin-top: 1rem !important;
   margin-bottom: 0 !important;
   padding-top: 1rem !important;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
-  max-width: 750px; /* Match heading/buttons width */
   width: 100%;
-  
-  @media (max-width: 600px) {
+  // No max-width: let flex-wrap decide based on actual available space.
+  // The badges stay on one line when they fit, wrap to two lines otherwise.
+
+  @media (max-width: 768px) {
     flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
   }
 }
@@ -232,6 +234,15 @@
   text-decoration: none;
   transition: all 0.2s ease;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    white-space: normal;
+    text-align: left;
+    max-width: 100%;
+    font-size: 1rem;
+
+    span { font-size: 1rem; }
+  }
   
   &:hover {
     color: #d3e7b6 !important;

@@ -7,3 +7,4 @@ tech-doc-hugo
 .DS_Store
 themes/
 homebrew/
+.vscode/

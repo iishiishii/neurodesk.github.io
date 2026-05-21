@@ -1,3 +1,121 @@
+@import 'content';
+@import 'search';
+
+
+// Hide the site title text shown next to the logo in Docsy v0.15's default navbar
+.td-navbar .navbar-brand__name {
+  display: none;
+}
+
+// Force the navbar to a flat near-black ($dark = #0c0e0a) instead of the
+// medium-grey --bs-body-bg colour Docsy v0.15 uses by default.
+.td-navbar {
+  --td-navbar-bg-color: #{$dark};
+  background-image: none;
+  // Lock the navbar to a fixed height at all viewport widths.
+  height: 4rem !important;
+  min-height: 4rem !important;
+
+  .nav-link {
+    font-weight: $font-weight-normal;
+  }
+
+  // Give the brand/logo breathing room from the viewport left edge,
+  // consistent across all widths so it stays in the same position.
+  .navbar-brand {
+    padding-left: 2rem;
+  }
+
+  // Breathing room on the right edge for the Algolia search
+  .td-navbar__search {
+    padding-right: 2rem;
+  }
+}
+
+// Align the sidebar's vertical padding with main's --td-main-padding-top so
+// both columns start at the same Y offset under the navbar (Docsy's default
+// 1rem on search-disabled produces a 0.5rem misalignment with main's 1.5rem).
+.td-sidebar-nav.td-sidebar-nav--search-disabled {
+  padding-top: var(--td-main-padding-top, 1.5rem) !important;
+}
+
+// We don't want the sidebar's mobile-only Algolia search form (Docsy renders
+// it unconditionally between md and lg even when sidebar_search_disable=true).
+// The Algolia search is already in the top navbar at md+.
+.td-sidebar #content-mobile {
+  display: none !important;
+}
+
+// Landing page hero is full-bleed (no internal breathing room expected
+// above it), so override Docsy's standard 1.5rem main-padding-top extra,
+// leaving only the navbar-height clearance.
+@include media-breakpoint-up(md) {
+  body.td-home .td-main main {
+    padding-top: $td-navbar-min-height !important;
+  }
+}
+
+// Below xl, the hamburger menu must overlay below the navbar instead of
+// pushing it taller. (The navbar above is locked to 4rem height.)
+@include media-breakpoint-down(xl) {
+  .td-navbar .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--td-navbar-bg-color);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    z-index: 31; // just below .td-navbar's z-index of 32
+  }
+}
+
+// Docsy v0.15 forces `.td-navbar { @extend .navbar-expand; }` (always-expanded).
+// Below xl breakpoint, undo that so Bootstrap's navbar-collapse + hamburger pattern works.
+@include media-breakpoint-down(xl) {
+  .td-navbar.navbar-expand-xl {
+    flex-wrap: wrap;
+
+    .navbar-toggler {
+      display: block;
+    }
+
+    .navbar-nav {
+      flex-direction: column;
+      white-space: normal;
+      align-items: flex-start;
+      margin-inline-start: 0 !important; // override .ms-auto in collapsed state
+    }
+
+    .navbar-collapse {
+      flex-basis: 100%;
+      width: 100%;
+
+      &:not(.show) {
+        display: none !important;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .td-navbar.navbar-expand-xl {
+    .navbar-toggler {
+      display: none;
+    }
+
+    // Keep logo + menu + search on a single row above the hamburger threshold
+    // so the menu can't get pushed to a second row in the narrow-desktop zone.
+    .td-navbar-container {
+      flex-wrap: nowrap;
+    }
+
+    .navbar-nav {
+      flex-wrap: nowrap;
+    }
+  }
+}
+
 .fixed-top {
   position: fixed;
   top: 0;

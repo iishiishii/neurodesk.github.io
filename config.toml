@@ -162,6 +162,8 @@ breadcrumb_disable = false
 sidebar_search_disable = true
 #  Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top nav bar
 navbar_logo = true
+# Set the navbar theme to "dark" for a dark navbar background (Docsy 0.14+ default is light)
+navbar_theme = "dark"
 # Set to true to disable the About link in the site footer
 footer_about_disable = true
 
