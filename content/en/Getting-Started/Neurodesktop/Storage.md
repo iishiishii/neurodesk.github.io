@@ -96,7 +96,7 @@ You can also mount additional directories by adding another `-v` parameter set (
 
 > **Note:** The mountpoint inside Neurodesktop needs to be named `/data`, otherwise the applications will not see the files without modifying the `SINGULARITY_BINDPATH` variable in your `.bashrc`.
 
-If you are using the NeurodeskApp, you can set an additional storage location through the [settings](https://neurodesk.org/getting-started/app/neurodeskapp/#add-a-custom-data-directory).
+If you are using the NeurodeskApp, you can set an additional storage location through the [settings](/getting-started/app/neurodeskapp/#add-a-custom-data-directory).
 
 If you are starting Neurodesk through the command line, here is an example for Windows adding another storage directory:
 ```cmd
