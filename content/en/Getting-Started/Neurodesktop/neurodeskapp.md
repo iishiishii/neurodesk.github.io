@@ -2,7 +2,7 @@
 title: "Neurodesk App"
 linkTitle: "Neurodesk App"
 weight: 1
-manualLink: /getting-started/app/neurodeskapp/
+manualLinkRelref: /getting-started/app/neurodeskapp/
 manualLinkTitle: "Neurodesk App"
 build:
   render: link
