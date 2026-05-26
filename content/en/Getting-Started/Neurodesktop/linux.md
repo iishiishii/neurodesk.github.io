@@ -47,7 +47,7 @@ Before the first run, create a local folder where the downloaded applications wi
 Then use one of the following options to run Neurodesktop:
 
 #### Option 1 (Recommended for local installations): Neurodesk-App
-Instructions on installing and using the app: https://neurodesk.org/getting-started/app/neurodeskapp/
+Instructions on installing and using the app: [Neurodesk App](/getting-started/app/neurodeskapp/).
 
 #### Option 2 (Advanced and for remote installations): Using Terminal
 
@@ -294,4 +294,3 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 ```
 
 ![image](https://user-images.githubusercontent.com/4021595/135449288-6c3e9bbd-fe5f-4f43-aa4a-8a798ba629e6.png)
-

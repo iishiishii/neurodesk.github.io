@@ -65,7 +65,7 @@ The Neurodeskapp can be launched directly from the application menu, or by runni
 In the Neurodeskapp settings you can choose if you want to stream or download containers to your system.
 
 
-more information can be found here: https://neurodesk.org/getting-started/app/neurodeskapp/
+More information can be found in the [Neurodesk App instructions](/getting-started/app/neurodeskapp/).
 
 
 

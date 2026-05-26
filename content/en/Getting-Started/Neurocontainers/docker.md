@@ -8,7 +8,7 @@ description: >
   Neurodesk Docker containers
 ---
 
-Our containers are automatically built in https://github.com/neurodesk/neurocontainers/ and hosted on [dockerhub](https://hub.docker.com/u/vnmd) and on [github](https://github.com/neurodesk/neurocontainers/packages)
+Our containers are automatically built in https://github.com/neurodesk/neurocontainers/ and hosted on [dockerhub](https://hub.docker.com/u/vnmd) and on [github](https://github.com/orgs/neurodesk/packages?repo_name=neurocontainers)
 
 ## Pull Docker containers
 e.g. for a julia container
