@@ -17,7 +17,7 @@ type: landing
                     <span style="font-size: 1.1rem;"><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
                     <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
                 </a>
-                <a class="btn btn-lg btn-outline-light hero-cta-secondary" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
+                <a class="btn btn-lg btn-outline-light hero-cta-secondary" href="{{< relurl "/getting-started/app/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
                     <span style="font-size: 1.1rem;"><i class="fas fa-download"></i> Install Locally</span>
                 </a>
             </div>
