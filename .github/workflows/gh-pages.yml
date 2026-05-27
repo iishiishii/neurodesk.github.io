@@ -213,7 +213,8 @@ jobs:
           set -euo pipefail
 
           echo '::group::Installing linkspector'
-          npm install -g @umbrelladocs/linkspector@0.5.2
+          npm install -g @umbrelladocs/linkspector@0.5.2 puppeteer@^24.37.5
+          puppeteer browsers install chrome
           linkspector --version
           echo '::endgroup::'
 
