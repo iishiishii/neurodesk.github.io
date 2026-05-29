@@ -209,15 +209,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUPPETEER_CACHE_DIR: ${{ runner.temp }}/puppeteer-cache
+          PUPPETEER_SKIP_DOWNLOAD: "true"
         run: |
           set -euo pipefail
 
           echo '::group::Installing linkspector'
-          rm -rf "$PUPPETEER_CACHE_DIR"
-          mkdir -p "$PUPPETEER_CACHE_DIR"
-          npm install -g @umbrelladocs/linkspector@0.5.2 puppeteer@^24.37.5
-          puppeteer browsers install chrome
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium-browser || command -v chromium || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "No system Chrome or Chromium executable found" >&2
+            exit 1
+          fi
+          export PUPPETEER_EXECUTABLE_PATH="$CHROME_BIN"
+          echo "Using Chrome at $PUPPETEER_EXECUTABLE_PATH"
+          npm install -g @umbrelladocs/linkspector@0.5.2
           linkspector --version
           echo '::endgroup::'
 
