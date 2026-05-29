@@ -209,10 +209,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUPPETEER_CACHE_DIR: ${{ runner.temp }}/puppeteer-cache
         run: |
           set -euo pipefail
 
           echo '::group::Installing linkspector'
+          rm -rf "$PUPPETEER_CACHE_DIR"
+          mkdir -p "$PUPPETEER_CACHE_DIR"
           npm install -g @umbrelladocs/linkspector@0.5.2 puppeteer@^24.37.5
           puppeteer browsers install chrome
           linkspector --version
