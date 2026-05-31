@@ -24,11 +24,17 @@ For instructions on how to cite Neurodesk and specific tools, visit our [Citatio
 
 - Dao, T. T., Masson-Trottier, M., Ribeiro, F. L., Scarsbrook, J., Stewart, A., Ye, X., Hamilton, E., Bollmann, S., & Narayanan, A. (2025). Democratizing open neuroimaging: Neurodesk’s approach to open data accessibility and utilization. Aperture Neuro, 5(SI 2). https://doi.org/10.52294/001c.144107
 
-- Monika Dörig, Michèle Masson-Trottier, Thuy Dao, Kyle Mapue, Andrew Jahn, Fernanda L. Ribeiro, Ashley Stewart, Thomas Shaw, Michal Toth, Marla Pinkert, Paul Taylor, Angela Renton, Daniel A. Handwerker, Giulia Baracchini, Christopher Rorden, Aswin Narayanan, & Bollmann, S. (2026). Developing an Interactive Neuroimaging Education Resource with Neurodesk. EdArXiv. https://doi.org/10.35542/osf.io/7q83c_v1 
+- Dörig, M., Masson-Trottier, M., Dao, T. T., Mapue, K., Jahn, A., Ribeiro, F. L., Stewart, A., Shaw, T., Toth, M., Pinkert, M., Taylor, P., Renton, A., Handwerker, D. A., Baracchini, G., Rorden, C., Narayanan, A., & Bollmann, S. (2026). Developing an Interactive Neuroimaging Education Resource with Neurodesk. Aperture Neuro. https://doi.org/10.52294/001c.160858 
 
 
 ## Neurodesk in action
-- Pruckner, Philip, Remika Mito, David N Vaughan, et al. “Surgical White Matter Disruption Leads to Downstream Atrophy in the Non-Resected Human Brain.” Brain, September 16, 2025, awaf344. https://doi.org/10.1093/brain/awaf344.
+- Wang, S., Lou, K., Wei, C., Sheng, Z., Tang, J., Peng, K., Shen, X., Mei, S., Chen, L., Gu, D., & Liu, Q. (2026). A geometry aware framework enhances noninvasive mapping of whole human brain dynamics. Nat Biomed Eng. https://doi.org/10.1038/s41551-026-01664-0 
+
+- Sanchez-Martinez, J., Solis-Urra, P., Fernandez-Gamez, B., Fernandez-Ortega, J., Sanchez-Aranda, L., Erickson, K. I., Ortega, F. B., & Esteban-Cornejo, I. (2026). Effects of a 24-week resistance exercise program on Alzheimer's disease brain signatures in cognitively unimpaired older adults: a secondary analysis of the AGUEDA randomized controlled trial. Age Ageing, 55(4). https://doi.org/10.1093/ageing/afag086 
+
+- Chang, J., Lipscombe, H., Lv, J., McCombe, P. A., Henderson, R. D., Ngo, S. T., Steyn, F. J., & Shaw, T. B. (2026). White matter changes in reward circuits of amyotrophic lateral sclerosis: a fixel-based study of appetite loss. BMC Med, 24(1). https://doi.org/10.1186/s12916-026-04763-6 
+
+- Pruckner, P., Remika M., Vaughan, D.N., et al. “Surgical White Matter Disruption Leads to Downstream Atrophy in the Non-Resected Human Brain.” Brain, September 16, 2025, awaf344. https://doi.org/10.1093/brain/awaf344.
 
 - Wright, B. R., Schira, M. M., Paxinos, G., & Kassem, M. S. (2025). Paediatric MRI: High-Resolution in vivo 3T Methods. bioRxiv. https://doi.org/10.1101/2025.10.30.685686 
 
