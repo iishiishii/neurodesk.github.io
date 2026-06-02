@@ -65,7 +65,7 @@ The Neurodeskapp can be launched directly from the application menu, or by runni
 In the Neurodeskapp settings you can choose if you want to stream or download containers to your system.
 
 
-more information can be found here: https://neurodesk.org/docs/getting-started/local/neurodeskapp/
+More information can be found in the [Neurodesk App instructions](/getting-started/app/neurodeskapp/).
 
 
 
@@ -270,7 +270,7 @@ curl -s https://raw.githubusercontent.com/neurodesk/neurocommand/main/cvmfs/log.
 
 #select a container and download it:
 export container=itksnap_3.8.0_20201208
-curl -X GET https://neurocontainers.s3.us-east-2.amazonaws.com/$container.simg -O
+curl -X GET https://neurocontainers.neurodesk.workers.dev/$container.simg -O
 
 singularity shell itksnap_3.8.0_20201208.simg
 itksnap

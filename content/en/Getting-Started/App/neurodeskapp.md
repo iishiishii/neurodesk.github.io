@@ -3,9 +3,16 @@ title: "Neurodesk App"
 linkTitle: "Neurodesk App"
 weight: 1
 aliases:
-- /docs/getting-started/neurodesktop/neurodeskapp/ 
+- /getting-started/local/neurodeskapp/
+- /getting-started/local/neurodeskapp
+- /getting-started/neurodesktop/portable/
+- /getting-started/neurodesktop/portable
+- /docs/getting-started/neurodesktop/neurodeskapp/
+- /docs/getting-started/neurodesktop/portable/
+- /docs/getting-started/neurodesktop/portable
+- /docs/getting-started/local/neurodeskapp/
 - /docs/getting-started/local/neurodeskapp
-- docs/Getting-Started/Local/neurodeskapp
+- /docs/Getting-Started/Local/neurodeskapp
 description: >
   A cross-platform desktop application for Neurodesk: The easiest way to use Neurodesktop
 ---
@@ -162,13 +169,13 @@ Neurodesk App stores its data in the following locations:
 - By choice, in the settings window below, select `Additional Directory` on the left side bar, click `Change` button to select the local directory, then click `Apply & restart`. The next time you start the app, the data from the local directory can be found in /home/jovyan/data.
 
 {{< alert color="info">}}
-If you are using Windows it is currently not possible to mount external hard drives. We recommend copying data from the external drive to your local disk first and then processing it in Neurodesk. 
+If you are using Windows it is currently not possible to mount external hard drives. We recommend copying data from the external drive to your local disk first and then processing it in Neurodesk.
 {{< /alert >}}
 
 {{< alert color="info">}}
-If you are using MacOS and Docker mounting an external hard drive will work out of the box. If you are using Podman you have to modify the Podman machine settings with the following commands once and then set the path in the Neurodesk App: 
+If you are using MacOS and Docker mounting an external hard drive will work out of the box. If you are using Podman you have to modify the Podman machine settings with the following commands once and then set the path in the Neurodesk App:
 ```
-podman machine reset -f   
+podman machine reset -f
 podman machine init --rootful --now -v /Volumes:/Volumes -v $HOME:$HOME podman-machine-default
 ```
 {{< /alert >}}

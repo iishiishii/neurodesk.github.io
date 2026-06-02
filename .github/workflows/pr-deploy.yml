@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Find PR number from artifacts
         id: find-pr
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
@@ -64,7 +64,7 @@ jobs:
           echo "pr-number=$PR" >> $GITHUB_OUTPUT
 
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: pr-preview-${{ steps.validate-pr.outputs.pr-number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -169,8 +169,44 @@ jobs:
           
           echo "All metadata validated successfully"
 
+      - name: Check PR state
+        # Defense-in-depth: if the PR has already closed between build and
+        # deploy (e.g. cleanup workflow could not cancel the build in time),
+        # skip the gh-pages push and PR comment so we don't re-create a
+        # preview directory for a merged PR. Uses the validated PR number,
+        # NOT workflow_run.display_title (which is the commit subject and
+        # would not contain the PR number).
+        id: check-pr-state
+        uses: actions/github-script@v9
+        env:
+          PR_NUMBER: ${{ steps.pr-meta.outputs.pr-number }}
+        with:
+          script: |
+            const prNumber = Number(process.env.PR_NUMBER);
+            // On API error (404, rate-limit, transient): default to proceed
+            // so a transient hiccup never blocks a legitimate deploy. This
+            // step is purely additive defense.
+            try {
+              const { data: pr } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              if (pr.state === 'closed') {
+                const reason = pr.merged ? 'merged' : 'closed';
+                core.notice(`PR #${prNumber} already ${reason} — skipping preview deploy steps`);
+                core.setOutput('skip', 'true');
+              } else {
+                core.info(`PR #${prNumber} is open — proceeding with deploy`);
+                core.setOutput('skip', 'false');
+              }
+            } catch (error) {
+              core.warning(`Could not fetch PR #${prNumber} state (${error.message}); proceeding with deploy`);
+              core.setOutput('skip', 'false');
+            }
+
       - name: Remove legacy CNAME on gh-pages (target branch)
-        if: ${{ steps.pr-meta.outputs.base-repo == 'neurodesk/neurodesk.github.io' }}
+        if: ${{ steps.pr-meta.outputs.base-repo == 'neurodesk/neurodesk.github.io' && steps.check-pr-state.outputs.skip != 'true' }}
         env:
           PR_NUMBER: ${{ steps.pr-meta.outputs.pr-number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -199,7 +235,8 @@ jobs:
           fi
 
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ steps.check-pr-state.outputs.skip != 'true' }}
+        uses: peaceiris/actions-gh-pages@v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./preview-deploy
@@ -207,8 +244,8 @@ jobs:
           keep_files: true
 
       - name: Trigger Pages deploy to include previews
-        if: ${{ steps.pr-meta.outputs.base-repo == 'neurodesk/neurodesk.github.io' }}
-        uses: actions/github-script@v7
+        if: ${{ steps.pr-meta.outputs.base-repo == 'neurodesk/neurodesk.github.io' && steps.check-pr-state.outputs.skip != 'true' }}
+        uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr-meta.outputs.pr-number }}
           REPO_OWNER: ${{ github.repository_owner }}
@@ -237,7 +274,8 @@ jobs:
             core.info('Triggered repository_dispatch: pr-preview-updated');
 
       - name: Comment preview URL
-        uses: actions/github-script@v7
+        if: ${{ steps.check-pr-state.outputs.skip != 'true' }}
+        uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr-meta.outputs.pr-number }}
           BASE_REPO: ${{ steps.pr-meta.outputs.base-repo }}

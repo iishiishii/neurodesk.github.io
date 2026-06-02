@@ -28,7 +28,7 @@ Alternatively, Neurodesk also works with Podman, follow the Podman installation 
 Use one of the following options to run Neurodesktop:
 
 #### Option 1 (Recommended): Neurodesk-App
-Instructions for installing and using the app: https://neurodesk.org/docs/getting-started/neurodesktop/neurodeskapp/
+Instructions for installing and using the app: [Neurodesk App](/getting-started/app/neurodeskapp/).
 
 #### Option 2 (Advanced): Using Terminal
 1. Open a terminal (e.g. Powershell), and type the following command to automatically download the neurodesktop container and run it
@@ -38,7 +38,7 @@ docker volume create neurodesk-home
 # This creates a docker volume to store your /home/jovyan data inside a docker volume
 ```
 ```shell
-docker run --shm-size=1gb -it --privileged --user=root --name neurodesktop -v C:/neurodesktop-storage:/neurodesktop-storage --mount source=neurodesk-home,target=/home/jovyan -p 8888:8888 -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
+docker run --shm-size=1gb -it --privileged --user=root --name neurodesktop -v C:/neurodesktop-storage:/neurodesktop-storage --mount source=neurodesk-home,target=/home/jovyan --add-host=host.docker.internal:host-gateway -e OLLAMA_HOST="http://host.docker.internal:11434" -p 8888:8888 -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
 ```
 
 

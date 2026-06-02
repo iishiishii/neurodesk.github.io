@@ -9,12 +9,22 @@ permissions:
   issues: write
   actions: write
 
+# Best-effort: share the build's concurrency group (set in pr-build.yml) so
+# closing a PR cancels any in-flight preview build. This is timing-dependent
+# — cleanup must reach the concurrency-evaluation stage before the build
+# finishes uploading its artifact. The actual safety net is the
+# "Check PR state" step in pr-deploy.yml, which skips deploy steps when the
+# PR has already closed.
+concurrency:
+  group: preview-build-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   cleanup:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -52,7 +62,7 @@ jobs:
 
       - name: Trigger Pages deploy to drop preview from live site
         if: ${{ github.event.pull_request.merged != true }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             await github.request('POST /repos/{owner}/{repo}/dispatches', {
@@ -64,7 +74,7 @@ jobs:
             core.info('Triggered repository_dispatch: pr-preview-removed')
 
       - name: Comment cleanup
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         continue-on-error: true
         with:
           script: |
@@ -81,49 +91,10 @@ jobs:
               core.info(`Skipping cleanup comment (likely permissions on forked PRs): ${error.message}`);
             }
 
-      - name: Delete preview artifacts
-        uses: actions/github-script@v7
-        continue-on-error: true
-        with:
-          script: |
-            const prNumber = context.payload.pull_request.number;
-            const artifactName = `pr-preview-${prNumber}`;
-            
-            console.log(`Searching for artifacts named: ${artifactName}`);
-            
-            // List all artifacts for the repo (paginate if needed)
-            let page = 1;
-            let deletedCount = 0;
-            
-            while (page <= 5) {  // Safety limit: check first 5 pages (500 artifacts max)
-              const { data } = await github.rest.actions.listArtifactsForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                per_page: 100,
-                page: page
-              });
-              
-              if (!data.artifacts || data.artifacts.length === 0) {
-                break;
-              }
-              
-              for (const artifact of data.artifacts) {
-                if (artifact.name === artifactName) {
-                  try {
-                    await github.rest.actions.deleteArtifact({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      artifact_id: artifact.id
-                    });
-                    console.log(`✓ Deleted artifact: ${artifact.name} (ID: ${artifact.id})`);
-                    deletedCount++;
-                  } catch (error) {
-                    console.log(`✗ Failed to delete artifact ${artifact.id}: ${error.message}`);
-                  }
-                }
-              }
-              
-              page++;
-            }
-            
-            console.log(`Cleanup complete. Deleted ${deletedCount} artifact(s).`);
+      # Note: artifacts are NOT deleted here. They expire automatically via
+      # `retention-days: 7` set in pr-build.yml. Synchronous deletion on PR
+      # close raced with in-flight builds (see run 26075660775): cleanup could
+      # delete an artifact one second after the build uploaded it but before
+      # pr-deploy.yml could read it. Letting retention handle expiration
+      # removes the race entirely. Concurrency-group cancellation (above)
+      # prevents the build from finishing in the common case anyway.

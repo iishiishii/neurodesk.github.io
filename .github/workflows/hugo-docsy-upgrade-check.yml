@@ -32,7 +32,7 @@ jobs:
       date_tag: ${{ steps.detect.outputs.date_tag }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Detect current Hugo and Docsy versions
         id: detect
@@ -83,17 +83,17 @@ jobs:
             docsy: latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Go (for Hugo Modules)
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.22.x'
           check-latest: true
 
       - name: "Set up Hugo"
         id: hugo-setup
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3.2.1
         with:
           hugo-version: ${{ matrix.hugo == 'latest' && 'latest' || needs.prepare.outputs.current_hugo }}
           extended: true
@@ -109,9 +109,9 @@ jobs:
           echo "Go: $(go version)" | tee -a "$REPORT_DIR/${{ matrix.id }}/versions.txt"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install Node dependencies
@@ -233,7 +233,7 @@ jobs:
 
       - name: "Upload artifacts (logs + summary)"
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: compat-${{ matrix.id }}-${{ needs.prepare.outputs.date_tag }}
           path: |
@@ -252,7 +252,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
       - name: Download all scenario artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: downloaded-artifacts
 
@@ -329,7 +329,7 @@ jobs:
           echo "month_title=$MONTH_TITLE" >> "$GITHUB_OUTPUT"
 
       - name: Create or update monthly compatibility issue
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

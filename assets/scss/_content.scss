@@ -6,7 +6,7 @@
     order: 1;
 
     p, li, td {
-        font-weight: $font-weight-body-text;
+        font-weight: $td-font-weight-body-text;
     }
 
     > h1 {
@@ -60,6 +60,46 @@
 
     strong {
         font-weight: $font-weight-bold;
+    }
+
+    .webapp-usage {
+        display: flex;
+        flex-direction: column;
+        gap: .35rem;
+        max-width: 42rem;
+        margin: .75rem 0 1rem;
+        padding: .75rem 1rem;
+        border: 1px solid $gray-300;
+        border-radius: .5rem;
+        background: $gray-100;
+    }
+
+    .webapp-usage__summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        align-items: center;
+    }
+
+    .webapp-usage__metric {
+        display: inline-flex;
+        gap: .35rem;
+        align-items: baseline;
+        color: $gray-700;
+        white-space: nowrap;
+
+        strong {
+            color: $gray-900;
+            font-size: 1.05rem;
+            line-height: 1;
+        }
+    }
+
+    .webapp-usage__details,
+    .webapp-usage__status {
+        color: $gray-600;
+        font-size: .875rem;
+        line-height: 1.35;
     }
 
     > pre, > .highlight, > .lead, > h1, > h2, > ul, > ol, > p, > blockquote, > dl dd, .footnotes, > .alert {

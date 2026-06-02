@@ -10,21 +10,21 @@ type: landing
 <div class="container">
     <div class="row align-items-center">
         <div class="col-md-8 order-md-1">
-            <h1 class="hero-heading mt-0 pb-2">Run Your Neuroimaging Analysis Anywhere</h1>
-            <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities.<br>Neurodesk gives you consistent, reproducible neuroimaging tools across any system.</p>
+            <h1 class="hero-heading mt-0 pb-2">Run Your Imaging Analyses Anywhere</h1>
+            <p class="lead mb-3">Stop wrestling with dependencies, version conflicts, and platform incompatibilities.<br>Neurodesk gives you consistent, reproducible biomedical imaging tools across any system.</p>
             <div class="hero-cta-buttons mb-4">
                 <a class="btn btn-lg btn-success hero-cta-primary" href="{{< relurl "/getting-started/hosted/play/" >}}" style="background-color: #9EC672; border-color: #9EC672; color: #0c0e0a; height: 85px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                     <span style="font-size: 1.1rem;"><i class="fas fa-rocket"></i> Try Neurodesk Now</span>
                     <small class="d-block mt-1" style="font-size: 0.75rem; opacity: 0.8;">No installation required</small>
                 </a>
-                <a class="btn btn-lg btn-outline-light hero-cta-secondary" href="{{< relurl "/getting-started/local/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
+                <a class="btn btn-lg btn-outline-light hero-cta-secondary" href="{{< relurl "/getting-started/app/neurodeskapp/" >}}" style="border-width: 2px; border-color: #d3e7b6; color: #d3e7b6; height: 85px; padding: 1.25rem; display: flex; align-items: center; justify-content: center;">
                     <span style="font-size: 1.1rem;"><i class="fas fa-download"></i> Install Locally</span>
                 </a>
             </div>
             <div class="validation-badges">
                 <a href="{{< relurl "/applications/" >}}" class="badge-item">
                     <i class="fas fa-brain"></i>
-                    <span><strong>100+</strong> Neuroimaging Tools</span>
+                    <span><strong>100+</strong> Neuroimaging and Biomedical Imaging Tools</span>
                 </a>
                 <a href="https://github.com/neurodesk" target="_blank" class="badge-item">
                     <i class="fab fa-github"></i>
@@ -85,7 +85,7 @@ type: landing
                         </div>
                         <div class="eval-card-content">
                             <span class="eval-card-title">Choose your Interface</span>
-                            <span class="eval-card-desc">Supports gaphical desktops, command line and computational notebooks</span>
+                            <span class="eval-card-desc">Supports graphical desktops, command line and computational notebooks</span>
                         </div>
                     </div>
                 </a>
@@ -135,7 +135,7 @@ type: landing
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10 text-center">
             <h2 class="mb-3" style="color: #0c0e0a;">See Neurodesk in Action</h2>
-            <p class="lead mb-4" style="color: #161c10;">From data to analysis to visualization—all in one reproducible environment</p>
+            <p class="lead mb-4" style="color: #161c10;">From data to analysis to visualisation—all in one reproducible environment</p>
             <div class="position-relative video-container" style="max-width: 1200px; margin: 0 auto;">
                 <div style="padding-top: 56.25%; position: relative;">
                     <img src="{{< relurl "/static/favicons/neurodesk.jpeg" >}}"
@@ -167,7 +167,7 @@ type: landing
     background-size: 100% auto;">
 	<div class="td-box">
 		<h2>Neurodesk Components</h2>
-		<p class="lead mt-2">Flexible tools that work together or independently.<br />Neurodesk makes it easy for beginners and experts to use neuroimaging tools for desktop, HPC, web, and cloud.</p>
+		<p class="lead mt-2">Flexible tools that work together or independently.<br />Neurodesk makes it easy for beginners and experts to use biomedical imaging tools on desktop, HPC, web, and cloud.</p>
 	</div>
 	<div class="component-start container-fluid py-3">
 		<div class="row">
@@ -198,7 +198,7 @@ type: landing
 								<div class="card-body">
 									<i class="fas fa-layer-group"></i>
 									<h4>Neurocontainers</h4>
-									<p class="card-summary">Individual containerized tools you can use in your own pipelines and workflows.</p>
+									<p class="card-summary">Individual containerised tools you can use in your own pipelines and workflows.</p>
 									<ul class="feature-list text-start small">
 										<li>Transparent, version-controlled builds</li>
 										<li>Use via Docker or Singularity</li>

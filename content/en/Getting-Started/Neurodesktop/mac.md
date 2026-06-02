@@ -29,7 +29,7 @@ Docker for MacOS by default runs with 2GB Memory. For actual workloads, 4GB Memo
 Use one of the following options to run Neurodesktop:
 
 #### Option 1 (Recommended): Neurodesk-App
-Instructions on installing and using the app: [https://neurodesk.org/docs/getting-started/neurodesktop/neurodeskapp/](https://neurodesk.org/docs/getting-started/local/neurodeskapp/)
+Instructions on installing and using the app: [Neurodesk App](/getting-started/app/neurodeskapp/).
 
 #### Option 2 (Advanced): Using Terminal
 Create a local folder where the downloaded applications will be stored, e.g. ~/neurodesktop-storage 
@@ -42,6 +42,8 @@ docker run \
 --shm-size=1gb -it --privileged --user=root --name neurodesktop \
 -v ~/neurodesktop-storage:/neurodesktop-storage \
 --mount source=neurodesk-home,target=/home/jovyan \
+--add-host=host.docker.internal:host-gateway \
+-e OLLAMA_HOST="http://host.docker.internal:11434" \
 -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
 -p 8888:8888 -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
 ```

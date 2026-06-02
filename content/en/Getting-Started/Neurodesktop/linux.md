@@ -47,7 +47,7 @@ Before the first run, create a local folder where the downloaded applications wi
 Then use one of the following options to run Neurodesktop:
 
 #### Option 1 (Recommended for local installations): Neurodesk-App
-Instructions on installing and using the app: https://neurodesk.org/docs/getting-started/neurodesktop/neurodeskapp/
+Instructions on installing and using the app: [Neurodesk App](/getting-started/app/neurodeskapp/).
 
 #### Option 2 (Advanced and for remote installations): Using Terminal
 
@@ -64,6 +64,8 @@ sudo docker run \
   --shm-size=1gb -it --security-opt apparmor=neurodeskapp --privileged --user=root --name neurodesktop \
   -v ~/neurodesktop-storage:/neurodesktop-storage \
   --mount source=neurodesk-home,target=/home/jovyan \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_HOST="http://host.docker.internal:11434" \
   -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
   -p 8888:8888 \
   -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
@@ -76,6 +78,8 @@ sudo docker run \
   --shm-size=1gb -it --security-opt apparmor=neurodeskapp --privileged --user=root --name neurodesktop \
   -v ~/neurodesktop-storage:/neurodesktop-storage \
   --mount source=neurodesk-home,target=/home/jovyan \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_HOST="http://host.docker.internal:11434" \
   -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
   -p 8888:8888 \
   -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} ghcr.io/neurodesk/neurodesktop/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
@@ -131,6 +135,8 @@ sudo docker run \
   --dns 8.8.8.8 \
   -v ~/neurodesktop-storage:/neurodesktop-storage \
   --mount source=neurodesk-home,target=/home/jovyan \
+  --add-host=host.docker.internal:host-gateway \
+  -e OLLAMA_HOST="http://host.docker.internal:11434" \
   -e NB_UID="$(id -u)" -e NB_GID="$(id -g)" \
   -p 8888:8888 \
   -e NEURODESKTOP_VERSION={{< params/neurodesktop/jupyter_neurodesk_version >}} vnmd/neurodesktop:{{< params/neurodesktop/jupyter_neurodesk_version >}}
@@ -288,5 +294,3 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 ```
 
 ![image](https://user-images.githubusercontent.com/4021595/135449288-6c3e9bbd-fe5f-4f43-aa4a-8a798ba629e6.png)
-
-

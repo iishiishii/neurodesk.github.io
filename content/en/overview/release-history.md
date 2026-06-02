@@ -16,6 +16,24 @@ Latest Version
 
 Please consult [this page](https://github.com/neurodesk/neurodesk.github.io/blob/main/.github/content-templates/release-history-template.md) for the template for new releases.
 
+## 2026-04-28
+### New Features
+- added slurm
+- added opencode, codex, claude agent apps
+- vscode server
+- added webapps
+- added donation banner
+
+### Improvements
+- VNC and RDP desktops are now secured by random passwords
+- added pytest testing under /opt/tests
+- startup time optimization
+- size optimiziation
+
+### Bug Fixes
+- fixed NBI default model and instructions for notebooks
+
+
 ## 2025-12-20
 ### New Features
 - added pydra
