@@ -133,6 +133,16 @@ runPingTest();
 We provide several methods to transfer your files in and out of Neurodesk Play, including drag-and-drop and cloud storage integration. 
 [View Data Transfer Documentation &rarr;](/docs/neurodesktop/storage)
 
+## Shared directories for courses and workshops
+
+Neurodesk Play can provide shared directories for educational use. These directories are mounted inside Play sessions under `/data/groups/<group-name>` or `/data/teaching/<educator-github-username>` and can be configured for different teaching and project needs:
+
+- **Educator-managed course material:** educators can write to a directory under `/data/teaching/<educator-github-username>`, while all other users have read-only access.
+- **Project groups:** a defined group of users can share a directory where every group member has read+write access under `/data/groups/<group-name>`.
+- **Teaching teams:** multiple educators can have write access to a shared directory under `/data/groups/<group-name>`, while everyone else has read-only access.
+
+This is useful for distributing workshop datasets, notebooks, examples, or course material without asking every participant to copy files into their own home directory. It also makes it very easy to provide the solutions of a previous session to all users to learners can catchup to the rest of the class.
+
 ## SSH connection
 It is possible to connect to Play instances using SSH, including from VS Code Remote SSH. Neurodesk Play uses [`jupyter-sshd-proxy`](https://pypi.org/project/jupyter-sshd-proxy/) to proxy SSH over the authenticated JupyterHub connection.
 
