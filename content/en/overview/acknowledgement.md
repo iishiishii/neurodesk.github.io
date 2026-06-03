@@ -59,12 +59,12 @@ This work benefits from services and infrastructure provided by:
 </div>
 
 <br/> 
-We are also grateful for:
+We are very grateful for the support by:
 
-- **Blacksmith.sh** for saving us a huge amount of time by making our arm64 container builds fast and reliable.
-- **AWS Cloud Credits** (providing cloud credits since 2024)
-- **Google Cloud Platform** (support from 2024–2025)  
-- **Oracle for Research** (support from 2022–2023)
+- **Blacksmith.sh** for saving us a huge amount of time and pain by making our arm64 container builds fast and reliable (sponsoring all container builds since 06/2026).
+- **AWS Cloud Credits** (providing cloud credits from 2024-2025, providing free egress for our containers from S3)
+- **Google Cloud Platform** (providing cloud credits from 2024–2025)  
+- **Oracle for Research** (providing cloud credits from 2022–2023)
 <div style="display:flex; gap:30px; flex-wrap:wrap; align-items:center; margin: 10px 0;">
   <a href="https://www.blacksmith.sh/" target="_blank" rel="noopener noreferrer">
     <img src="{{< relurl "/static/docs/overview/blacksmith-wordmark.svg" >}}" width="220" alt="Blacksmith wordmark">
