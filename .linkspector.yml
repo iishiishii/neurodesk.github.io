@@ -5,6 +5,7 @@ ignorePatterns:
   - pattern: '^http://localhost'
   - pattern: '^https://www.biorxiv.org/content/'
   - pattern: '^https://www\.humanbrainmapping\.org/i4a/pages/index\.cfm\?pageid=3912$'
+  - pattern: '^https://www\.humanconnectome\.org/software/get-connectome-workbench#download$'
 useGitIgnore: true
 aliveStatusCodes:
   - 200
