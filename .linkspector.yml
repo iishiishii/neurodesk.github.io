@@ -6,6 +6,7 @@ ignorePatterns:
   - pattern: '^https://www.biorxiv.org/content/'
   - pattern: '^https://www\.humanbrainmapping\.org/i4a/pages/index\.cfm\?pageid=3912$'
   - pattern: '^https://www\.humanconnectome\.org/software/get-connectome-workbench#download$'
+  - pattern: '^https://doi\.org/10\.1017/S0007114525000406$'
 useGitIgnore: true
 aliveStatusCodes:
   - 200
