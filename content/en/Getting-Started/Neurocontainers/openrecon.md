@@ -274,15 +274,31 @@ Turn the license off by commenting it out. Add `#` in front of the relevant line
 
 Restart the whole system. Restarting the workspace is not enough.
 
-### Cleaning up package on the scanner
+### Cleaning up packages on the scanner
 
-After installing a few different versions the container library can get full.
+After installing and testing different OpenRecon containers, old containers remain in the host registry and consume space on the host C: drive.
 
-Download the tool "wip_OpenRecon_PackageRemover_Tool.exe" from the Siemens magnetom.net forum. Make sure to follow the installation instructions. Then run `wip_OpenRecon_PackageRemover_Tool.exe -p` to cleanup old versions.
+Download `wip_OpenRecon_PackageRemover_Tool.exe` from the Siemens MAGNETOM forum and follow the installation instructions.
 
-For the deletion to work (and for the tool to see your OpenRecon package), the package needs to be labeled as Research - it will not touch OpenRecon tools labels as Product.
+At the end of a testing session, purge the old packages by running this in the powershell:
 
-so check, that you have this in your OpenReconLabel.json file:
+```powershell
+wip_OpenRecon_PackageRemover_Tool.exe --purge
+```
+
+Answer `y` for each package you want to purge.
+
+Then run garbage collection to clean up the storage:
+
+```powershell
+wip_OpenRecon_PackageRemover_Tool.exe --gc
+```
+
+This tool often breaks the OpenRecon watcher process, so installing new packages after cleanup may fail until the host is restarted. Reboot the host after cleanup before installing more OpenRecon packages.
+
+For the deletion to work, and for the tool to see your OpenRecon package, the package needs to be labeled as Research. It will not touch OpenRecon tools labeled as Product.
+
+Check that your `OpenReconLabel.json` file contains:
 
 ```json
     "content_qualification_type": "RESEARCH"
