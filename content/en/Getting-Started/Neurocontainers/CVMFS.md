@@ -46,7 +46,7 @@ NQIDAQAB
 
 echo "CVMFS_USE_GEOAPI=yes" | sudo tee /etc/cvmfs/config.d/neurodesk.ardc.edu.au.conf
 
-echo 'CVMFS_SERVER_URL="http://cvmfs-geoproximity.neurodesk.org/cvmfs/@fqrn@;http://cvmfs.neurodesk.org/cvmfs/@fqrn@;http://s1osggoc-cvmfs.openhtc.io:8080/cvmfs/@fqrn@;http://s1fnal-cvmfs.openhtc.io:8080/cvmfs/@fqrn@;http://s1sampa-cvmfs.openhtc.io:8080/cvmfs/@fqrn@;http://s1brisbane-cvmfs.openhtc.io/cvmfs/@fqrn@;http://s1nikhef-cvmfs.openhtc.io/cvmfs/@fqrn@;http://s1bnl-cvmfs.openhtc.io/cvmfs/@fqrn@;http://s1perth-cvmfs.openhtc.io/cvmfs/@fqrn@"' | sudo tee -a /etc/cvmfs/config.d/neurodesk.ardc.edu.au.conf 
+echo 'CVMFS_SERVER_URL="http://cvmfs-geoproximity.neurodesk.org/cvmfs/@fqrn@;http://cvmfs.neurodesk.org/cvmfs/@fqrn@;http://s1osggoc-cvmfs.openhtc.io:8080/cvmfs/@fqrn@;http://s1fnal-cvmfs.openhtc.io:8080/cvmfs/@fqrn@;http://s1sampa-cvmfs.openhtc.io:8080/cvmfs/@fqrn@;http://s1brisbane-cvmfs.openhtc.io/cvmfs/@fqrn@;http://s1nikhef-cvmfs.openhtc.io/cvmfs/@fqrn@;http://s1bnl-cvmfs.openhtc.io/cvmfs/@fqrn@;http://s1perth-cvmfs.openhtc.io/cvmfs/@fqrn@;http://cvmfs-stratum-one.ihep.ac.cn:8000/cvmfs/@fqrn@"' | sudo tee -a /etc/cvmfs/config.d/neurodesk.ardc.edu.au.conf
 
 echo 'CVMFS_KEYS_DIR="/etc/cvmfs/keys/ardc.edu.au/"' | sudo tee -a /etc/cvmfs/config.d/neurodesk.ardc.edu.au.conf
 
@@ -80,6 +80,9 @@ This CVMFS Stratum 1 server is hosted by AWS:
 This CMVFS Stratum 1 server is hosted by Jetstream:
 - Indiana, US: cvmfs-jetstream.neurodesk.org -> 149.165.172.188 
 
+This CVMFS Stratum 1 server is hosted by IHEP:
+- Beijing, China: s1ihep-cvmfs.openhtc.io:8080 -> cvmfs-stratum-one.ihep.ac.cn:8000
+
 Then we have a one geolocation-steered domain: cvmfs-geoproximity.neurodesk.org
 - 153.02 (Longitude),-27.46 (Latitude) -> cvmfs-brisbane.neurodesk.org
 - 151.2073, -33.8678 -> cvmfs-sydney.neurodesk.org
@@ -92,6 +95,7 @@ Then we have a one geolocation-steered domain: cvmfs-geoproximity.neurodesk.org
 - -46.63,-23.54 -> sampacs01.if.usp.br
 - -86.45,39.22 -> cvmfs-jetstream.neurodesk.org
 - 145.13,-37.92 -> cvmfs-melbourne.neurodesk.org
+- 116.39,39.91 -> cvmfs-stratum-one.ihep.ac.cn
 
 - Every location has a health check attached to it and doesn't forward to it if the destination is not working.
 
@@ -114,9 +118,8 @@ Asia -> cvmfs-brisbane.neurodesk.org
 Default -> cvmfs-s1bnl.opensciencegrid.org
 Oceania -> cvmfs-perth.neurodesk.org
 
-These servers are currently NOT working and are NOT YET mirroring our repository (we are waiting for RAL to come back online, then the others will mirror that):
+This server is currently NOT working and is NOT YET mirroring our repository (we are waiting for RAL to come back online, then the others will mirror that):
 - Swinburne, Australia:   s1swinburne-cvmfs.openhtc.io:8080 -> cvmfs-s1.hpc.swin.edu.au:8000
-- China:                  s1ihep-cvmfs.openhtc.io:8080      -> cvmfs-stratum-one.ihep.ac.cn:8000
 
 ### For WSL users
 You will need to run this for each new WSL session:
