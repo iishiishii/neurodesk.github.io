@@ -353,7 +353,11 @@ attach_neurodesk_job() {
             case "$REASON" in
                 Resources|Priority|None|null)
                     echo "        (normal queue wait -- the partition is busy; waiting for a slot)" ;;
-                *PartitionTimeLimit*|*PartitionNodeLimit*|ReqNodeNotAvail*|*PartitionConfig*|*Reservation*)
+                ReqNodeNotAvail*|*Reservation*)
+                    echo "        ('$PARTITION' nodes are unavailable right now -- often an upcoming maintenance"
+                    echo "         reservation your walltime overlaps, or the owner nodes are reserved/busy/down."
+                    echo "         Try a shorter --time, check 'ssh $LOGIN_NODE scontrol show reservation', or use 'normal'.)" ;;
+                *PartitionTimeLimit*|*PartitionNodeLimit*|*PartitionConfig*)
                     echo "        (the request may exceed what '$PARTITION' allows -- e.g. walltime, mem, or GPUs; this can wait indefinitely)" ;;
                 *QOS*|*Assoc*|*Grp*)
                     echo "        (a usage/QOS limit is holding it -- you may already have another job running)" ;;
