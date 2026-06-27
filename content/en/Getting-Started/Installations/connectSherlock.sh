@@ -329,24 +329,46 @@ attach_neurodesk_job() {
     local JOB_ID="$3"
     local NODE_NAME="" WAITED=0
     local MAX_WAIT="${NEURODESKTOP_START_TIMEOUT:-600}"
+    local INFO STATE REASON STARTTIME LAST_REASON=""
 
     while [ "$WAITED" -lt "$MAX_WAIT" ]; do
-        NODE_NAME=$(ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "squeue -j $JOB_ID -h -t R -o '%N' 2>/dev/null")
-        if [ -n "$NODE_NAME" ]; then
-            break
-        fi
-        # Stop waiting if the job has left the queue entirely (failed/cancelled).
-        if ! ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "squeue -j $JOB_ID -h -o '%i' 2>/dev/null" | grep -q .; then
+        # One query for everything: state | node | pending-reason | est-start.
+        INFO=$(ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "squeue -j $JOB_ID -h -o '%t|%N|%r|%S' 2>/dev/null")
+        if [ -z "$INFO" ]; then
+            # Job has left the queue entirely (started+finished, failed, cancelled).
             echo "Job $JOB_ID is no longer in the queue (it may have failed or been cancelled)."
             echo "Check its log: ssh $LOGIN_NODE cat ~/.neurodesk_job_${JOB_ID}.log"
             return 1
         fi
+        IFS='|' read -r STATE NODE_NAME REASON STARTTIME <<< "$INFO"
+        if [ "$STATE" = "R" ] && [ -n "$NODE_NAME" ]; then
+            break
+        fi
+
+        # Surface why it is still waiting. Print whenever the reason changes, and
+        # otherwise a heartbeat every ~60s, so the user is never left guessing.
+        REASON=${REASON:-unknown}
+        if [ "$REASON" != "$LAST_REASON" ]; then
+            echo "  [${WAITED}s] state=${STATE} reason=${REASON}${STARTTIME:+ est-start=${STARTTIME}}"
+            case "$REASON" in
+                Resources|Priority|None|null)
+                    echo "        (normal queue wait -- the partition is busy; waiting for a slot)" ;;
+                *PartitionTimeLimit*|*PartitionNodeLimit*|ReqNodeNotAvail*|*PartitionConfig*|*Reservation*)
+                    echo "        (the request may exceed what '$PARTITION' allows -- e.g. walltime, mem, or GPUs; this can wait indefinitely)" ;;
+                *QOS*|*Assoc*|*Grp*)
+                    echo "        (a usage/QOS limit is holding it -- you may already have another job running)" ;;
+            esac
+            LAST_REASON="$REASON"
+        elif [ "$WAITED" -gt 0 ] && [ $((WAITED % 60)) -eq 0 ]; then
+            echo "  [${WAITED}s] still waiting: ${REASON}${STARTTIME:+ (est-start ${STARTTIME})}"
+        fi
+
         sleep 5
         WAITED=$((WAITED + 5))
     done
 
-    if [ -z "$NODE_NAME" ]; then
-        echo "Job $JOB_ID has not started within ${MAX_WAIT}s; it is still queued."
+    if [ "$STATE" != "R" ] || [ -z "$NODE_NAME" ]; then
+        echo "Job $JOB_ID has not started within ${MAX_WAIT}s; it is still queued (reason: ${LAST_REASON:-unknown})."
         echo "Re-run connectSherlock later to attach once it is running,"
         echo "or cancel it with: ssh $LOGIN_NODE scancel $JOB_ID"
         return 0
