@@ -10,6 +10,18 @@ random_tunnel_port() {
     echo $((10000 + RANDOM % 55001))
 }
 
+random_notebook_token() {
+    # A URL-safe token the user authenticates with. Prefer a cryptographically
+    # strong source; fall back to combining RANDOM if openssl is unavailable.
+    if command -v openssl >/dev/null 2>&1; then
+        openssl rand -hex 24 2>/dev/null && return
+    fi
+    if [ -r /dev/urandom ] && command -v hexdump >/dev/null 2>&1; then
+        hexdump -n 24 -e '24/1 "%02x"' /dev/urandom 2>/dev/null && return
+    fi
+    printf '%s%s%s%s' "$RANDOM" "$RANDOM" "$RANDOM" "$RANDOM"
+}
+
 port_is_free_local() {
     local PORT="$1"
 
@@ -382,11 +394,12 @@ attach_neurodesk_job() {
     # race where it is "R" but hasn't recorded its port yet. The path is resolved
     # on the remote (escaped $HOME) rather than relying on tilde expansion.
     local STATE_REL=".neurodesk_session_${JOB_ID}.env"
-    local STATE_CONTENT SAVED_PORT SAVED_NODE PORT_TRIES=0
+    local STATE_CONTENT SAVED_PORT SAVED_NODE SAVED_TOKEN PORT_TRIES=0
     while [ "$PORT_TRIES" -lt 8 ]; do
         STATE_CONTENT=$(ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "cat \"\$HOME/${STATE_REL}\" 2>/dev/null")
         SAVED_PORT=$(printf '%s\n' "$STATE_CONTENT" | awk -F= '$1=="NEURODESK_PORT"{print $2}')
         SAVED_NODE=$(printf '%s\n' "$STATE_CONTENT" | awk -F= '$1=="NEURODESK_NODE"{print $2}')
+        SAVED_TOKEN=$(printf '%s\n' "$STATE_CONTENT" | awk -F= '$1=="NEURODESK_TOKEN"{print $2}')
         if [[ "$SAVED_PORT" =~ ^[0-9]+$ ]]; then
             break
         fi
@@ -402,11 +415,26 @@ attach_neurodesk_job() {
         return 1
     fi
 
+    local NOTEBOOK_URL="http://127.0.0.1:${SAVED_PORT}"
+    if [ -n "$SAVED_TOKEN" ]; then
+        NOTEBOOK_URL="${NOTEBOOK_URL}/lab?token=${SAVED_TOKEN}"
+    fi
+
     echo "Job $JOB_ID is running on $NODE_NAME."
     echo "Container log: ssh $LOGIN_NODE tail -f ~/.neurodesk_job_${JOB_ID}.log"
-    echo "Notebook will be available at http://127.0.0.1:${SAVED_PORT} (allow ~30s for startup)."
-    echo "Closing this terminal leaves the job running; re-run connectSherlock to reattach."
+    echo "Notebook will be available at ${NOTEBOOK_URL} (allow ~30s for startup)."
+    if [ -z "$SAVED_TOKEN" ]; then
+        echo "  (No token recorded for this job; if Jupyter asks for one, find it with:"
+        echo "   ssh $LOGIN_NODE grep -m1 token= ~/.neurodesk_job_${JOB_ID}.log )"
+    fi
+    echo "Press Ctrl-C to disconnect; you'll then be asked whether to cancel or keep the job."
+    # Hold the tunnel in the foreground. A bare 'trap : INT' keeps this script
+    # alive when Ctrl-C tears down the tunnel (the child ssh still gets the default
+    # SIGINT and exits), so control returns here and we can prompt about the job.
+    trap ':' INT
     hold_neurodesk_tunnel "$SSH_SOCKET" "$LOGIN_NODE" "$NODE_NAME" "$SAVED_PORT"
+    trap - INT
+    prompt_keep_or_cancel_on_exit "$SSH_SOCKET" "$LOGIN_NODE" "$JOB_ID"
 }
 
 cancel_neurodesk_job() {
@@ -431,6 +459,40 @@ cancel_neurodesk_job() {
     fi
     echo "Failed to cancel job $JOB_ID. Cancel it manually: ssh $LOGIN_NODE scancel $JOB_ID"
     return 1
+}
+
+prompt_keep_or_cancel_on_exit() {
+    # Called once the foreground tunnel has dropped (Ctrl-C or lost link). For a
+    # batch job the Slurm allocation is still running, so ask whether to cancel it
+    # now or leave it for a later reconnect. Defaults to keeping it (safer).
+    local SSH_SOCKET="$1"
+    local LOGIN_NODE="$2"
+    local JOB_ID="$3"
+    local choice
+
+    # If the job already left the queue (walltime hit, cancelled elsewhere), there
+    # is nothing to ask about.
+    if ! ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "squeue -j $JOB_ID -h -o '%t' 2>/dev/null" | grep -q .; then
+        echo "Job $JOB_ID is no longer running; nothing to clean up."
+        return 0
+    fi
+
+    echo
+    echo "Tunnel closed. Job $JOB_ID is still running on Sherlock."
+    echo -n "Cancel the session now, or keep it running to reconnect later? [keep/cancel] "
+    read -r choice
+    case "$choice" in
+        [cC]|[cC][aA][nN][cC][eE][lL])
+            if ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "scancel $JOB_ID"; then
+                echo "Cancelled job $JOB_ID."
+            else
+                echo "Failed to cancel job $JOB_ID. Cancel it manually: ssh $LOGIN_NODE scancel $JOB_ID"
+            fi
+            ;;
+        *)
+            echo "Leaving job $JOB_ID running. Re-run connectSherlock to reattach."
+            ;;
+    esac
 }
 
 function connectSherlock() {
@@ -539,6 +601,13 @@ function connectSherlock() {
     fi
 
     echo "Using shared random tunnel/notebook port: ${TUNNEL_PORT}"
+
+    # Authentication token for Jupyter. The compute-node notebook port lives on a
+    # shared node's localhost, so we keep token auth on (rather than disabling it)
+    # and thread a known token through to the container, the per-job state file,
+    # and the URL we print -- so the user can open the notebook in one click.
+    local TUNNEL_TOKEN
+    TUNNEL_TOKEN=$(random_notebook_token)
 
     echo "Preparing setup script..."
     ssh -S "$CTRL_SOCKET" "$LOGIN_NODE" "cat > ~/.neurodesk_setup.sh && chmod +x ~/.neurodesk_setup.sh" <<'EOF'
@@ -1174,6 +1243,11 @@ fi
 echo "Starting Neurodesktop container..."
 NEURODESKTOP_NOTEBOOK_PORT="${NEURODESKTOP_NOTEBOOK_PORT:-8888}"
 NEURODESKTOP_DISPLAY_URL="${NEURODESKTOP_DISPLAY_URL:-http://127.0.0.1:8888}"
+NEURODESKTOP_TOKEN="${NEURODESKTOP_TOKEN:-}"
+# Show a clickable, token-bearing URL in the container/Jupyter log.
+if [ -n "${NEURODESKTOP_TOKEN}" ]; then
+    NEURODESKTOP_DISPLAY_URL="${NEURODESKTOP_DISPLAY_URL%/}/lab?token=${NEURODESKTOP_TOKEN}"
+fi
 NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS="${NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS:-{'jupyter_server_fileid': False, 'jupyter_server_ydoc': False}}"
 NEURODESKTOP_SHELL_PROMPT="${NEURODESKTOP_SHELL_PROMPT:-neurodesk@sherlock:\\w\\$ }"
 
@@ -1283,6 +1357,7 @@ apptainer run \
    start-notebook.py \
       --ServerApp.port="${NEURODESKTOP_NOTEBOOK_PORT}" \
       --ServerApp.port_retries=0 \
+      --IdentityProvider.token="${NEURODESKTOP_TOKEN}" \
       --ServerApp.custom_display_url="${NEURODESKTOP_DISPLAY_URL}" \
       --FileContentsManager.delete_to_trash=False \
       --ServerApp.jpserver_extensions="${NEURODESKTOP_DISABLE_JPSERVER_EXTENSIONS}"
@@ -1314,6 +1389,7 @@ cat > "${STATE_FILE}" <<STATE
 NEURODESK_JOB_ID=${SLURM_JOB_ID}
 NEURODESK_NODE=$(hostname -s)
 NEURODESK_PORT=${NEURODESKTOP_NOTEBOOK_PORT}
+NEURODESK_TOKEN=${NEURODESKTOP_TOKEN:-}
 STATE
 exec "${HOME}/.neurodesk_setup.sh"
 EOF
@@ -1334,7 +1410,7 @@ EOF
             "sbatch --parsable --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME \
              --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM $GPU_FLAG \
              --output=\$HOME/.neurodesk_job_%j.log \
-             --export=ALL,NEURODESKTOP_ENABLE_GPU=${ENABLE_GPU_CONTAINER},NEURODESKTOP_NOTEBOOK_PORT=${TUNNEL_PORT},NEURODESKTOP_DISPLAY_URL=http://127.0.0.1:${TUNNEL_PORT} \
+             --export=ALL,NEURODESKTOP_ENABLE_GPU=${ENABLE_GPU_CONTAINER},NEURODESKTOP_NOTEBOOK_PORT=${TUNNEL_PORT},NEURODESKTOP_TOKEN=${TUNNEL_TOKEN},NEURODESKTOP_DISPLAY_URL=http://127.0.0.1:${TUNNEL_PORT} \
              ~/.neurodesk_job.sh")
         SUBMIT_STATUS=$?
         # --parsable prints "<jobid>" or "<jobid>;<cluster>"; take the field before ';'.
@@ -1366,7 +1442,7 @@ EOF
     ssh -S "$CTRL_SOCKET" -o ExitOnForwardFailure=yes -t -L ${TUNNEL_PORT}:localhost:${TUNNEL_PORT} "$LOGIN_NODE" \
         "salloc --job-name=$JOB_NAME -p $PARTITION --nodes=1 --time=$WALLTIME --ntasks=1 --cpus-per-task=$CPUS --mem=$MEM $GPU_FLAG \
         bash -c 'echo \"Allocated: \${SLURM_NODELIST}\"; \
-                 ssh -o ExitOnForwardFailure=yes -t -L ${TUNNEL_PORT}:localhost:${TUNNEL_PORT} \${SLURM_NODELIST} \"SLURM_JOB_ID=\${SLURM_JOB_ID} SLURM_CONF=\${SLURM_CONF:-} SLURM_SACK_SOCKET=\${SLURM_SACK_SOCKET:-} MUNGE_SOCKET=\${MUNGE_SOCKET:-} NEURODESKTOP_ENABLE_GPU=${ENABLE_GPU_CONTAINER} NEURODESKTOP_NOTEBOOK_PORT=${TUNNEL_PORT} NEURODESKTOP_DISPLAY_URL=http://127.0.0.1:${TUNNEL_PORT} ~/.neurodesk_job.sh\"'"
+                 ssh -o ExitOnForwardFailure=yes -t -L ${TUNNEL_PORT}:localhost:${TUNNEL_PORT} \${SLURM_NODELIST} \"SLURM_JOB_ID=\${SLURM_JOB_ID} SLURM_CONF=\${SLURM_CONF:-} SLURM_SACK_SOCKET=\${SLURM_SACK_SOCKET:-} MUNGE_SOCKET=\${MUNGE_SOCKET:-} NEURODESKTOP_ENABLE_GPU=${ENABLE_GPU_CONTAINER} NEURODESKTOP_NOTEBOOK_PORT=${TUNNEL_PORT} NEURODESKTOP_TOKEN=${TUNNEL_TOKEN} NEURODESKTOP_DISPLAY_URL=http://127.0.0.1:${TUNNEL_PORT} ~/.neurodesk_job.sh\"'"
 }
 
 # Check if the script is being executed directly
