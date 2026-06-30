@@ -22,6 +22,16 @@ random_notebook_token() {
     printf '%s%s%s%s' "$RANDOM" "$RANDOM" "$RANDOM" "$RANDOM"
 }
 
+normalize_memory_request() {
+    local MEM="$1"
+
+    MEM=${MEM//[[:space:]]/}
+    if [[ "$MEM" =~ ^[0-9]+$ ]]; then
+        MEM="${MEM}G"
+    fi
+    printf '%s\n' "$MEM"
+}
+
 port_is_free_local() {
     local PORT="$1"
 
@@ -332,6 +342,60 @@ hold_neurodesk_tunnel() {
         "ssh -o ExitOnForwardFailure=yes -N -L ${PORT}:localhost:${PORT} ${NODE_NAME}"
 }
 
+report_neurodesk_job_diagnostics() {
+    local SSH_SOCKET="$1"
+    local LOGIN_NODE="$2"
+    local JOB_ID="$3"
+    local TUNNEL_STATUS="$4"
+
+    echo
+    echo "Tunnel exited with status ${TUNNEL_STATUS}; checking Slurm job state before cleanup prompt..."
+    if ! ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "bash -s -- \"$JOB_ID\"" <<'EOF'
+job_id="$1"
+log_file="${HOME}/.neurodesk_job_${job_id}.log"
+failure_pattern='OUT_OF_MEMORY|FAILED|CANCELLED|TIMEOUT|NODE_FAIL|PREEMPTED|oom|oom_kill|out.of.memory|Killed|error:'
+
+echo "Slurm queue state:"
+queue_state=$(squeue -j "$job_id" -h -o '  job=%i state=%T reason=%r node=%N time-left=%L' 2>/dev/null || true)
+if [ -n "$queue_state" ]; then
+    printf '%s\n' "$queue_state"
+else
+    echo "  not in squeue (it may have completed, failed, or been cancelled)"
+fi
+
+if command -v sacct >/dev/null 2>&1; then
+    echo "Slurm accounting state:"
+    accounting_state=$(sacct -j "$job_id" --format=JobID,State,ExitCode,Elapsed,MaxRSS -P -n 2>/dev/null || true)
+    if [ -n "$accounting_state" ]; then
+        printf '%s\n' "$accounting_state" |
+            awk -F'|' '{printf "  job=%s state=%s exit=%s elapsed=%s maxrss=%s\n", $1, $2, $3, $4, $5}'
+        if printf '%s\n' "$accounting_state" | grep -Eiq "$failure_pattern"; then
+            echo "  Detected failure state in Slurm accounting."
+        fi
+    else
+        echo "  sacct has no record yet (accounting can lag briefly)"
+    fi
+else
+    echo "Slurm accounting state: sacct is not available"
+fi
+
+if [ -r "$log_file" ]; then
+    if grep -Eiq "$failure_pattern" "$log_file"; then
+        echo "Recent warning/error lines from ${log_file}:"
+        grep -Ein "$failure_pattern" "$log_file" | tail -20 | sed 's/^/  /'
+    fi
+    echo "Last 60 lines from ${log_file}:"
+    tail -60 "$log_file" | sed 's/^/  /'
+else
+    echo "Job log is not readable yet: ${log_file}"
+fi
+EOF
+    then
+        echo "Could not query Slurm diagnostics through $LOGIN_NODE."
+        echo "Try manually: ssh $LOGIN_NODE 'sacct -j $JOB_ID; tail -60 ~/.neurodesk_job_${JOB_ID}.log'"
+    fi
+}
+
 attach_neurodesk_job() {
     # Wait for a (possibly queued) job to start, recover the node + notebook
     # port it recorded in its per-job state file, then hold the tunnel. Used for
@@ -342,6 +406,7 @@ attach_neurodesk_job() {
     local NODE_NAME="" WAITED=0
     local MAX_WAIT="${NEURODESKTOP_START_TIMEOUT:-600}"
     local INFO STATE REASON STARTTIME LAST_REASON=""
+    local TUNNEL_STATUS
 
     while [ "$WAITED" -lt "$MAX_WAIT" ]; do
         # One query for everything: state | node | pending-reason | est-start.
@@ -442,7 +507,11 @@ attach_neurodesk_job() {
     # SIGINT and exits), so control returns here and we can prompt about the job.
     trap ':' INT
     hold_neurodesk_tunnel "$SSH_SOCKET" "$LOGIN_NODE" "$NODE_NAME" "$SAVED_PORT"
+    TUNNEL_STATUS=$?
     trap - INT
+    if [ "$TUNNEL_STATUS" -ne 0 ]; then
+        report_neurodesk_job_diagnostics "$SSH_SOCKET" "$LOGIN_NODE" "$JOB_ID" "$TUNNEL_STATUS"
+    fi
     prompt_keep_or_cancel_on_exit "$SSH_SOCKET" "$LOGIN_NODE" "$JOB_ID"
 }
 
@@ -587,6 +656,11 @@ function connectSherlock() {
     echo -n "How much Memory needed? [8G] "
     read -r MEM
     MEM=${MEM:-8G}
+    local RAW_MEM="$MEM"
+    MEM=$(normalize_memory_request "$MEM")
+    if [ "$MEM" != "$RAW_MEM" ]; then
+        echo "Interpreting bare memory value '${RAW_MEM}' as '${MEM}'."
+    fi
 
     echo -n "How many CPUs needed? [1] "
     read -r CPUS
