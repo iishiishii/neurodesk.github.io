@@ -420,7 +420,16 @@ attach_neurodesk_job() {
         NOTEBOOK_URL="${NOTEBOOK_URL}/lab?token=${SAVED_TOKEN}"
     fi
 
+    # Report remaining walltime so a reconnecting user knows how long the session
+    # has left before Slurm reclaims it. %L is TimeLeft, %l is the TimeLimit.
+    local TIME_INFO TIME_LEFT TIME_LIMIT
+    TIME_INFO=$(ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "squeue -j $JOB_ID -h -o '%L|%l' 2>/dev/null")
+    IFS='|' read -r TIME_LEFT TIME_LIMIT <<< "$TIME_INFO"
+
     echo "Job $JOB_ID is running on $NODE_NAME."
+    if [ -n "$TIME_LEFT" ] && [ "$TIME_LEFT" != "INVALID" ]; then
+        echo "Walltime remaining: ${TIME_LEFT}${TIME_LIMIT:+ of ${TIME_LIMIT}} (D-HH:MM:SS)."
+    fi
     echo "Container log: ssh $LOGIN_NODE tail -f ~/.neurodesk_job_${JOB_ID}.log"
     echo "Notebook will be available at ${NOTEBOOK_URL} (allow ~30s for startup)."
     if [ -z "$SAVED_TOKEN" ]; then
@@ -479,20 +488,18 @@ prompt_keep_or_cancel_on_exit() {
 
     echo
     echo "Tunnel closed. Job $JOB_ID is still running on Sherlock."
-    echo -n "Cancel the session now, or keep it running to reconnect later? [keep/cancel] "
+    echo -n "Cancel the session now? (No keeps it running to reconnect later) [y/N] "
     read -r choice
-    case "$choice" in
-        [cC]|[cC][aA][nN][cC][eE][lL])
-            if ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "scancel $JOB_ID"; then
-                echo "Cancelled job $JOB_ID."
-            else
-                echo "Failed to cancel job $JOB_ID. Cancel it manually: ssh $LOGIN_NODE scancel $JOB_ID"
-            fi
-            ;;
-        *)
-            echo "Leaving job $JOB_ID running. Re-run connectSherlock to reattach."
-            ;;
-    esac
+    if [[ ! "$choice" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        echo "Leaving job $JOB_ID running. Re-run connectSherlock to reattach."
+        return 0
+    fi
+
+    if ssh -S "$SSH_SOCKET" -q "$LOGIN_NODE" "scancel $JOB_ID"; then
+        echo "Cancelled job $JOB_ID."
+    else
+        echo "Failed to cancel job $JOB_ID. Cancel it manually: ssh $LOGIN_NODE scancel $JOB_ID"
+    fi
 }
 
 function connectSherlock() {
