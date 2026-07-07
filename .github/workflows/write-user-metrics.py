@@ -57,6 +57,7 @@ def empty_metrics(generated_at: str, unavailable: bool = False) -> dict[str, Any
         "source": "Google Analytics 4",
         "totalUsers": 0,
         "months": [],
+        "countries": [],
     }
     if unavailable:
         data["unavailable"] = True
@@ -82,7 +83,7 @@ def get_access_token(service_account_info: dict[str, Any]) -> str:
     return credentials.token
 
 
-def run_report(token: str, property_id: str) -> list[dict[str, Any]]:
+def run_report(token: str, property_id: str, body: dict[str, Any]) -> list[dict[str, Any]]:
     response = requests.post(
         f"https://analyticsdata.googleapis.com/v1beta/properties/{property_id}:runReport",
         headers={
@@ -91,10 +92,8 @@ def run_report(token: str, property_id: str) -> list[dict[str, Any]]:
         },
         json={
             "dateRanges": [{"startDate": EARLIEST_START_DATE, "endDate": "today"}],
-            "dimensions": [{"name": "yearMonth"}],
-            "metrics": [{"name": "newUsers"}],
-            "orderBys": [{"dimension": {"dimensionName": "yearMonth"}}],
             "limit": 10000,
+            **body,
         },
         timeout=60,
     )
@@ -103,6 +102,43 @@ def run_report(token: str, property_id: str) -> list[dict[str, Any]]:
             f"GA4 Data API returned HTTP {response.status_code}: {response.text[:500]}"
         )
     return response.json().get("rows") or []
+
+
+def monthly_report(token: str, property_id: str) -> list[dict[str, Any]]:
+    return run_report(
+        token,
+        property_id,
+        {
+            "dimensions": [{"name": "yearMonth"}],
+            "metrics": [{"name": "newUsers"}],
+            "orderBys": [{"dimension": {"dimensionName": "yearMonth"}}],
+        },
+    )
+
+
+def country_report(token: str, property_id: str) -> list[dict[str, Any]]:
+    return run_report(
+        token,
+        property_id,
+        {
+            "dimensions": [{"name": "countryId"}, {"name": "country"}],
+            "metrics": [{"name": "totalUsers"}],
+            "orderBys": [{"metric": {"metricName": "totalUsers"}, "desc": True}],
+        },
+    )
+
+
+def summarize_countries(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    countries: list[dict[str, Any]] = []
+    for row in rows:
+        dimensions = row.get("dimensionValues") or [{}, {}]
+        code = (dimensions[0].get("value") or "").strip()
+        name = (dimensions[1].get("value") or "").strip() if len(dimensions) > 1 else ""
+        users = int(round(float((row.get("metricValues") or [{}])[0].get("value") or 0)))
+        if len(code) != 2 or not code.isalpha() or users <= 0:
+            continue
+        countries.append({"code": code.upper(), "name": name or code.upper(), "users": users})
+    return countries
 
 
 def summarize(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], int]:
@@ -147,13 +183,17 @@ def main() -> int:
         return 1
 
     token = get_access_token(service_account_info)
-    rows = run_report(token, property_id)
-    months, total_users = summarize(rows)
-    print(f"GA4 property {property_id}: {len(months)} months, {total_users} users total")
+    months, total_users = summarize(monthly_report(token, property_id))
+    countries = summarize_countries(country_report(token, property_id))
+    print(
+        f"GA4 property {property_id}: {len(months)} months, "
+        f"{total_users} users total, {len(countries)} countries"
+    )
 
     data = empty_metrics(generated_at)
     data["months"] = months
     data["totalUsers"] = total_users
+    data["countries"] = countries
     write_json(args.output, data)
     return 0
 

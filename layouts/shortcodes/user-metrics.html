@@ -1,5 +1,6 @@
 {{- $metricsURL := "static/data/user-metrics.json" | relURL -}}
-<div class="user-metrics" data-user-metrics-url="{{ $metricsURL }}">
+{{- $mapURL := "static/vendor/world.svg" | relURL -}}
+<div class="user-metrics" data-user-metrics-url="{{ $metricsURL }}" data-user-metrics-map="{{ $mapURL }}">
   <span class="user-metrics__status">Loading user statistics...</span>
 </div>
 
@@ -282,6 +283,215 @@
     return figure;
   }
 
+  var MAP_RAMP = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"];
+
+  function binThresholds(values) {
+    // Quantile bin edges over countries with data; deduped for small sets.
+    var sorted = values.slice().sort(function (a, b) { return a - b; });
+    var thresholds = [];
+    for (var i = 1; i < MAP_RAMP.length; i++) {
+      var value = sorted[Math.min(sorted.length - 1,
+        Math.floor((sorted.length * i) / MAP_RAMP.length))];
+      if (!thresholds.length || value > thresholds[thresholds.length - 1]) {
+        thresholds.push(value);
+      }
+    }
+    return thresholds;
+  }
+
+  function binIndex(value, thresholds) {
+    for (var i = 0; i < thresholds.length; i++) {
+      if (value < thresholds[i]) {
+        return i;
+      }
+    }
+    return thresholds.length;
+  }
+
+  function legendItem(color, text, isSwatchOutlined) {
+    var item = document.createElement("span");
+    item.className = "user-metrics__legend-item";
+    var swatch = document.createElement("span");
+    swatch.className = "user-metrics__legend-swatch" +
+      (isSwatchOutlined ? " user-metrics__legend-swatch--nodata" : "");
+    swatch.style.background = color;
+    var label = document.createElement("span");
+    label.textContent = text;
+    item.append(swatch, label);
+    return item;
+  }
+
+  function renderMapInto(figure, svgText, countries) {
+    var doc = new DOMParser().parseFromString(svgText, "image/svg+xml");
+    var svg = doc.documentElement;
+    if (!svg || svg.nodeName !== "svg") {
+      throw new Error("Invalid map SVG");
+    }
+    svg.removeAttribute("width");
+    svg.removeAttribute("height");
+    svg.setAttribute("class", "user-metrics__map-svg");
+    svg.setAttribute("aria-hidden", "true");
+
+    var byCode = new Map(countries.map(function (entry) {
+      return [entry.code.toLowerCase(), entry];
+    }));
+    var thresholds = binThresholds(countries.map(function (entry) {
+      return entry.users;
+    }));
+
+    svg.querySelectorAll("path[id]").forEach(function (path) {
+      var entry = byCode.get(path.id.toLowerCase());
+      if (entry) {
+        path.style.fill = MAP_RAMP[binIndex(entry.users, thresholds)];
+      }
+    });
+
+    figure.textContent = "";
+    figure.append(svg);
+
+    // Legend: one swatch per bin range, plus the no-data fill.
+    var maxUsers = countries.reduce(function (max, entry) {
+      return Math.max(max, entry.users);
+    }, 0);
+    var legend = document.createElement("div");
+    legend.className = "user-metrics__legend";
+    var lower = 1;
+    for (var i = 0; i <= thresholds.length; i++) {
+      var upper = i < thresholds.length ? thresholds[i] - 1 : maxUsers;
+      if (upper < lower) {
+        continue;
+      }
+      legend.append(legendItem(
+        MAP_RAMP[i],
+        lower === upper ? formatNumber(lower) : formatNumber(lower) + "–" + formatNumber(upper)
+      ));
+      lower = upper + 1;
+    }
+    legend.append(legendItem("transparent", "No data", true));
+    figure.append(legend);
+
+    var tooltip = document.createElement("div");
+    tooltip.className = "user-metrics__tooltip";
+    tooltip.style.display = "none";
+    var tooltipTitle = document.createElement("div");
+    tooltipTitle.className = "user-metrics__tooltip-title";
+    var row = document.createElement("div");
+    row.className = "user-metrics__tooltip-row";
+    var value = document.createElement("strong");
+    var label = document.createElement("span");
+    row.append(value, label);
+    tooltip.append(tooltipTitle, row);
+    figure.append(tooltip);
+
+    var hovered = null;
+    function clearHover() {
+      if (hovered) {
+        hovered.classList.remove("user-metrics__country--hover");
+        hovered = null;
+      }
+      tooltip.style.display = "none";
+    }
+    svg.addEventListener("pointermove", function (event) {
+      var path = event.target.closest ? event.target.closest("path[id]") : null;
+      if (!path) {
+        clearHover();
+        return;
+      }
+      if (hovered !== path) {
+        if (hovered) {
+          hovered.classList.remove("user-metrics__country--hover");
+        }
+        hovered = path;
+        hovered.classList.add("user-metrics__country--hover");
+      }
+      var entry = byCode.get(path.id.toLowerCase());
+      tooltipTitle.textContent = (entry && entry.name) ||
+        path.getAttribute("aria-label") || path.getAttribute("name") || path.id.toUpperCase();
+      value.textContent = entry ? formatNumber(entry.users) : "0";
+      label.textContent = entry ? "users" : "recorded users";
+      tooltip.style.display = "";
+      var rect = figure.getBoundingClientRect();
+      var left = event.clientX - rect.left + 14;
+      if (left + tooltip.offsetWidth + 8 > rect.width) {
+        left = event.clientX - rect.left - tooltip.offsetWidth - 14;
+      }
+      tooltip.style.left = Math.max(0, left) + "px";
+      tooltip.style.top = (event.clientY - rect.top - tooltip.offsetHeight - 10) + "px";
+    });
+    svg.addEventListener("pointerleave", clearHover);
+  }
+
+  function renderMap(countries, mapUrl) {
+    var section = document.createElement("div");
+    section.className = "user-metrics__map";
+
+    var figure = document.createElement("figure");
+    figure.className = "user-metrics__map-figure";
+    figure.setAttribute(
+      "aria-label",
+      "World map of Neurodesk users by country. Values are listed in the table below the map."
+    );
+    var status = document.createElement("span");
+    status.className = "user-metrics__status";
+    status.textContent = "Loading map...";
+    figure.append(status);
+    section.append(figure);
+
+    var details = document.createElement("details");
+    var summary = document.createElement("summary");
+    summary.textContent = "Users by country (table)";
+    details.append(summary);
+    var wrapper = document.createElement("div");
+    wrapper.className = "user-metrics__table-wrapper";
+    var table = document.createElement("table");
+    table.className = "user-metrics__table td-initial";
+    var head = document.createElement("thead");
+    var headRow = document.createElement("tr");
+    ["Country", "Users"].forEach(function (text, index) {
+      var th = document.createElement("th");
+      th.textContent = text;
+      th.scope = "col";
+      if (index > 0) {
+        th.className = "user-metrics__num";
+      }
+      headRow.append(th);
+    });
+    head.append(headRow);
+    table.append(head);
+    var body = document.createElement("tbody");
+    countries.forEach(function (entry) {
+      var tr = document.createElement("tr");
+      var nameCell = document.createElement("th");
+      nameCell.scope = "row";
+      nameCell.textContent = entry.name;
+      var usersCell = document.createElement("td");
+      usersCell.className = "user-metrics__num";
+      usersCell.textContent = formatNumber(entry.users);
+      tr.append(nameCell, usersCell);
+      body.append(tr);
+    });
+    table.append(body);
+    wrapper.append(table);
+    details.append(wrapper);
+    section.append(details);
+
+    fetch(mapUrl, { credentials: "same-origin" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Map request failed: " + response.status);
+        }
+        return response.text();
+      })
+      .then(function (svgText) {
+        renderMapInto(figure, svgText, countries);
+      })
+      .catch(function () {
+        status.textContent = "The map could not be loaded.";
+      });
+
+    return section;
+  }
+
   function renderTable(months, currentMonthKey) {
     var wrapper = document.createElement("div");
     wrapper.className = "user-metrics__table-wrapper";
@@ -345,9 +555,12 @@
     block.textContent = "";
     block.append(
       renderSummary(data, currentMonthKey),
-      renderChart(data.months),
-      renderTable(data.months, currentMonthKey)
+      renderChart(data.months)
     );
+    if (Array.isArray(data.countries) && data.countries.length && block.dataset.userMetricsMap) {
+      block.append(renderMap(data.countries, block.dataset.userMetricsMap));
+    }
+    block.append(renderTable(data.months, currentMonthKey));
   }
 
   var blocks = document.querySelectorAll("[data-user-metrics-url]");
