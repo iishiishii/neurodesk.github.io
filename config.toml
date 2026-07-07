@@ -251,3 +251,7 @@ path = "github.com/google/docsy/dependencies"
 [[module.mounts]]
 source = 'static'
 target = 'static/static'
+
+[[module.mounts]]
+source = 'node_modules/@svg-maps/world/world.svg'
+target = 'static/static/vendor/world.svg'

@@ -27,7 +27,9 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 <img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
 
 ## User metrics
-<iframe src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
+The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
+
+{{< user-metrics >}}
 
 ## Uptime metrics
 
