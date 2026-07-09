@@ -74,9 +74,11 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 {{< webapp-usage id="vesselboost" >}}
 
 
+## NeurodeskEDU and Play usage
+These service-specific statistics are generated from Google Analytics 4 and separated by the tracked host or path.
+
+{{< ga4-service-usage ids="neurodeskedu,play-america,play-europe,play-australia" >}}
 
 ## Uptime metrics
 
-{{% alert title="For service uptimes, use this link" color="info" %}}
-https://stats.uptimerobot.com/NBE38IZWZM
-{{% /alert %}}
+{{< uptime-metrics >}}
