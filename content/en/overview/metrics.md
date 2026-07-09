@@ -9,6 +9,17 @@ description: >-
      User metrics, analytics and service uptime
 ---
 
+## User metrics
+The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
+
+{{< user-metrics >}}
+
+## Analytics of users in the last 28 days
+<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
+
+## Neurodesk App download metrics
+<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
+
 ## Docker metrics
 Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docker/pulls/vnmd/neurodesktop)
 
@@ -23,8 +34,7 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 | [neurodesk.github.io](https://github.com/neurodesk/neurodesk.github.io)         | ![](https://img.shields.io/github/stars/neurodesk/neurodesk.github.io)     | ![](https://img.shields.io/github/issues-raw/neurodesk/neurodesk.github.io)     | ![](https://img.shields.io/github/last-commit/neurodesk/neurodesk.github.io)     |
 | [neurodesk-app](https://github.com/neurodesk/neurodesk-app)                     | ![](https://img.shields.io/github/stars/neurodesk/neurodesk-app)           | ![](https://img.shields.io/github/issues-raw/neurodesk/neurodesk-app)           | ![](https://img.shields.io/github/last-commit/neurodesk/neurodesk-app)           |
 
-## Neurodesk App download metrics
-<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
+
 
 ## Webapp usage metrics
 
@@ -63,16 +73,12 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 
 {{< webapp-usage id="vesselboost" >}}
 
-## User metrics
-The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
 
-{{< user-metrics >}}
+## NeurodeskEDU and Play usage
+These service-specific statistics are generated from Google Analytics 4 and separated by the tracked host or path.
 
-## Analytics of users in the last 28 days
-<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
+{{< ga4-service-usage ids="neurodeskedu,play-america,play-europe,play-australia" >}}
 
 ## Uptime metrics
 
-{{% alert title="For service uptimes, use this link" color="info" %}}
-https://stats.uptimerobot.com/NBE38IZWZM
-{{% /alert %}}
+{{< uptime-metrics >}}

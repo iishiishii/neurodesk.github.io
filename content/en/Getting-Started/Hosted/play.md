@@ -129,6 +129,20 @@ runPingTest();
 </div>
 <!-- Play Server latency widget -->
 
+## Usage Acknowledgments
+
+When using these services for research, please include the appropriate acknowledgment:
+
+**🇺🇸 US (Jetstream2 / NSF)**
+> "This research was supported by Jetstream2 (NSF award #2005506), which is supported by the National Science Foundation. Jetstream2 is a cloud computing resource managed by the Indiana University Pervasive Technology Institute and part of the ACCESS project."
+
+**🇪🇺 Europe (EGI / CESNET-MCC)**
+> "Enabled through services and resources provided by the EGI Federation with the dedicated support of CESNET-MCC. Computational resources were provided by the e-INFRA CZ project (ID:90254), supported by the Ministry of Education, Youth and Sports of the Czech Republic."
+
+**🇦🇺 Australia (ARDC / Nectar)**
+> "This research was supported by use of the Nectar Research Cloud, a collaborative Australian research platform supported by the NCRIS-funded Australian Research Data Commons (ARDC)."
+
+
 ## Data Transfer
 We provide several methods to transfer your files in and out of Neurodesk Play, including drag-and-drop and cloud storage integration. 
 [View Data Transfer Documentation &rarr;](/docs/neurodesktop/storage)
@@ -225,15 +239,3 @@ scp local-file.txt neurodesk-play:~/
 sftp neurodesk-play
 ```
 
-## Usage Acknowledgments
-
-When using these services for research, please include the appropriate acknowledgment:
-
-**🇺🇸 US (Jetstream2 / NSF)**
-> "This research was supported by Jetstream2 (NSF award #2005506), which is supported by the National Science Foundation. Jetstream2 is a cloud computing resource managed by the Indiana University Pervasive Technology Institute and part of the ACCESS project."
-
-**🇪🇺 Europe (EGI / CESNET-MCC)**
-> "Enabled through services and resources provided by the EGI Federation with the dedicated support of CESNET-MCC. Computational resources were provided by the e-INFRA CZ project (ID:90254), supported by the Ministry of Education, Youth and Sports of the Czech Republic."
-
-**🇦🇺 Australia (ARDC / Nectar)**
-> "This research was supported by use of the Nectar Research Cloud, a collaborative Australian research platform supported by the NCRIS-funded Australian Research Data Commons (ARDC)."

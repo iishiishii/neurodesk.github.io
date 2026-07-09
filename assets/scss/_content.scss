@@ -102,6 +102,77 @@
         line-height: 1.35;
     }
 
+    .uptime-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 58rem;
+        margin: .75rem 0 1.5rem;
+    }
+
+    .uptime-metrics__summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        align-items: stretch;
+    }
+
+    .uptime-metrics__metric {
+        display: inline-flex;
+        flex-direction: column;
+        min-width: 9rem;
+        padding: .75rem 1rem;
+        border: 1px solid $gray-300;
+        border-radius: .5rem;
+        background: $gray-100;
+        color: $gray-600;
+        font-size: .875rem;
+        line-height: 1.35;
+
+        strong {
+            color: $gray-900;
+            font-size: 1.25rem;
+            line-height: 1.1;
+        }
+    }
+
+    .uptime-metrics__table {
+        min-width: 44rem;
+    }
+
+    .uptime-metrics__badge {
+        display: inline-flex;
+        align-items: center;
+        padding: .15rem .5rem;
+        border-radius: 999px;
+        background: $gray-200;
+        color: $gray-800;
+        font-size: .8125rem;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    .uptime-metrics__badge--success {
+        background: #d9f2dc;
+        color: #17672a;
+    }
+
+    .uptime-metrics__badge--warning {
+        background: #fff0c2;
+        color: #6f5100;
+    }
+
+    .uptime-metrics__badge--danger,
+    .uptime-metrics__badge--error {
+        background: #f8d7da;
+        color: #842029;
+    }
+
+    .uptime-metrics__badge--muted {
+        background: $gray-200;
+        color: $gray-700;
+    }
+
     .user-metrics {
         --um-series: #2a78d6;
         --um-series-wash: rgba(42, 120, 214, .1);
@@ -325,6 +396,7 @@
 
     .user-metrics__table-wrapper {
         max-height: 26rem;
+        overflow-x: auto;
         overflow-y: auto;
         border: 1px solid $gray-300;
         border-radius: .5rem;
