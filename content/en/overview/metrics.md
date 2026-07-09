@@ -26,16 +26,53 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 ## Neurodesk App download metrics
 <img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
 
+## Webapp usage metrics
+
+### CALMaR Co-designed Automated Lesion Mapping and Reporting
+<a href="https://calmar.neurodesk.org/" target="_blank" rel="noopener noreferrer">calmar.neurodesk.org</a>
+
+{{< webapp-usage id="calmar" >}}
+
+### dicompare
+<a href="https://dicompare.neurodesk.org" target="_blank" rel="noopener noreferrer">dicompare.neurodesk.org</a>
+
+{{< webapp-usage id="dicompare" >}}
+
+### MuscleMap
+<a href="https://musclemap.neurodesk.org" target="_blank" rel="noopener noreferrer">musclemap.neurodesk.org</a>
+
+{{< webapp-usage id="musclemap" >}}
+
+### QSMbly
+<a href="https://qsmbly.neurodesk.org" target="_blank" rel="noopener noreferrer">qsmbly.neurodesk.org</a>
+
+{{< webapp-usage id="qsmbly" >}}
+
+### SeedSeg
+<a href="https://seedseg.neurodesk.org/" target="_blank" rel="noopener noreferrer">seedseg.neurodesk.org</a>
+
+{{< webapp-usage id="seedseg" >}}
+
+### Spinal Cord Toolbox
+<a href="https://sct.neurodesk.org" target="_blank" rel="noopener noreferrer">sct.neurodesk.org</a>
+
+{{< webapp-usage id="sct" >}}
+
+### VesselBoost
+<a href="https://vesselboost.neurodesk.org" target="_blank" rel="noopener noreferrer">vesselboost.neurodesk.org</a>
+
+{{< webapp-usage id="vesselboost" >}}
+
 ## User metrics
 The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
 
 {{< user-metrics >}}
+
+## Analytics of users in the last 28 days
+<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
 
 ## Uptime metrics
 
 {{% alert title="For service uptimes, use this link" color="info" %}}
 https://stats.uptimerobot.com/NBE38IZWZM
 {{% /alert %}}
-
-
-

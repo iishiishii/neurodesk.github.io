@@ -1,0 +1,35 @@
+---
+title: "XNAT"
+linkTitle: "XNAT"
+weight: 5
+aliases:
+- /docs/getting-started/hosted/xnat
+description: >
+  Neurodesk as an analysis environment in XNAT deployments
+---
+
+The [Australian Imaging Service (AIS)](https://australian-imaging-service.github.io/) has added Neurodesk to its XNAT deployment stack, making it possible to provide Neurodesk-powered analysis environments alongside managed imaging data.
+
+AIS is a national platform for secure imaging management, analysis, informatics, and machine learning. Its XNAT deployment work combines XNAT for imaging data management with a JupyterHub layer that can launch Neurodesk environments for interactive analysis.
+
+## Who this is for
+
+This option is most relevant for:
+
+- imaging facilities and research platforms using XNAT,
+- institutions that need governed access to imaging data and analysis environments,
+
+## Deployment resources
+
+The AIS deployment resources are available here:
+
+- [AIS project website](https://australian-imaging-service.github.io/)
+- [AIS-XNAT deployment repository](https://github.com/Australian-Imaging-Service/ais-devstack)
+
+The `ais-devstack` repository documents an XNAT deployment for Kubernetes and includes the JupyterHub/Neurodesk layer used to provide interactive analysis sessions.
+
+## Access
+
+XNAT-hosted Neurodesk is not a single public Neurodesk service like [Neurodesk Play](/getting-started/hosted/play/). Access depends on the AIS node or institutional XNAT deployment that is hosting the environment.
+
+If your project uses XNAT and you want to offer Neurodesk next to your imaging data, start with the AIS deployment repository and coordinate with your local infrastructure or AIS support team. For questions, reach out to <mail.neurodesk@gmail.com>.

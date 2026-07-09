@@ -49,6 +49,13 @@ We have documented installations at several institutions:
 - No data is transferred to the cloud
 - [Explore Neurodesk Webapps →](/getting-started/hosted/webapps)
 
+### 4. XNAT
+**Best for**: Imaging data platforms that want Neurodesk analysis next to managed XNAT data
+- Integrated with the Australian Imaging Service XNAT deployment stack
+- Provides a JupyterHub/Neurodesk analysis layer for XNAT-based workflows
+- Intended for institutional deployments
+- [Learn about Neurodesk on XNAT →](/getting-started/hosted/xnat)
+
 
 ## Choosing the Right Option
 
