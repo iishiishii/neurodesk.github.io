@@ -111,14 +111,12 @@
       "Service",
       "Users to date",
       "Users (" + periodDays + " days)",
-      "Sessions (" + periodDays + " days)",
-      "Views (" + periodDays + " days)",
       "Tracked area"
     ].forEach(function (text, index) {
       var th = document.createElement("th");
       th.textContent = text;
       th.scope = "col";
-      if (index > 0 && index < 5) {
+      if (index > 0 && index < 3) {
         th.className = "user-metrics__num";
       }
       headRow.append(th);
@@ -146,8 +144,6 @@
 
       addNumericCell(row, segment.totalUsers);
       addNumericCell(row, segment.periodUsers);
-      addNumericCell(row, segment.periodSessions);
-      addNumericCell(row, segment.periodPageViews);
 
       var areaCell = document.createElement("td");
       areaCell.textContent = trackedArea(segment);
