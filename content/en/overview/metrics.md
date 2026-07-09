@@ -23,6 +23,16 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 | [neurodesk.github.io](https://github.com/neurodesk/neurodesk.github.io)         | ![](https://img.shields.io/github/stars/neurodesk/neurodesk.github.io)     | ![](https://img.shields.io/github/issues-raw/neurodesk/neurodesk.github.io)     | ![](https://img.shields.io/github/last-commit/neurodesk/neurodesk.github.io)     |
 | [neurodesk-app](https://github.com/neurodesk/neurodesk-app)                     | ![](https://img.shields.io/github/stars/neurodesk/neurodesk-app)           | ![](https://img.shields.io/github/issues-raw/neurodesk/neurodesk-app)           | ![](https://img.shields.io/github/last-commit/neurodesk/neurodesk-app)           |
 
+
+
+## User metrics
+The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
+
+{{< user-metrics >}}
+
+## Analytics of users in the last 28 days
+<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
+
 ## Neurodesk App download metrics
 <img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
 
@@ -62,14 +72,6 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 <a href="https://vesselboost.neurodesk.org" target="_blank" rel="noopener noreferrer">vesselboost.neurodesk.org</a>
 
 {{< webapp-usage id="vesselboost" >}}
-
-## User metrics
-The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
-
-{{< user-metrics >}}
-
-## Analytics of users in the last 28 days
-<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
 
 ## Uptime metrics
 
