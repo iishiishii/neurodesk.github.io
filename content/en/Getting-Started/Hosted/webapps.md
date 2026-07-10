@@ -87,3 +87,30 @@ This is a browser-based implementation of the Spinal Cord Toolbox MRI segmentati
 VesselBoost is a browser-based blood vessel segmentation tool. It combines preprocessing and inference steps in a guided workflow so users can segment vessel structures from MRI angiography data directly on their own machine.
 
 <img src="{{< relurl "/static/docs/getting-started/hosted/webapps/vesselboost.png" >}}" class="img-fluid border rounded shadow-sm" alt="VesselBoost screenshot" loading="lazy">
+
+
+## Webapps from Neurodesk Friends and Family
+
+These browser-based webapps are built and maintained by collaborators in the wider Neurodesk community and not maintained by us.
+
+### 3D printing
+
+- <a href="https://brainchop.org/" target="_blank" rel="noopener noreferrer">brainchop.org</a>
+
+### Defacing
+
+- <a href="https://niivue.github.io/deface/" target="_blank" rel="noopener noreferrer">niivue.github.io/deface</a>
+
+### MP2RAGE processing
+
+- <a href="https://thomshaw92.github.io/Easy-MP2RAGE-T1-Map/" target="_blank" rel="noopener noreferrer">thomshaw92.github.io/Easy-MP2RAGE-T1-Map</a>
+
+### Brain Segmentation
+
+- <a href="https://brain2print.org/" target="_blank" rel="noopener noreferrer">brain2print.org</a>
+- <a href="https://neuroneural.net/brainchop-test/" target="_blank" rel="noopener noreferrer">neuroneural.net/brainchop-test</a>
+
+
+### General Image processing in the browser
+
+- <a href="https://niivue.github.io/niivue-niimath/" target="_blank" rel="noopener noreferrer">niivue.github.io/niivue-niimath</a>
