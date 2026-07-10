@@ -156,28 +156,38 @@
     block.append(wrapper);
   }
 
-  var blocks = document.querySelectorAll("[data-ga4-service-usage-url]");
-  if (!blocks.length) {
-    return;
+  function init() {
+    var blocks = document.querySelectorAll("[data-ga4-service-usage-url]");
+    if (!blocks.length) {
+      return;
+    }
+
+    fetch(blocks[0].dataset.ga4ServiceUsageUrl, { credentials: "same-origin" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Service usage statistics request failed: " + response.status);
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        blocks.forEach(function (block) {
+          render(block, data);
+        });
+      })
+      .catch(function () {
+        blocks.forEach(function (block) {
+          renderStatus(block, "Service usage statistics could not be loaded.");
+        });
+      });
   }
 
-  fetch(blocks[0].dataset.ga4ServiceUsageUrl, { credentials: "same-origin" })
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error("Service usage statistics request failed: " + response.status);
-      }
-      return response.json();
-    })
-    .then(function (data) {
-      blocks.forEach(function (block) {
-        render(block, data);
-      });
-    })
-    .catch(function () {
-      blocks.forEach(function (block) {
-        renderStatus(block, "Service usage statistics could not be loaded.");
-      });
-    });
+  // The script is emitted next to the first shortcode block, so later blocks
+  // on the page have not been parsed yet — wait for the full DOM.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 }());
 </script>
 {{- end -}}

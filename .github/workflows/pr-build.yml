@@ -59,18 +59,6 @@ jobs:
             echo "ZENODO_TOKEN not set, skipping applist generation"
           fi
 
-      - name: Write webapp usage statistics
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS: ${{ secrets.CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS }}
-        run: |
-          if [ -n "$CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS" ]; then
-            python .github/workflows/write-webapp-usage.py
-          else
-            echo "CLOUDFLARE_API_TOKEN_WEBAPPS_ANALYTICS not set — writing unavailable placeholder for PR preview"
-            python .github/workflows/write-webapp-usage.py --allow-missing-token
-          fi
-
       - name: Write user metrics
         env:
           GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
