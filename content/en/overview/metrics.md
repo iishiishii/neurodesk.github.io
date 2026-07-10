@@ -36,48 +36,15 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 
 
 
-## Webapp usage metrics
-
-### CALMaR Co-designed Automated Lesion Mapping and Reporting
-<a href="https://calmar.neurodesk.org/" target="_blank" rel="noopener noreferrer">calmar.neurodesk.org</a>
-
-{{< webapp-usage id="calmar" >}}
-
-### dicompare
-<a href="https://dicompare.neurodesk.org" target="_blank" rel="noopener noreferrer">dicompare.neurodesk.org</a>
-
-{{< webapp-usage id="dicompare" >}}
-
-### MuscleMap
-<a href="https://musclemap.neurodesk.org" target="_blank" rel="noopener noreferrer">musclemap.neurodesk.org</a>
-
-{{< webapp-usage id="musclemap" >}}
-
-### QSMbly
-<a href="https://qsmbly.neurodesk.org" target="_blank" rel="noopener noreferrer">qsmbly.neurodesk.org</a>
-
-{{< webapp-usage id="qsmbly" >}}
-
-### SeedSeg
-<a href="https://seedseg.neurodesk.org/" target="_blank" rel="noopener noreferrer">seedseg.neurodesk.org</a>
-
-{{< webapp-usage id="seedseg" >}}
-
-### Spinal Cord Toolbox
-<a href="https://sct.neurodesk.org" target="_blank" rel="noopener noreferrer">sct.neurodesk.org</a>
-
-{{< webapp-usage id="sct" >}}
-
-### VesselBoost
-<a href="https://vesselboost.neurodesk.org" target="_blank" rel="noopener noreferrer">vesselboost.neurodesk.org</a>
-
-{{< webapp-usage id="vesselboost" >}}
-
-
 ## NeurodeskEDU and Play usage
 These service-specific statistics are generated from Google Analytics 4 and separated by the tracked host or path.
 
 {{< ga4-service-usage ids="neurodeskedu,play-america,play-europe,play-australia" >}}
+
+## Webapp usage metrics
+These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host.
+
+{{< ga4-service-usage ids="webapp-calmar,webapp-dicompare,webapp-musclemap,webapp-qsmbly,webapp-seedseg,webapp-sct,webapp-vesselboost" >}}
 
 ## Uptime metrics
 

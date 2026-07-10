@@ -53,6 +53,55 @@ GA4_SEGMENTS: list[dict[str, Any]] = [
             "play.neurodesk.cloud.edu.au",
         ],
     },
+    {
+        "id": "webapp-calmar",
+        "name": "CALMaR",
+        "url": "https://calmar.neurodesk.org/",
+        "description": "CALMaR lesion mapping and reporting webapp.",
+        "hostNames": ["calmar.neurodesk.org"],
+    },
+    {
+        "id": "webapp-dicompare",
+        "name": "dicompare",
+        "url": "https://dicompare.neurodesk.org",
+        "description": "dicompare DICOM protocol comparison webapp.",
+        "hostNames": ["dicompare.neurodesk.org"],
+    },
+    {
+        "id": "webapp-musclemap",
+        "name": "MuscleMap",
+        "url": "https://musclemap.neurodesk.org",
+        "description": "MuscleMap muscle segmentation webapp.",
+        "hostNames": ["musclemap.neurodesk.org"],
+    },
+    {
+        "id": "webapp-qsmbly",
+        "name": "QSMbly",
+        "url": "https://qsmbly.neurodesk.org",
+        "description": "QSMbly quantitative susceptibility mapping webapp.",
+        "hostNames": ["qsmbly.neurodesk.org"],
+    },
+    {
+        "id": "webapp-seedseg",
+        "name": "SeedSeg",
+        "url": "https://seedseg.neurodesk.org/",
+        "description": "SeedSeg fiducial marker segmentation webapp.",
+        "hostNames": ["seedseg.neurodesk.org"],
+    },
+    {
+        "id": "webapp-sct",
+        "name": "Spinal Cord Toolbox",
+        "url": "https://sct.neurodesk.org",
+        "description": "Spinal Cord Toolbox segmentation webapp.",
+        "hostNames": ["sct.neurodesk.org"],
+    },
+    {
+        "id": "webapp-vesselboost",
+        "name": "VesselBoost",
+        "url": "https://vesselboost.neurodesk.org",
+        "description": "VesselBoost blood vessel segmentation webapp.",
+        "hostNames": ["vesselboost.neurodesk.org"],
+    },
 ]
 
 
