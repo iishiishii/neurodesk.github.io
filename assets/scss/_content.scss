@@ -385,9 +385,10 @@
         thead th {
             position: sticky;
             top: 0;
+            z-index: 1;
             border-top: 0;
             border-bottom: 2px solid $gray-300;
-            background: var(--um-surface);
+            background: var(--um-surface, #fff);
             color: $gray-700;
         }
 
