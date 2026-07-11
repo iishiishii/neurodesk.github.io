@@ -1,7 +1,7 @@
 ---
 title: "Donate"
 linkTitle: "Donate"
-weight: 9
+weight: 10
 aliases:
 - /docs/overview/donate
 

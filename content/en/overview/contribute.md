@@ -1,6 +1,6 @@
 ---
 title: "Contribute"
-weight: 8
+weight: 9
 description: > 
   Neurodesk thrives on community contributions. Whether you're a developer, researcher, educator, or advocate for open science, there are many ways you can support us.
 aliases:
