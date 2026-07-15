@@ -5,6 +5,14 @@ ignorePatterns:
   - pattern: '^http://localhost'
   - pattern: '^https://www.biorxiv.org/content/'
   - pattern: '^https://www\.humanbrainmapping\.org/i4a/pages/index\.cfm\?pageid=3912$'
+  - pattern: '^https://www\.humanconnectome\.org/software/get-connectome-workbench#download$'
+  - pattern: '^https://rdcu\.be/eqro7$'
+  - pattern: '^https://www\.contributor-covenant\.org/?$'
+  - pattern: '^https://www\.contributor-covenant\.org/version/2/0/code_of_conduct(?:\.html|/)?$'
+  - pattern: '^https://www\.contributor-covenant\.org/faq/?$'
+  - pattern: '^https://www\.contributor-covenant\.org/translations/?$'
+  - pattern: '^https://docs\.sylabs\.io/guides/3\.5/user-guide/quick_start\.html$'
+  - pattern: '^https://workgroup\.stanford\.edu/ords/regapps/r/wgadmin/inbound\?clear=702&p702_wg_id=oak:GROUPNAME$'
 useGitIgnore: true
 aliveStatusCodes:
   - 200
@@ -12,5 +20,7 @@ aliveStatusCodes:
   - 204
   - 403
 replacementPatterns:
+  - pattern: '^https://doi\.org/(.+)$'
+    replacement: 'https://doi.org/api/handles/$1'
   - pattern: "^/"
     replacement: "https://neurodesk.github.io/"

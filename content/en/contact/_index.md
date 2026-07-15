@@ -1,5 +1,5 @@
 ---
-title: "Contact form"
+title: "Contact"
 linkTitle: "Contact"
 weight: 55
 menu:
@@ -10,9 +10,8 @@ layout: single
 
 
 description: >
-    Use this form to send the team a message. Please provide as many details as possible so we can assist you effectively. If your message is directed to a specific person, feel free to mention their name in the subject line.
+    Choose the contact route that best matches your request so it reaches the right people and stays visible when it can help the wider Neurodesk community.
 
 ---
-
 
 

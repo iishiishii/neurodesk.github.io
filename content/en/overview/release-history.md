@@ -16,6 +16,32 @@ Latest Version
 
 Please consult [this page](https://github.com/neurodesk/neurodesk.github.io/blob/main/.github/content-templates/release-history-template.md) for the template for new releases.
 
+## 2026-07-11
+### New Features
+- n/a
+
+### Improvements
+- Improved cvmfs setup
+- improved clipboard support
+- improved libreoffice integration
+- improved startup time
+
+### Bug Fixes
+- libreoffice
+
+## 2026-06-04
+### New Features
+- new webapps design
+
+### Improvements
+- Update to latest dependency versions
+- Improved Desktop performance
+
+### Bug Fixes
+- fixed webapps
+- fixed RDP and VNC desktop startup issues
+
+
 ## 2026-04-28
 ### New Features
 - added slurm
