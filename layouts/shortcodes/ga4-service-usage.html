@@ -1,6 +1,10 @@
 {{- $metricsURL := "static/data/user-metrics.json" | relURL -}}
 {{- $ids := .Get "ids" | default (.Get 0) | default "" -}}
-<div class="ga4-service-usage" data-ga4-service-usage-url="{{ $metricsURL }}" data-ga4-service-usage-ids="{{ $ids }}">
+{{- $intro := .Get "intro" | default "" -}}
+<div class="ga4-service-usage" data-ga4-service-usage-url="{{ $metricsURL }}" data-ga4-service-usage-ids="{{ $ids }}" data-ga4-service-usage-intro="{{ $intro }}">
+  {{- with $intro }}
+  <p>{{ . }}</p>
+  {{- end }}
   <span class="user-metrics__status">Loading service usage statistics...</span>
 </div>
 
@@ -28,8 +32,34 @@
     });
   }
 
+  function appendIntro(block, segments) {
+    var text = String(block.dataset.ga4ServiceUsageIntro || "").trim();
+    if (!text) {
+      return;
+    }
+
+    var intro = document.createElement("p");
+    intro.textContent = text;
+
+    if (segments && segments.length === 1) {
+      var trackingDate = formatDate(segments[0].trackingStartDate);
+      intro.textContent += trackingDate
+        ? " Tracking started on " + trackingDate + "."
+        : " A tracking start date has not yet been recorded.";
+    } else if (segments && segments.length > 1) {
+      var trackingDates = segments.map(function (segment) {
+        return (segment.name || segment.id) + ": " +
+          (formatDate(segment.trackingStartDate) || "not yet recorded");
+      });
+      intro.textContent += " Tracking started: " + trackingDates.join("; ") + ".";
+    }
+
+    block.append(intro);
+  }
+
   function renderStatus(block, message) {
     block.textContent = "";
+    appendIntro(block);
     var status = document.createElement("span");
     status.className = "user-metrics__status";
     status.textContent = message;
@@ -88,6 +118,7 @@
 
     var periodDays = data.periodDays || 30;
     block.textContent = "";
+    appendIntro(block, segments);
 
     var details = document.createElement("p");
     details.className = "user-metrics__details";
@@ -111,7 +142,6 @@
       "Service",
       "Users to date",
       "Users (" + periodDays + " days)",
-      "Tracking started",
       "Tracked area"
     ].forEach(function (text, index) {
       var th = document.createElement("th");
@@ -145,10 +175,6 @@
 
       addNumericCell(row, segment.totalUsers);
       addNumericCell(row, segment.periodUsers);
-
-      var trackingCell = document.createElement("td");
-      trackingCell.textContent = formatDate(segment.trackingStartDate) || "Not yet recorded";
-      row.append(trackingCell);
 
       var areaCell = document.createElement("td");
       areaCell.textContent = trackedArea(segment);

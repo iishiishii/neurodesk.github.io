@@ -37,19 +37,16 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 
 
 ## NeurodeskEDU usage
-These statistics are generated from Google Analytics 4 for the NeurodeskEDU path. The tracking start date is the first day GA4 recorded a page view.
 
-{{< ga4-service-usage ids="neurodeskedu" >}}
+{{< ga4-service-usage ids="neurodeskedu" intro="These statistics are generated from Google Analytics 4 for the NeurodeskEDU path." >}}
 
 ## Play usage
-These statistics are generated from Google Analytics 4 and reported separately for each tracked Play server. The tracking start date is the first day GA4 recorded a page view for that server.
 
-{{< ga4-service-usage ids="play-america,play-europe,play-australia" >}}
+{{< ga4-service-usage ids="play-america,play-europe,play-australia" intro="These statistics are generated from Google Analytics 4 and reported separately for each tracked Play server." >}}
 
 ## Webapp usage metrics
-These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host. The tracking start date is the first day GA4 recorded a page view for that webapp.
 
-{{< ga4-service-usage ids="webapp-calmar,webapp-dicompare,webapp-musclemap,webapp-qsmbly,webapp-seedseg,webapp-sct,webapp-vesselboost" >}}
+{{< ga4-service-usage ids="webapp-calmar,webapp-dicompare,webapp-musclemap,webapp-qsmbly,webapp-seedseg,webapp-sct,webapp-vesselboost" intro="These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host." >}}
 
 ## Uptime metrics
 

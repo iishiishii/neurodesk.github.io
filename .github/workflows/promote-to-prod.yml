@@ -53,7 +53,7 @@ jobs:
         run: |
           npm ci || npm install
           python -m pip install --upgrade pip
-          pip install requests google-auth
+          pip install requests google-auth matplotlib
 
       - name: Build applications index (applist.json)
         env:
@@ -87,6 +87,11 @@ jobs:
             echo "GA4_SERVICE_ACCOUNT_KEY not set — writing unavailable placeholder"
             python .github/workflows/write-user-metrics.py --allow-missing-token
           fi
+
+      - name: Build Neurodesk App download metrics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/workflows/write-neurodeskapp-metrics.py
 
       - name: Build with Hugo (prod baseURL)
         env:
