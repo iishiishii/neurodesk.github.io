@@ -2,6 +2,8 @@
 public/
 resources/
 node_modules/
+__pycache__/
+*.py[cod]
 tech-doc-hugo
 *.exe
 .DS_Store

@@ -9,13 +9,15 @@ description: >-
      User metrics, analytics and service uptime
 ---
 
-## User metrics
-The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
+## User locations — past 28 days
+This Google Analytics map shows where Neurodesk users were recorded during the past 28 days.
+
+<iframe title="Neurodesk users by location during the past 28 days" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
+
+## Cumulative user metrics — all time
+The chart and map show cumulative Neurodesk users since tracking began. The table below lists new and cumulative users by month.
 
 {{< user-metrics >}}
-
-## Analytics of users in the last 28 days
-<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
 
 ## Neurodesk App download metrics
 <img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%" alt="Neurodesk App downloads per release and operating system">

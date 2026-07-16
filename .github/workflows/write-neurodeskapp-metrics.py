@@ -56,9 +56,27 @@ def fetch_releases() -> list[dict[str, Any]]:
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    request = urllib.request.Request(API_URL, headers=headers)
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.load(response)
+    releases: list[dict[str, Any]] = []
+    next_url: str | None = API_URL
+    while next_url:
+        request = urllib.request.Request(next_url, headers=headers)
+        with urllib.request.urlopen(request, timeout=30) as response:
+            releases.extend(json.load(response))
+            next_url = next_link_url(response.headers.get("Link"))
+    return releases
+
+
+def next_link_url(link_header: str | None) -> str | None:
+    if not link_header:
+        return None
+    for link in link_header.split(","):
+        parts = [part.strip() for part in link.split(";")]
+        if len(parts) < 2 or 'rel="next"' not in parts[1:]:
+            continue
+        url = parts[0]
+        if url.startswith("<") and url.endswith(">"):
+            return url[1:-1]
+    return None
 
 
 def read_releases(input_json: Path | None) -> list[dict[str, Any]]:

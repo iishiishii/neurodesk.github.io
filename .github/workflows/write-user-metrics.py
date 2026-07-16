@@ -481,9 +481,16 @@ def main() -> int:
     segments = []
     for segment in GA4_SEGMENTS:
         dimension_filter = dimension_filter_for_segment(segment)
-        tracking_start_date = summarize_tracking_start(
-            tracking_start_report(token, property_id, dimension_filter)
-        )
+        try:
+            tracking_start_date = summarize_tracking_start(
+                tracking_start_report(token, property_id, dimension_filter)
+            )
+        except (requests.RequestException, RuntimeError) as error:
+            print(
+                f"  {segment['id']}: could not determine tracking start date: {error}",
+                file=sys.stderr,
+            )
+            tracking_start_date = None
         segment_metrics = build_metrics(
             token,
             property_id,
