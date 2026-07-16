@@ -158,6 +158,7 @@ def public_segment_config(segment: dict[str, Any]) -> dict[str, Any]:
 def empty_segment(segment: dict[str, Any]) -> dict[str, Any]:
     return {
         **public_segment_config(segment),
+        "trackingStartDate": None,
         "totalUsers": 0,
         "periodUsers": 0,
         "periodSessions": 0,
@@ -303,6 +304,35 @@ def monthly_report(
     )
 
 
+def tracking_start_report(
+    token: str,
+    property_id: str,
+    dimension_filter: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    return run_report(
+        token,
+        property_id,
+        with_dimension_filter(
+            {
+                "dimensions": [{"name": "date"}],
+                "metrics": [{"name": "screenPageViews"}],
+                "metricFilter": {
+                    "filter": {
+                        "fieldName": "screenPageViews",
+                        "numericFilter": {
+                            "operation": "GREATER_THAN",
+                            "value": {"int64Value": "0"},
+                        },
+                    }
+                },
+                "orderBys": [{"dimension": {"dimensionName": "date"}}],
+                "limit": "1",
+            },
+            dimension_filter,
+        ),
+    )
+
+
 def country_report(
     token: str,
     property_id: str,
@@ -377,6 +407,15 @@ def summarize(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], int]:
     return months, cumulative
 
 
+def summarize_tracking_start(rows: list[dict[str, Any]]) -> str | None:
+    if not rows:
+        return None
+    value = (rows[0].get("dimensionValues") or [{}])[0].get("value", "")
+    if len(value) != 8 or not value.isdigit():
+        return None
+    return f"{value[:4]}-{value[4:6]}-{value[6:]}"
+
+
 def metric_value(row: dict[str, Any], index: int) -> int:
     values = row.get("metricValues") or []
     if index >= len(values):
@@ -441,18 +480,28 @@ def main() -> int:
 
     segments = []
     for segment in GA4_SEGMENTS:
+        dimension_filter = dimension_filter_for_segment(segment)
+        tracking_start_date = summarize_tracking_start(
+            tracking_start_report(token, property_id, dimension_filter)
+        )
         segment_metrics = build_metrics(
             token,
             property_id,
             args.period_days,
-            dimension_filter_for_segment(segment),
+            dimension_filter,
         )
         print(
             f"  {segment['id']}: {segment_metrics['periodUsers']} users, "
             f"{segment_metrics['periodSessions']} sessions, "
             f"{segment_metrics['periodPageViews']} views in last {args.period_days} days"
         )
-        segments.append({**public_segment_config(segment), **segment_metrics})
+        segments.append(
+            {
+                **public_segment_config(segment),
+                "trackingStartDate": tracking_start_date,
+                **segment_metrics,
+            }
+        )
 
     data = empty_metrics(generated_at, args.period_days)
     data.update(aggregate)

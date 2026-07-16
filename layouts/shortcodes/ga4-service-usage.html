@@ -111,6 +111,7 @@
       "Service",
       "Users to date",
       "Users (" + periodDays + " days)",
+      "Tracking started",
       "Tracked area"
     ].forEach(function (text, index) {
       var th = document.createElement("th");
@@ -144,6 +145,10 @@
 
       addNumericCell(row, segment.totalUsers);
       addNumericCell(row, segment.periodUsers);
+
+      var trackingCell = document.createElement("td");
+      trackingCell.textContent = formatDate(segment.trackingStartDate) || "Not yet recorded";
+      row.append(trackingCell);
 
       var areaCell = document.createElement("td");
       areaCell.textContent = trackedArea(segment);

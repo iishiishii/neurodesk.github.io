@@ -18,7 +18,7 @@ The chart shows the cumulative number of Neurodesk users over time, the map show
 <iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
 
 ## Neurodesk App download metrics
-<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
+<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%" alt="Neurodesk App downloads per release and operating system">
 
 ## Docker metrics
 Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docker/pulls/vnmd/neurodesktop)
@@ -36,13 +36,18 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 
 
 
-## NeurodeskEDU and Play usage
-These service-specific statistics are generated from Google Analytics 4 and separated by the tracked host or path.
+## NeurodeskEDU usage
+These statistics are generated from Google Analytics 4 for the NeurodeskEDU path. The tracking start date is the first day GA4 recorded a page view.
 
-{{< ga4-service-usage ids="neurodeskedu,play-america,play-europe,play-australia" >}}
+{{< ga4-service-usage ids="neurodeskedu" >}}
+
+## Play usage
+These statistics are generated from Google Analytics 4 and reported separately for each tracked Play server. The tracking start date is the first day GA4 recorded a page view for that server.
+
+{{< ga4-service-usage ids="play-america,play-europe,play-australia" >}}
 
 ## Webapp usage metrics
-These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host.
+These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host. The tracking start date is the first day GA4 recorded a page view for that webapp.
 
 {{< ga4-service-usage ids="webapp-calmar,webapp-dicompare,webapp-musclemap,webapp-qsmbly,webapp-seedseg,webapp-sct,webapp-vesselboost" >}}
 
