@@ -84,18 +84,6 @@
     return ids.map(function (id) { return byId.get(id); }).filter(Boolean);
   }
 
-  function trackedArea(segment) {
-    var filters = segment.filters || {};
-    var hosts = Array.isArray(filters.hostNames) ? filters.hostNames : [];
-    if (filters.pagePathPrefix && hosts.length === 1) {
-      return hosts[0] + filters.pagePathPrefix;
-    }
-    if (filters.pagePathPrefix) {
-      return hosts.join(", ") + filters.pagePathPrefix;
-    }
-    return hosts.join(", ");
-  }
-
   function addNumericCell(row, value) {
     var cell = document.createElement("td");
     cell.className = "user-metrics__num";
@@ -141,8 +129,7 @@
     [
       "Service",
       "Users to date",
-      "Users (" + periodDays + " days)",
-      "Tracked area"
+      "Users (" + periodDays + " days)"
     ].forEach(function (text, index) {
       var th = document.createElement("th");
       th.textContent = text;
@@ -175,10 +162,6 @@
 
       addNumericCell(row, segment.totalUsers);
       addNumericCell(row, segment.periodUsers);
-
-      var areaCell = document.createElement("td");
-      areaCell.textContent = trackedArea(segment);
-      row.append(areaCell);
 
       body.append(row);
     });
