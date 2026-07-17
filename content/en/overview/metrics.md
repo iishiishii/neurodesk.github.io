@@ -20,7 +20,8 @@ The chart and map show cumulative Neurodesk users since tracking began. The tabl
 {{< user-metrics >}}
 
 ## Neurodesk App download metrics
-<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%" alt="Neurodesk App downloads per release and operating system">
+
+  <iframe src="https://release-stats-graph-five.vercel.app/graph?owner=neurodesk&repo=neurodesk-app&theme=vue" frameborder="0" style="border:0"></iframe>
 
 ## Docker metrics
 Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docker/pulls/vnmd/neurodesktop)
