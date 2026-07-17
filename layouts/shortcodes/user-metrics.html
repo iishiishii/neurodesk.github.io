@@ -283,7 +283,7 @@
     return figure;
   }
 
-  var MAP_RAMP = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"];
+  var MAP_RAMP = ["#e6f1d6", "#d3e7b6", "#b7d886", "#6aa329", "#4f7b38"];
 
   function binThresholds(values) {
     // Quantile bin edges over countries with data; deduped for small sets.
@@ -347,7 +347,10 @@
     });
 
     figure.textContent = "";
-    figure.append(svg);
+    var caption = document.createElement("figcaption");
+    caption.className = "user-metrics__map-caption";
+    caption.textContent = "Cumulative users by country (all time)";
+    figure.append(caption, svg);
 
     // Legend: one swatch per bin range, plus the no-data fill.
     var maxUsers = countries.reduce(function (max, entry) {
@@ -429,7 +432,7 @@
     figure.className = "user-metrics__map-figure";
     figure.setAttribute(
       "aria-label",
-      "World map of Neurodesk users by country. Values are listed in the table below the map."
+      "World map of cumulative Neurodesk users by country since tracking began. Values are listed in the table below the map."
     );
     var status = document.createElement("span");
     status.className = "user-metrics__status";
@@ -439,7 +442,7 @@
 
     var details = document.createElement("details");
     var summary = document.createElement("summary");
-    summary.textContent = "Users by country (table)";
+    summary.textContent = "Cumulative users by country (table)";
     details.append(summary);
     var wrapper = document.createElement("div");
     wrapper.className = "user-metrics__table-wrapper";

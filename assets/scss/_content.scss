@@ -134,8 +134,8 @@
     }
 
     .user-metrics {
-        --um-series: #2a78d6;
-        --um-series-wash: rgba(42, 120, 214, .1);
+        --um-series: #6aa329;
+        --um-series-wash: rgba(106, 163, 41, .12);
         --um-surface: #fff;
         --um-gridline: #e1e0d9;
         --um-baseline: #c3c2b7;
@@ -309,6 +309,12 @@
         border: 1px solid $gray-300;
         border-radius: .5rem;
         background: var(--um-surface);
+    }
+
+    .user-metrics__map-caption {
+        margin-bottom: .5rem;
+        color: var(--um-ink);
+        font-weight: $font-weight-bold;
     }
 
     .user-metrics__map-svg {
