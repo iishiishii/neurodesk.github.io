@@ -9,16 +9,18 @@ description: >-
      User metrics, analytics and service uptime
 ---
 
-## User metrics
-The chart shows the cumulative number of Neurodesk users over time, the map shows where users are located, and the table below lists the number of new users acquired each month.
+## User locations — past 28 days
+This Google Analytics map shows where Neurodesk users were recorded during the past 28 days.
+
+<iframe title="Neurodesk users by location during the past 28 days" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
+
+## Cumulative user metrics — all time
+The chart and map show cumulative Neurodesk users since tracking began. The table below lists new and cumulative users by month.
 
 {{< user-metrics >}}
 
-## Analytics of users in the last 28 days
-<iframe title="Google Analytics report" src="https://lookerstudio.google.com/embed/reporting/1b5d3da0-7a67-4440-bc3c-95bd6fd94f18/page/2VKTD" frameborder="0" style="border:0"></iframe>
-
 ## Neurodesk App download metrics
-<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%">
+<img src="{{< relurl "/static/docs/overview/neurodeskapp_metrics.png" >}}" width="95%" alt="Neurodesk App downloads per release and operating system">
 
 ## Docker metrics
 Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docker/pulls/vnmd/neurodesktop)
@@ -36,15 +38,17 @@ Total Neurodesktop container pulls: ![Docker Pulls](https://img.shields.io/docke
 
 
 
-## NeurodeskEDU and Play usage
-These service-specific statistics are generated from Google Analytics 4 and separated by the tracked host or path.
+## NeurodeskEDU usage
 
-{{< ga4-service-usage ids="neurodeskedu,play-america,play-europe,play-australia" >}}
+{{< ga4-service-usage ids="neurodeskedu" intro="These statistics are generated from Google Analytics 4 for the NeurodeskEDU path." >}}
+
+## Play usage
+
+{{< ga4-service-usage ids="play-america,play-europe,play-australia" intro="These statistics are generated from Google Analytics 4 and reported separately for each tracked Play server." >}}
 
 ## Webapp usage metrics
-These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host.
 
-{{< ga4-service-usage ids="webapp-calmar,webapp-dicompare,webapp-musclemap,webapp-qsmbly,webapp-seedseg,webapp-sct,webapp-vesselboost" >}}
+{{< ga4-service-usage ids="webapp-calmar,webapp-dicompare,webapp-musclemap,webapp-qsmbly,webapp-seedseg,webapp-sct,webapp-vesselboost" intro="These statistics are generated from Google Analytics 4 for each hosted Neurodesk webapp, separated by the tracked host." >}}
 
 ## Uptime metrics
 

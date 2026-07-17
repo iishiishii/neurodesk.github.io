@@ -13,6 +13,7 @@ ignorePatterns:
   - pattern: '^https://www\.contributor-covenant\.org/translations/?$'
   - pattern: '^https://docs\.sylabs\.io/guides/3\.5/user-guide/quick_start\.html$'
   - pattern: '^https://workgroup\.stanford\.edu/ords/regapps/r/wgadmin/inbound\?clear=702&p702_wg_id=oak:GROUPNAME$'
+  - pattern: '^https://www\.pulseit\.news/australian-digital-health/neurodesk-wins-iaward-for-technology-platform/?$'
 useGitIgnore: true
 aliveStatusCodes:
   - 200
