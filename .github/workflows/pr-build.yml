@@ -46,6 +46,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests google-auth matplotlib
 
+      - name: Test user metrics generator
+        run: python -m unittest tests/test_write_user_metrics.py
+
       - name: Install Node dependencies
         run: npm install
 

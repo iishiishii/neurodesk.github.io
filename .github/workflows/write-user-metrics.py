@@ -304,6 +304,23 @@ def monthly_report(
     )
 
 
+def all_time_users_report(
+    token: str,
+    property_id: str,
+    dimension_filter: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    return run_report(
+        token,
+        property_id,
+        with_dimension_filter(
+            {
+                "metrics": [{"name": "totalUsers"}],
+            },
+            dimension_filter,
+        ),
+    )
+
+
 def tracking_start_report(
     token: str,
     property_id: str,
@@ -438,7 +455,11 @@ def build_metrics(
     period_days: int,
     dimension_filter: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    months, total_users = summarize(monthly_report(token, property_id, dimension_filter))
+    # Monthly newUsers power the acquisition chart, but "users to date" must use
+    # totalUsers so returning users within a filtered service are still counted.
+    months, _ = summarize(monthly_report(token, property_id, dimension_filter))
+    all_time_rows = all_time_users_report(token, property_id, dimension_filter)
+    total_users = metric_value(all_time_rows[0] if all_time_rows else {}, 0)
     countries = summarize_countries(country_report(token, property_id, dimension_filter))
     period = summarize_period(period_report(token, property_id, period_days, dimension_filter))
     return {
